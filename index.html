@@ -143,12 +143,11 @@ input{font-family:inherit}
 .tier-hdr-slots.ok{border-color:rgba(255,255,255,.1);color:var(--text-dim)}.tier-hdr-slots.warn{border-color:rgba(247,201,72,.3);color:var(--warm)}.tier-hdr-slots.full{border-color:rgba(255,77,77,.3);color:var(--red)}
 
 /* product grid */
-.prod-grid{display:grid;grid-template-columns:repeat(var(--prod-count,3),1fr);gap:1px;background:var(--line2);border:1px solid var(--line2)}
-.prod-card{background:var(--bg2);display:flex;flex-direction:column;position:relative;overflow:hidden;transition:background .15s,box-shadow .15s}
-.prod-card:hover{background:var(--bg3);box-shadow:inset 0 0 0 1px var(--line2)}
+.prod-card{background:var(--bg2);display:flex;flex-direction:column;position:relative;overflow:hidden;transition:background .15s,border-color .15s,box-shadow .15s;border:2px solid transparent}
+.prod-card:hover{background:var(--bg3);border-color:rgba(255,255,255,.12)}
 /* hover handled above */
-.prod-card.sel-dep{background:#050e1a;outline:2px solid var(--blue);outline-offset:-2px}
-.prod-card.sel-fp{background:#050d00;outline:2px solid var(--neon);outline-offset:-2px}
+.prod-card.sel-dep{background:#040c17;border-color:var(--blue)!important;box-shadow:0 0 18px rgba(77,166,255,.25)}
+.prod-card.sel-fp{background:#040c00;border-color:var(--neon)!important;box-shadow:0 0 18px rgba(180,255,0,.20)}
 
 /* foto */
 .prod-photo{width:100%;height:220px;background:linear-gradient(135deg,var(--bg3) 0%,var(--bg4) 100%);display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;flex-shrink:0}
@@ -156,32 +155,32 @@ input{font-family:inherit}
 .prod-photo-ph{display:flex;flex-direction:column;align-items:center;gap:6px;opacity:.15}
 .prod-photo-ph svg{width:32px;height:32px}
 .prod-photo-ph span{font-family:var(--f-mono);font-size:8px;letter-spacing:2px;text-transform:uppercase}
-.prod-sel-bdg{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;pointer-events:none}
-.prod-sel-bdg-in{font-family:var(--f-title);font-size:11px;font-weight:700;letter-spacing:3px;text-transform:uppercase;padding:6px 16px;border:1px solid;backdrop-filter:blur(4px)}
-.prod-sel-bdg-in.dep{border-color:var(--blue);color:var(--blue);background:rgba(77,166,255,.15)}
-.prod-sel-bdg-in.fp{border-color:var(--neon);color:var(--neon);background:rgba(180,255,0,.12)}
+.prod-sel-bdg{position:absolute;bottom:10px;left:10px;display:flex;align-items:center;justify-content:flex-start;pointer-events:none;z-index:2}
+.prod-sel-bdg-in{font-family:var(--f-title);font-size:12px;font-weight:700;letter-spacing:2px;text-transform:uppercase;padding:7px 14px;border:1px solid;border-radius:var(--r)}
+.prod-sel-bdg-in.dep{border-color:var(--blue);color:#fff;background:rgba(30,100,210,.75);backdrop-filter:blur(6px)}
+.prod-sel-bdg-in.fp{border-color:var(--neon);color:#000;background:rgba(160,235,0,.80);backdrop-filter:blur(6px)}
 
 /* card body */
 .prod-body{padding:14px 16px;display:flex;flex-direction:column;gap:10px;flex:1}
-.prod-name{font-size:13px;font-weight:500;color:var(--text);line-height:1.45;min-height:2.9em}
-.prod-sku{font-family:var(--f-mono);font-size:9px;color:var(--text-dim);letter-spacing:.5px;margin-top:-6px}
+.prod-name{font-size:14px;font-weight:600;color:var(--text);line-height:1.45;min-height:2.9em}
+.prod-sku{font-family:var(--f-mono);font-size:10px;color:var(--text-dim);letter-spacing:.5px;margin-top:-6px}
 .prod-price-row{display:flex;align-items:baseline;gap:8px;flex-wrap:wrap}
 .prod-price{font-family:var(--f-title);font-size:24px;font-weight:700;line-height:1;font-variant-numeric:tabular-nums}
 .prod-price.tbd{color:var(--warm);font-size:18px}
-.prod-price-pub{font-size:11px;color:var(--text-dim);text-decoration:line-through}
-.prod-price-disc{font-family:var(--f-mono);font-size:9px;font-weight:600;color:var(--neon);background:var(--neon-dim);padding:2px 6px;border-radius:var(--r)}
-.prod-disc-bdg{font-family:var(--f-mono);font-size:9px;font-weight:700;color:var(--neon);opacity:.85}
+.prod-price-pub{font-size:13px;color:var(--text-dim);text-decoration:line-through;font-variant-numeric:tabular-nums}
+.prod-price-disc{font-family:var(--f-mono);font-size:11px;font-weight:700;color:#000;background:var(--neon);padding:3px 8px;border-radius:var(--r);letter-spacing:.3px}
+.prod-disc-bdg{font-family:var(--f-mono);font-size:11px;font-weight:700;color:var(--neon);letter-spacing:.3px}
 
 /* action buttons */
 .prod-actions{display:flex;flex-direction:column;gap:4px;margin-top:auto}
-.prod-btn{display:flex;align-items:center;justify-content:space-between;padding:9px 12px;border:1px solid var(--line2);background:transparent;color:var(--text-mid);font-size:12px;font-weight:500;transition:all .15s;border-radius:var(--r);gap:8px;width:100%}
+.prod-btn{display:flex;align-items:center;justify-content:space-between;padding:10px 14px;border:1px solid var(--line2);background:transparent;color:var(--text-mid);font-size:13px;font-weight:500;transition:all .15s;border-radius:var(--r);gap:8px;width:100%}
 .prod-btn:hover:not(.blocked){border-color:var(--line2);color:var(--text-mid);background:var(--bg4)}
-.prod-btn.dep-on{border-color:var(--blue);color:var(--blue);background:var(--blue-dim)}
-.prod-btn.fp-on{border-color:var(--neon);color:var(--neon);background:var(--neon-dim)}
+.prod-btn.dep-on{border-color:var(--blue);color:var(--blue);background:rgba(30,100,210,.20)}
+.prod-btn.fp-on{border-color:var(--neon);color:var(--neon);background:rgba(160,235,0,.15)}
 .prod-btn.blocked{opacity:.2;cursor:not-allowed;pointer-events:none}
 .prod-btn-left{display:flex;flex-direction:column;align-items:flex-start;gap:2px}
-.prod-btn-lbl{font-family:var(--f-title);font-size:12px;font-weight:600;letter-spacing:.5px}
-.prod-btn-val{font-family:var(--f-mono);font-size:12px;font-weight:600;font-variant-numeric:tabular-nums;white-space:nowrap}
+.prod-btn-lbl{font-family:var(--f-title);font-size:13px;font-weight:700;letter-spacing:.5px}
+.prod-btn-val{font-family:var(--f-mono);font-size:13px;font-weight:700;font-variant-numeric:tabular-nums;white-space:nowrap}
 .prod-dot{width:8px;height:8px;border:1.5px solid currentColor;border-radius:50%;flex-shrink:0;position:relative}
 .prod-dot::after{content:'';position:absolute;inset:2px;border-radius:50%;background:currentColor;opacity:0;transition:opacity .15s}
 .dep-on .prod-dot::after,.fp-on .prod-dot::after{opacity:1}
@@ -321,6 +320,14 @@ input{font-family:inherit}
   content:'🔍';position:absolute;top:8px;right:8px;z-index:3;
   font-size:14px;opacity:.7;pointer-events:none;
 }
+/* Tier tag sulla foto */
+.prod-tier-tag{position:absolute;top:10px;left:10px;z-index:2;
+  font-family:var(--f-mono);font-size:9px;font-weight:700;letter-spacing:3px;
+  text-transform:uppercase;padding:4px 10px;border:1px solid;
+  backdrop-filter:blur(4px)}
+.prod-tier-tag.scout{color:var(--scout);border-color:var(--scout);background:rgba(90,180,255,.18)}
+.prod-tier-tag.veteran{color:var(--veteran);border-color:var(--veteran);background:rgba(0,212,160,.18)}
+.prod-tier-tag.elite{color:var(--elite);border-color:var(--elite);background:rgba(247,201,72,.18)}
 /* dot indicatori foto (visibili sulla card) */
 .photo-dots{position:absolute;bottom:6px;left:50%;transform:translateX(-50%);
   display:flex;gap:5px;z-index:3;pointer-events:none}
@@ -328,6 +335,8 @@ input{font-family:inherit}
   transition:background .2s}
 .photo-dot.active{background:#fff}
 
+/* Grid senza gap (bordo sulla card gestisce la separazione) */
+.prod-grid{display:grid;grid-template-columns:repeat(var(--prod-count,3),1fr);gap:4px;background:transparent;border:none}
 /* lightbox overlay */
 #mLightbox{position:fixed;inset:0;z-index:9990;background:rgba(0,0,0,.92);
   display:flex;flex-direction:column;align-items:center;justify-content:center;
@@ -394,13 +403,10 @@ input{font-family:inherit}
 .btn-zoom:disabled{opacity:.3;cursor:default}
 .tb-zoom-lbl{font-family:var(--f-mono);font-size:9px;color:var(--text-dim);
   letter-spacing:1px;min-width:32px;text-align:center;user-select:none}
-
-/* Layout toggle button */
-.btn-layout-toggle{margin-left:4px;border-left:1px solid var(--line2);padding-left:8px!important;font-size:14px!important;opacity:.6}
+.btn-layout-toggle{margin-left:6px;border-left:1px solid var(--line2);padding-left:8px;font-size:13px;opacity:.55}
 .btn-layout-toggle:hover{opacity:1!important}
 .btn-layout-toggle.active{color:var(--neon)!important;opacity:1!important}
-
-/* Mobile layout class applicata su desktop */
+/* Mobile layout attivabile su desktop */
 @media (min-width:769px){
   body.layout-mobile .prod-grid{grid-template-columns:1fr!important}
   body.layout-mobile .prod-card{flex-direction:row;min-height:140px}
@@ -411,7 +417,6 @@ input{font-family:inherit}
   body.layout-mobile .prod-price-row{flex:0 0 auto}
   body.layout-mobile .prod-price{font-size:26px}
   body.layout-mobile .prod-actions{flex:1 0 260px;flex-direction:column;gap:6px}
-  body.layout-mobile .prod-sel-bdg{bottom:auto;top:6px;left:6px;right:auto;justify-content:flex-start}
 }
 
 /* ═══════════════════════════════════════════════════════════════════
@@ -560,7 +565,7 @@ input{font-family:inherit}
         <button class="btn-zoom" id="btnZoomOut" onclick="zoomStep(-1)" title="Riduci testo">A−</button>
         <span class="tb-zoom-lbl" id="zoomLbl">100%</span>
         <button class="btn-zoom" id="btnZoomIn" onclick="zoomStep(+1)" title="Ingrandisci testo">A+</button>
-        <button class="btn-zoom btn-layout-toggle" id="btnLayout" onclick="toggleLayout()" title="Cambia layout">⊟</button>
+        <button class="btn-zoom btn-layout-toggle" id="btnLayout" onclick="toggleLayout()" title="Vista mobile">⊟</button>
       </div>
       <div class="tb-cred">
         <div class="tb-cred-lbl">Credito</div>
@@ -758,11 +763,14 @@ async function _get(params) {
 
 async function _post(body) {
   if (S._sessionToken) body._st = S._sessionToken;
-  const res = await fetch(URL_API, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(body),
-  });
+  // Apps Script: le richieste POST con JSON body non passano CORS.
+  // Usiamo GET con parametri flat; selezioni[] viene JSON-stringificata.
+  const flat = {};
+  for (const [k, v] of Object.entries(body)) {
+    flat[k] = (typeof v === 'object') ? JSON.stringify(v) : v;
+  }
+  const qs = new URLSearchParams(flat).toString();
+  const res = await fetch(`${URL_API}?${qs}`);
   if (!res.ok) throw new Error(`HTTP ${res.status}`);
   return res.json();
 }
@@ -1075,6 +1083,7 @@ function renderCatalogo(){
                   <span>Foto</span>
                 </div>`}
           ${badge}
+          <div class="prod-tier-tag ${prod.tier}">${prod.sku?prod.sku.replace(/^\d{6}-/,'').replace(/-DBC$/i,'').replace(/_/g,' '):prod.tier.toUpperCase()}</div>
           ${hasMulti?`<div class="photo-dots">${imgs.map((_,i)=>`<div class="photo-dot${i===0?' active':''}"></div>`).join('')}</div>`:''}
         </div>
         <div class="prod-body">
@@ -1494,7 +1503,7 @@ function applyZoom(idx) {
 
 function zoomStep(dir) { applyZoom(zoomIdx + dir); }
 
-/* ─── LAYOUT TOGGLE (desktop ↔ mobile) ──────────────────────────────────── */
+/* ─── LAYOUT TOGGLE ─────────────────────────────────────────────────────── */
 let _layoutMobile = false;
 function toggleLayout() {
   _layoutMobile = !_layoutMobile;
@@ -1508,10 +1517,7 @@ function toggleLayout() {
   try { localStorage.setItem('dni_layout', _layoutMobile ? '1' : '0'); } catch(e){}
 }
 function initLayout() {
-  try {
-    const saved = localStorage.getItem('dni_layout');
-    if (saved === '1') toggleLayout();
-  } catch(e){}
+  try { if (localStorage.getItem('dni_layout') === '1') toggleLayout(); } catch(e){}
 }
 
 function initZoom() {
