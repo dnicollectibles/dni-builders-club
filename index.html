@@ -641,10 +641,10 @@ input{font-family:inherit}
         <div class="filters" style="justify-content:space-between;align-items:center">
           <div style="display:flex;gap:6px;flex-wrap:wrap">
             <button class="flt-btn active" onclick="setFiltro('tutti',this)">Tutti</button>
+            <button class="flt-btn" onclick="setFiltro('in_preparazione',this)">In preparazione</button>
             <button class="flt-btn" onclick="setFiltro('da_saldare',this)">Da saldare</button>
-            <button class="flt-btn" onclick="setFiltro('in_lavorazione',this)">In conferma</button>
-            <button class="flt-btn" onclick="setFiltro('spedito',this)">Spedito</button>
             <button class="flt-btn" onclick="setFiltro('saldato',this)">Saldato</button>
+            <button class="flt-btn" onclick="setFiltro('spedito',this)">Spedito</button>
           </div>
           <button class="btn-rileva" id="btnRileva" onclick="rilevaMieiOrdini(this)" title="Ricarica ordini dal server">
             <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
@@ -652,25 +652,40 @@ input{font-family:inherit}
           </button>
         </div>
 
-        <div class="ord-section">
-          <div class="ord-sec-title">
-            Assegna acconti <span class="sec-cnt" id="cntMod">0</span>
+        <div id="grpDaSaldare" class="ord-group" style="display:none">
+          <div class="ord-group-hdr da_saldare">
+            <div class="grp-dot"></div>
+            <span class="grp-label">Da saldare</span>
+            <span class="grp-cnt" id="cntDaSaldare">0</span>
           </div>
-          <div id="ordMod"></div>
+          <div id="ordDaSaldare"></div>
         </div>
 
-        <div class="ord-section">
-          <div class="ord-sec-title">
-            In attesa di conferma DNI <span class="sec-cnt" id="cntDraft">0</span>
+        <div id="grpSaldato" class="ord-group" style="display:none">
+          <div class="ord-group-hdr saldato">
+            <div class="grp-dot"></div>
+            <span class="grp-label">Saldato</span>
+            <span class="grp-cnt" id="cntSaldato">0</span>
+          </div>
+          <div id="ordSaldato"></div>
+        </div>
+
+        <div id="grpSpedito" class="ord-group" style="display:none">
+          <div class="ord-group-hdr spedito">
+            <div class="grp-dot"></div>
+            <span class="grp-label">Spedito</span>
+            <span class="grp-cnt" id="cntSpedito">0</span>
+          </div>
+          <div id="ordSpedito"></div>
+        </div>
+
+        <div id="grpDraft" class="ord-group" style="display:none">
+          <div class="ord-group-hdr in_conferma">
+            <div class="grp-dot"></div>
+            <span class="grp-label">In conferma</span>
+            <span class="grp-cnt" id="cntDraft">0</span>
           </div>
           <div id="ordDraft"></div>
-        </div>
-
-        <div class="ord-section">
-          <div class="ord-sec-title">
-            Ordini confermati <span class="sec-cnt" id="cntArch">0</span>
-          </div>
-          <div id="ordArch"></div>
         </div>
       </div>
     </div>
@@ -708,23 +723,67 @@ input{font-family:inherit}
 </div>
 
 <!-- ═══ MODAL SALDO COMPLETO ═══ -->
-<div class="overlay" id="mSaldo" onclick="if(event.target===this)chiudiSaldo()">
-  <div class="mbox-saldo">
-    <div class="mbox-saldo-body">
-      <div class="saldo-icon">✅</div>
-      <div class="saldo-title">Ordine saldato!</div>
-      <div class="saldo-text">
-        Stai saldando completamente
-        <span class="saldo-prodname" id="saldoProd">—</span>.
-        Dopo la conferma l'ordine sarà bloccato in attesa di spedizione.
+<!-- ═══ MODAL SALDA ORDINE ═══ -->
+<div class="overlay" id="mSaldaOrd" onclick="if(event.target===this)chiudiModalSalda()">
+  <div class="mbox-saldo" style="width:440px">
+    <div class="mbox-saldo-body" style="gap:14px;align-items:stretch;text-align:left">
+      <div style="font-family:var(--f-title);font-size:16px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--neon)">Salda ordine</div>
+      <div id="mSaldaNome" style="font-size:13px;font-weight:500;color:var(--text);line-height:1.4">—</div>
+      <div style="display:flex;align-items:center;justify-content:space-between;padding:13px 16px;background:var(--bg4);border:1px solid var(--line2);border-radius:var(--r)">
+        <span style="font-family:var(--f-mono);font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--text-dim)">Importo da scalare</span>
+        <span id="mSaldaImporto" style="font-family:var(--f-title);font-size:26px;font-weight:700;color:var(--neon)">—</span>
+      </div>
+      <div style="border:1px solid var(--line2);border-radius:var(--r);overflow:hidden">
+        <div style="display:flex;justify-content:space-between;padding:9px 14px;font-family:var(--f-mono);font-size:10px;border-bottom:1px solid var(--line2)">
+          <span style="color:var(--text-dim)">Credito disponibile</span>
+          <span id="mSaldaCreditoOra" style="font-weight:600;color:var(--text)">—</span>
+        </div>
+        <div style="display:flex;justify-content:space-between;padding:9px 14px;font-family:var(--f-mono);font-size:10px">
+          <span style="color:var(--text-dim)">Credito dopo operazione</span>
+          <span id="mSaldaCreditoDopo" style="font-weight:600;color:var(--neon)">—</span>
+        </div>
+      </div>
+      <div style="font-family:var(--f-mono);font-size:10px;color:var(--warm);background:var(--warm-dim);border:1px solid rgba(247,201,72,.2);padding:9px 12px;border-radius:var(--r);line-height:1.5">
+        ⚠ Confermando, l'ordine andrà in preparazione spedizione e non sarà più modificabile.
       </div>
     </div>
-    <div class="mfooter" style="justify-content:center">
-      <button class="btn-cancel" onclick="chiudiSaldo()">Annulla</button>
-      <button class="btn-confirm" onclick="confermaSaldo()">Conferma saldo</button>
+    <div class="mfooter" style="justify-content:flex-end">
+      <button class="btn-cancel" onclick="chiudiModalSalda()">Annulla</button>
+      <button class="btn-confirm" onclick="eseguiSalda()">Conferma saldo</button>
     </div>
   </div>
 </div>
+
+<!-- ═══ MODAL IMPOSTA ACCONTO ═══ -->
+<div class="overlay" id="mAccontoOrd" onclick="if(event.target===this)chiudiModalAcconto()">
+  <div class="mbox-saldo" style="width:440px">
+    <div class="mbox-saldo-body" style="gap:14px;align-items:stretch;text-align:left">
+      <div style="font-family:var(--f-title);font-size:16px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--blue)">Imposta acconto</div>
+      <div id="mAccNome" style="font-size:13px;font-weight:500;color:var(--text);line-height:1.4">—</div>
+      <div>
+        <div style="font-family:var(--f-mono);font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--text-mid);margin-bottom:6px">Importo (€)</div>
+        <input type="number" id="mAccInput" class="extra-input" style="width:100%;padding:11px 14px;font-size:15px;font-family:var(--f-mono)" placeholder="es. 10" min="1" oninput="aggiornaPrevAcc()">
+        <div id="mAccHint" style="font-family:var(--f-mono);font-size:9px;color:var(--text-dim);margin-top:5px">Massimo: — · Credito disponibile: —</div>
+      </div>
+      <div id="mAccPreview" style="border:1px solid var(--line2);border-radius:var(--r);overflow:hidden;opacity:0;transition:opacity .2s">
+        <div style="display:flex;justify-content:space-between;padding:9px 14px;font-family:var(--f-mono);font-size:10px;border-bottom:1px solid var(--line2)">
+          <span style="color:var(--text-dim)">Residuo dopo operazione</span>
+          <span id="mAccResAfter" style="font-weight:600;color:var(--warm)">—</span>
+        </div>
+        <div style="display:flex;justify-content:space-between;padding:9px 14px;font-family:var(--f-mono);font-size:10px">
+          <span style="color:var(--text-dim)">Credito dopo operazione</span>
+          <span id="mAccCreditoDopo" style="font-weight:600;color:var(--neon)">—</span>
+        </div>
+      </div>
+      <div id="mAccErr" style="display:none;font-family:var(--f-mono);font-size:10px;color:var(--red);background:var(--red-dim);border:1px solid rgba(255,90,90,.2);padding:9px 12px;border-radius:var(--r)"></div>
+    </div>
+    <div class="mfooter" style="justify-content:flex-end">
+      <button class="btn-cancel" onclick="chiudiModalAcconto()">Annulla</button>
+      <button class="btn-confirm" id="mAccBtn" disabled onclick="eseguiAcconto()" style="background:var(--blue)">Conferma acconto</button>
+    </div>
+  </div>
+</div>
+
 
 <!-- ═══ LIGHTBOX IMMAGINI ═══ -->
 <div id="mLightbox" onclick="if(event.target===this)chiudiLightbox()">
@@ -1255,6 +1314,9 @@ async function inviaConferma(){
   finally{btn.classList.remove('loading');btn.disabled=false;}
 }
 
+// statoUI: determina la categoria visiva basandosi su stato_ordine + confermata
+function statoUI(p){ return !p.confermata ? 'in_preparazione' : (p.stato_ordine || 'in_preparazione'); }
+
 /* ─── RENDER ORDINI ──────────────────────────────────────────────────────── */
 function renderOrdini(){
   const flt=p=>{if(filtro==='tutti')return true; const s=!p.confermata?'draft':p.stato_ordine; return s===filtro;};
@@ -1271,43 +1333,88 @@ function renderOrdini(){
   renderOrdSection('ordArch', arch, false);
 }
 
-function renderOrdSection(elId, prens, conMod){
+function renderOrdSection(elId, prens){
   const el=document.getElementById(elId);
-  if(!prens.length){el.innerHTML='<div class="ord-empty">Nessun ordine in questa sezione</div>';return;}
+  if(!prens.length){el.innerHTML='';return;}
   el.innerHTML=prens.map(p=>{
-    const stato=!p.confermata?'draft':p.stato_ordine;
+    const stato=statoUI(p);
     const sl=STATI_LBL[stato]||stato;
     const max=p.residuo||0;
-    const comm=p.commento_alberto?`<div class="ocard-comment on">💬 ${p.commento_alberto}</div>`:'';
-    const track=p.tracking?`<div class="ocard-tracking">📦 Tracking: <a href="https://www.google.com/search?q=${encodeURIComponent(p.tracking)}" target="_blank" rel="noopener" class="track-link">${p.tracking}</a></div>`:'';
-    const tipoLbl=p.tipo==='saldo'?'Full Pay':'Deposito';
-    const nums=`<div class="ocard-nums">
-      <div class="onum"><div class="onum-lbl">Prezzo</div><div class="onum-val tot">€${fmt(p.prezzo_totale)}</div></div>
-      <div class="onum"><div class="onum-lbl">Versato</div><div class="onum-val acc">€${fmt(Number(p.acconto)+(Number(p.acconto_extra)||0))}</div></div>
-      <div class="onum"><div class="onum-lbl">Da saldare</div><div class="onum-val ${p.residuo<=0?'zero':'res'}">€${fmt(p.residuo)}</div></div>
-      <div class="onum"><div class="onum-lbl">Tipo</div><div class="onum-val" style="font-size:11px;color:var(--text-mid)">${tipoLbl}</div></div>
-    </div>`;
-    const extra=conMod?`<div class="ocard-extra">
-      <span class="extra-lbl">Assegna acconto:</span>
-      <input type="number" class="extra-input" id="ei-${p.id}" placeholder="€" min="1" max="${max}"
-             oninput="onEI('${p.id}',${max})">
-      <span class="extra-max">max €${fmt(max)}</span>
-      <button class="btn-extra" id="be-${p.id}" disabled onclick="salvaExtra('${p.id}',${max})">Salva</button>
-      <span class="extra-fb" id="ef-${p.id}"></span>
-    </div>`:'';
+    const puoModificare = p.confermata && p.residuo > 0 && stato !== 'saldato';
+    const tipoLbl = p.tipo==='saldo'?'Full Pay':'Deposito';
+    const _cp = S.catalogo.find(x => String(x.id) === String(p.prodotto_id));
+    const _imgF = (_cp && _cp.imgFile) || p.imgFile || '';
+    const imgHtml = _imgF
+      ? `<img src="img_catalogo/${_imgF}" alt="" loading="lazy">`
+      : '🖼';
+    const comm = p.commento_alberto
+      ? `<span class="ocard-comment">💬 ${p.commento_alberto}</span>` : '';
+    const track = (p.tracking && statoUI(p) !== 'spedito')
+      ? `<span class="ocard-tracking">📦 ${p.tracking}</span>` : '';
+
+    // blocco numeri desktop
+    const resCls = max<=0 ? 'zero' : 'res';
+    const nums = `
+      <div class="ocard-sep"></div>
+      <div class="ocard-nums">
+        <div class="onum residuo-block">
+          <div class="onum-val big ${resCls}">€${fmt(max)}</div>
+          <div class="onum-lbl">da saldare</div>
+        </div>
+        <div class="onum" style="border-right:1px solid var(--line2)">
+          <div class="onum-val tot">€${fmt(p.prezzo_totale)}</div>
+          <div class="onum-lbl">prezzo</div>
+        </div>
+        <div class="onum" style="border-right:1px solid var(--line2)">
+          <div class="onum-val acc">€${fmt((p.acconto||0)+(p.acconto_extra||0))}</div>
+          <div class="onum-lbl">versato</div>
+        </div>
+        <div class="onum" style="border-right:1px solid var(--line2);padding-right:16px">
+          <div class="onum-val tipo">${tipoLbl}</div>
+          <div class="onum-lbl">tipo</div>
+        </div>
+      </div>`;
+
+    // blocco numeri mobile
+    const mobileNums = `
+      <div class="ocard-mobile-nums">
+        <div class="omob-num"><span class="omob-val ${resCls==='res'?'warn':'zero'}">€${fmt(max)}</span><span class="omob-lbl">Residuo</span></div>
+        <div class="omob-num"><span class="omob-val dim">€${fmt(p.prezzo_totale)}</span><span class="omob-lbl">Prezzo</span></div>
+        <div class="omob-num"><span class="omob-val blue">€${fmt((p.acconto||0)+(p.acconto_extra||0))}</span><span class="omob-lbl">Versato</span></div>
+      </div>`;
+
+    // blocco azioni
+    let actions = '';
+    if(puoModificare){
+      actions = `<div class="ocard-sep"></div><div class="ocard-actions">
+        <button class="btn-salda-ord" onclick="apriModalSalda('${p.id}')">Salda €${fmt(max)}</button>
+        <button class="btn-acc-ord" onclick="apriModalAcconto('${p.id}')">Imposta acconto</button>
+      </div>`;
+    } else if(stato==='spedito' && p.tracking){
+      actions = `<div class="ocard-sep"></div><div class="ocard-actions">
+        <div class="ocard-tracking">🚚 ${p.tracking}</div>
+      </div>`;
+    } else if(stato==='in_conferma'){
+      actions = `<div class="ocard-sep"></div><div class="ocard-actions">
+        <span class="ocard-wait">In attesa di DNI</span>
+      </div>`;
+    }
+
     return`<div class="ocard ${stato}" id="oc-${p.id}">
-      <div class="ocard-top">
-        <div class="ocard-thumb">${(()=>{const cp=S.catalogo.find(x=>x.id==p.prodotto_id);const img=cp&&cp.imgFile?`img_catalogo/${cp.imgFile}`:p.imgFile?`img_catalogo/${p.imgFile}`:'';return img?`<img src="${img}" alt="" style="width:100%;height:100%;object-fit:cover;opacity:1">`:'🖼';})()}</div>
+      <div class="ocard-left">
+        <div class="ocard-thumb">${imgHtml}</div>
         <div class="ocard-info">
           <div class="ocard-name">${p.nome_prodotto}</div>
           <div class="ocard-meta">
+            <span class="tier-pill ${p.tier_prodotto}">${TIER_NAMES[p.tier_prodotto]||p.tier_prodotto}</span>
             <span class="stato-pill ${stato}">${sl}</span>
+            ${comm}${track}
           </div>
-          ${comm}${track}
         </div>
-        <div style="flex-shrink:0">${nums}</div>
       </div>
-      ${extra}
+      ${mobileNums}
+      ${nums}
+      ${actions}
     </div>`;
   }).join('');
 }
@@ -1351,23 +1458,126 @@ async function salvaExtra(id,max){
   }catch(e){fb.textContent='Errore di connessione.';fb.className='extra-fb err';btn.disabled=false;}
 }
 
-function chiudiSaldo(){document.getElementById('mSaldo').classList.remove('open');saldoPendId=null;saldoPendVal=0;}
+// ─── MODAL SALDA ──────────────────────────────────────────────────────────────
+let _mSaldaId = null;
 
-async function confermaSaldo(){
-  const id=saldoPendId, val=saldoPendVal; chiudiSaldo();
-  try{
-    const res=await apiSalvaExtra(id,val);
-    if(!res.ok){alert('Errore salvataggio. Riprova.');return;}
-    const pren=S.prenotazioni.find(p=>p.id===id);
-    if(pren){
-      pren.acconto_extra=(pren.acconto_extra||0)+val;
-      pren.residuo=0; pren.modificabile=false; pren.stato_ordine='saldato';
-      S.utente.credito=Math.max(0,S.utente.credito-val);
-      document.getElementById('tbCred').textContent='€'+fmt(S.utente.credito);
-    }
-    renderOrdini();
-  }catch(e){alert('Errore di connessione.');}
+function apriModalSalda(id) {
+  const p = S.prenotazioni.find(x => x.id === id);
+  if (!p) return;
+  _mSaldaId = id;
+  const residuo = p.residuo || 0;
+  const creditoDopo = S.utente.credito - residuo;
+  document.getElementById('mSaldaNome').textContent = p.nome_prodotto;
+  document.getElementById('mSaldaImporto').textContent = '€' + fmt(residuo);
+  document.getElementById('mSaldaCreditoOra').textContent = '€' + fmt(S.utente.credito);
+  const dopoEl = document.getElementById('mSaldaCreditoDopo');
+  dopoEl.textContent = '€' + fmt(Math.max(0, creditoDopo));
+  dopoEl.style.color = creditoDopo < 0 ? 'var(--red)' : 'var(--neon)';
+  if (creditoDopo < 0) {
+    // credito insufficiente: avviso, non aprire modal
+    alert(`Credito insufficiente. Hai €${fmt(S.utente.credito)} ma servono €${fmt(residuo)}.`);
+    return;
+  }
+  document.getElementById('mSaldaOrd').classList.add('open');
 }
+
+function chiudiModalSalda() {
+  document.getElementById('mSaldaOrd').classList.remove('open');
+  _mSaldaId = null;
+}
+
+async function eseguiSalda() {
+  const id = _mSaldaId;
+  const p = S.prenotazioni.find(x => x.id === id);
+  if (!p) return;
+  const val = p.residuo || 0;
+  chiudiModalSalda();
+  try {
+    const res = await apiSalvaExtra(id, val);
+    if (!res.ok) { alert('Errore salvataggio. Riprova.'); return; }
+    p.acconto_extra = (p.acconto_extra || 0) + val;
+    p.residuo = 0; p.modificabile = false; p.stato_ordine = 'saldato';
+    S.utente.credito = Math.max(0, S.utente.credito - val);
+    document.getElementById('tbCred').textContent = '€' + fmt(S.utente.credito);
+    aggiornaCache();
+    renderOrdini();
+  } catch(e) { alert('Errore di connessione. Riprova.'); }
+}
+
+// ─── MODAL IMPOSTA ACCONTO ─────────────────────────────────────────────────────
+let _mAccId = null, _mAccMax = 0;
+
+function apriModalAcconto(id) {
+  const p = S.prenotazioni.find(x => x.id === id);
+  if (!p) return;
+  _mAccId = id; _mAccMax = p.residuo || 0;
+  document.getElementById('mAccNome').textContent = p.nome_prodotto;
+  document.getElementById('mAccHint').textContent = `Massimo: €${fmt(_mAccMax)} · Credito disponibile: €${fmt(S.utente.credito)}`;
+  document.getElementById('mAccInput').value = '';
+  document.getElementById('mAccInput').max = _mAccMax;
+  document.getElementById('mAccPreview').style.opacity = '0';
+  document.getElementById('mAccBtn').disabled = true;
+  document.getElementById('mAccErr').style.display = 'none';
+  document.getElementById('mAccontoOrd').classList.add('open');
+  setTimeout(() => document.getElementById('mAccInput').focus(), 200);
+}
+
+function chiudiModalAcconto() {
+  document.getElementById('mAccontoOrd').classList.remove('open');
+  _mAccId = null; _mAccMax = 0;
+}
+
+function aggiornaPrevAcc() {
+  const v = parseFloat(document.getElementById('mAccInput').value);
+  const preview = document.getElementById('mAccPreview');
+  const btn = document.getElementById('mAccBtn');
+  const errEl = document.getElementById('mAccErr');
+  errEl.style.display = 'none';
+  if (v > 0 && v <= _mAccMax && v <= S.utente.credito) {
+    const newRes = _mAccMax - v;
+    const newCred = S.utente.credito - v;
+    const resEl = document.getElementById('mAccResAfter');
+    resEl.textContent = '€' + fmt(newRes);
+    resEl.style.color = newRes === 0 ? 'var(--neon)' : 'var(--warm)';
+    document.getElementById('mAccCreditoDopo').textContent = '€' + fmt(newCred);
+    preview.style.opacity = '1';
+    btn.disabled = false;
+  } else {
+    preview.style.opacity = '0';
+    btn.disabled = true;
+    if (v > S.utente.credito) {
+      errEl.textContent = `Credito insufficiente. Hai €${fmt(S.utente.credito)}.`;
+      errEl.style.display = 'block';
+    } else if (v > _mAccMax) {
+      errEl.textContent = `Importo superiore al residuo (€${fmt(_mAccMax)}).`;
+      errEl.style.display = 'block';
+    }
+  }
+}
+
+async function eseguiAcconto() {
+  const id = _mAccId;
+  const val = parseFloat(document.getElementById('mAccInput').value);
+  const p = S.prenotazioni.find(x => x.id === id);
+  if (!p || !val || val <= 0) return;
+  chiudiModalAcconto();
+  try {
+    const res = await apiSalvaExtra(id, val);
+    if (!res.ok) { alert('Errore salvataggio. Riprova.'); return; }
+    const nE = (p.acconto_extra || 0) + val;
+    const nR = Math.max(0, p.prezzo_totale - p.acconto - nE);
+    p.acconto_extra = nE; p.residuo = nR;
+    if (nR === 0) { p.modificabile = false; p.stato_ordine = 'saldato'; }
+    S.utente.credito = Math.max(0, S.utente.credito - val);
+    document.getElementById('tbCred').textContent = '€' + fmt(S.utente.credito);
+    aggiornaCache();
+    renderOrdini();
+  } catch(e) { alert('Errore di connessione. Riprova.'); }
+}
+
+// legacy compat
+function chiudiSaldo(){chiudiModalSalda();}
+
 
 /* ─── NAVIGAZIONE ────────────────────────────────────────────────────────── */
 function switchTab(t){
@@ -1463,7 +1673,7 @@ window.addEventListener('DOMContentLoaded',()=>{
   },700);
 });
 document.addEventListener('keydown',e=>{
-  if(e.key==='Escape'){chiudiConferma();chiudiSaldo();chiudiLightbox();}
+  if(e.key==='Escape'){chiudiConferma();chiudiSaldo();chiudiModalSalda();chiudiModalAcconto();chiudiLightbox();}
 });
 
 
