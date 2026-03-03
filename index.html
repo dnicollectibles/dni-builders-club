@@ -144,13 +144,13 @@ input{font-family:inherit}
 
 /* product grid */
 /* ── griglia prodotti: sempre 3 colonne fisse ── */
-.prod-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--line2);border:1px solid var(--line2)}
+.prod-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;background:transparent;border:none}
 
 /* card split: foto sinistra + info destra */
-.prod-card{background:var(--bg2);display:flex;flex-direction:row;position:relative;overflow:hidden;transition:background .15s,box-shadow .15s;min-height:300px}
-.prod-card:hover{background:var(--bg3);box-shadow:inset 0 0 0 1px var(--line2)}
-.prod-card.sel-dep{background:#050e1a;outline:2px solid var(--blue);outline-offset:-2px}
-.prod-card.sel-fp{background:#050d00;outline:2px solid var(--neon);outline-offset:-2px}
+.prod-card{background:var(--bg2);display:flex;flex-direction:row;position:relative;overflow:hidden;transition:background .15s,box-shadow .15s;min-height:380px;border:1px solid var(--line2);border-radius:var(--r)}
+.prod-card:hover{background:var(--bg3);box-shadow:0 4px 20px rgba(0,0,0,.35)}
+.prod-card.sel-dep{background:#050e1a;border-color:var(--blue);box-shadow:0 0 0 1px var(--blue),0 4px 24px rgba(77,166,255,.15)}
+.prod-card.sel-fp{background:#050d00;border-color:var(--neon);box-shadow:0 0 0 1px var(--neon),0 4px 24px rgba(180,255,0,.12)}
 .prod-card-empty{opacity:.35;pointer-events:none}
 
 /* metà sinistra: foto */
@@ -209,6 +209,8 @@ input{font-family:inherit}
 .sel-item{display:flex;align-items:center;gap:10px;padding:11px 16px;border-bottom:1px solid var(--line);transition:background .15s}
 .sel-item:hover{background:var(--bg3)}
 .sel-item.dep{border-left:3px solid var(--blue)}.sel-item.fp{border-left:3px solid var(--neon)}
+.sel-del{flex-shrink:0;width:24px;height:24px;display:flex;align-items:center;justify-content:center;border:1px solid var(--line2);border-radius:var(--r);background:transparent;color:var(--text-dim);font-size:13px;line-height:1;transition:all .15s;cursor:pointer}
+.sel-del:hover{border-color:var(--red);color:var(--red);background:rgba(255,60,60,.08)}
 .sel-thumb{width:38px;height:38px;flex-shrink:0;background:var(--bg4);overflow:hidden;display:flex;align-items:center;justify-content:center;font-size:14px;opacity:.4}
 .sel-thumb img{width:100%;height:100%;object-fit:cover;opacity:1}
 .sel-info{flex:1;min-width:0}
@@ -239,6 +241,12 @@ input{font-family:inherit}
 .flt-btn{font-family:var(--f-mono);font-size:10px;font-weight:500;letter-spacing:2px;text-transform:uppercase;padding:5px 14px;border:1px solid var(--line2);color:var(--text-dim);background:transparent;transition:all .15s;border-radius:var(--r)}
 .flt-btn:hover{color:var(--text-mid);background:var(--bg3)}
 .flt-btn.active{background:var(--bg3);border-color:var(--neon);color:var(--neon)}
+
+.btn-rileva{display:flex;align-items:center;gap:7px;font-family:var(--f-mono);font-size:10px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;padding:6px 14px;border:1px solid var(--line2);color:var(--text-mid);background:transparent;transition:all .2s;border-radius:var(--r);white-space:nowrap}
+.btn-rileva:hover{border-color:var(--neon);color:var(--neon);background:var(--neon-dim)}
+.btn-rileva.loading{opacity:.5;pointer-events:none}
+.btn-rileva.loading svg{animation:spin .8s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
 
 .ord-section{display:flex;flex-direction:column;gap:12px}
 .ord-sec-title{font-family:var(--f-mono);font-size:9px;font-weight:600;letter-spacing:3px;text-transform:uppercase;color:var(--text-mid);padding-bottom:10px;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:10px}
@@ -627,12 +635,18 @@ input{font-family:inherit}
     <!-- TAB ORDINI -->
     <div class="tab-pane" id="pOrd">
       <div class="orders-wrap">
-        <div class="filters">
-          <button class="flt-btn active" onclick="setFiltro('tutti',this)">Tutti</button>
-          <button class="flt-btn" onclick="setFiltro('da_saldare',this)">Da saldare</button>
-          <button class="flt-btn" onclick="setFiltro('in_lavorazione',this)">In lavorazione</button>
-          <button class="flt-btn" onclick="setFiltro('spedito',this)">Spedito</button>
-          <button class="flt-btn" onclick="setFiltro('saldato',this)">Saldato</button>
+        <div class="filters" style="justify-content:space-between;align-items:center">
+          <div style="display:flex;gap:6px;flex-wrap:wrap">
+            <button class="flt-btn active" onclick="setFiltro('tutti',this)">Tutti</button>
+            <button class="flt-btn" onclick="setFiltro('da_saldare',this)">Da saldare</button>
+            <button class="flt-btn" onclick="setFiltro('in_lavorazione',this)">In lavorazione</button>
+            <button class="flt-btn" onclick="setFiltro('spedito',this)">Spedito</button>
+            <button class="flt-btn" onclick="setFiltro('saldato',this)">Saldato</button>
+          </div>
+          <button class="btn-rileva" id="btnRileva" onclick="rilevaMieiOrdini(this)" title="Ricarica ordini dal server">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
+            Rileva i miei ordini
+          </button>
         </div>
 
         <div class="ord-section">
@@ -1232,6 +1246,8 @@ async function inviaConferma(){
     document.getElementById('lockBanner').classList.add('on');
     document.getElementById('btnConferma').disabled=true;
     renderCatalogo();
+    // Ricarica ordini dal backend così "I tuoi ordini" mostra subito le prenotazioni create
+    rilevaMieiOrdini();
   }catch(e){alert('Errore di connessione. Riprova.');}
   finally{btn.classList.remove('loading');btn.disabled=false;}
 }
@@ -1439,7 +1455,7 @@ window.addEventListener('DOMContentLoaded',()=>{
   setTimeout(()=>{
     gl.classList.add('out');
     setTimeout(()=>gl.style.display='none',300);
-    ripristinaSessione().then(ok=>{ if(!ok) showScreen('sLogin'); });
+    if(!ripristinaSessione()) showScreen('sLogin');
   },700);
 });
 document.addEventListener('keydown',e=>{
@@ -1449,68 +1465,69 @@ document.addEventListener('keydown',e=>{
 
 /* ─── CACHE SESSIONE — ripristino dopo refresh ───────────────────────────── */
 const DNI_CACHE_KEY = 'dni_cache';
+const DNI_CACHE_TTL = 8 * 60 * 60 * 1000; // 8 ore — ripristino rapido senza schermata nera
 
 function salvaCacheSessione() {
   try {
-    // Salva credenziali + snapshot dati (usato solo come fallback offline)
     localStorage.setItem(DNI_CACHE_KEY, JSON.stringify({
-      id:           S.utente.id,
-      pin:          S.utente._codice,
-      token:        S._sessionToken,
-      utente:       S.utente,
-      catalogo:     S.catalogo,
-      prenotazioni: S.prenotazioni,
-      mese:         S.mese,
-      savedAt:      Date.now(),
+      utente: S.utente, catalogo: S.catalogo,
+      prenotazioni: S.prenotazioni, mese: S.mese,
+      token: S._sessionToken, savedAt: Date.now(),
     }));
   } catch(e) {}
 }
 
-// async: chiama sempre il backend per dati freschi.
-// Se il backend fallisce usa i dati cached come fallback silenzioso.
-async function ripristinaSessione() {
+// Sincrona e veloce: carica dalla cache, nessuna chiamata al backend.
+// I dati freschi si ottengono con "Rileva i miei ordini" o dopo conferma.
+function ripristinaSessione() {
   try {
     const raw = localStorage.getItem(DNI_CACHE_KEY);
     if (!raw) return false;
     const c = JSON.parse(raw);
-    if (!c.id || !c.pin) { localStorage.removeItem(DNI_CACHE_KEY); return false; }
-
-    // Ripristina token anti-duplicato prima del fetch
+    if (!c.savedAt || Date.now() - c.savedAt > DNI_CACHE_TTL) {
+      localStorage.removeItem(DNI_CACHE_KEY); return false;
+    }
+    if (!c.utente || !c.utente.id || !c.utente._codice) return false;
+    S.utente = c.utente; S.catalogo = c.catalogo || [];
+    S.prenotazioni = c.prenotazioni || []; S.mese = c.mese || '';
     S._sessionToken = c.token || null;
     if (S._sessionToken) {
-      try { localStorage.setItem('dni_session_' + c.id, S._sessionToken); } catch(e) {}
+      try { localStorage.setItem('dni_session_' + S.utente.id, S._sessionToken); } catch(e) {}
+      avviaSessionWatch(S.utente.id);
     }
-
-    // Sempre: richiedi dati freschi al backend
-    const res = await apiLogin(c.id, c.pin);
-
-    if (res.ok) {
-      res.utente.tier = normTier(res.utente.tier);
-      S.utente = res.utente; S.utente._codice = c.pin;
-      S.catalogo     = res.catalogo     || [];
-      S.prenotazioni = res.prenotazioni || [];
-      S.mese         = res.mese         || '';
-    } else {
-      // Backend non raggiungibile: fallback ai dati cached
-      if (!c.utente) { localStorage.removeItem(DNI_CACHE_KEY); return false; }
-      c.utente.tier = normTier(c.utente.tier);
-      S.utente = c.utente; S.utente._codice = c.pin;
-      S.catalogo     = c.catalogo     || [];
-      S.prenotazioni = c.prenotazioni || [];
-      S.mese         = c.mese         || '';
-    }
-
-    if (!S._sessionToken)
-      S._sessionToken = 'st_' + Date.now() + '_' + Math.random().toString(36).slice(2,8);
-    try { localStorage.setItem('dni_session_' + S.utente.id, S._sessionToken); } catch(e) {}
-    avviaSessionWatch(S.utente.id);
-    salvaCacheSessione();
     avviaApp();
     return true;
   } catch(e) { localStorage.removeItem(DNI_CACHE_KEY); return false; }
 }
 
 function aggiornaCache() { if (S.utente) salvaCacheSessione(); }
+
+/**
+ * Rileva ordini: ricarica prenotazioni, credito e stato dal backend.
+ * Chiamato dal tasto "Rileva i miei ordini" e automaticamente dopo conferma.
+ */
+async function rilevaMieiOrdini(btn) {
+  if (btn) { btn.classList.add('loading'); btn.disabled = true; }
+  try {
+    const res = await apiLogin(S.utente.id, S.utente._codice);
+    if (res.ok) {
+      res.utente.tier = normTier(res.utente.tier);
+      // Aggiorna solo i dati dinamici, non sovrascrive le credenziali attive
+      S.utente.credito = res.utente.credito;
+      S.utente.stato   = res.utente.stato;
+      S.prenotazioni   = res.prenotazioni || [];
+      S.catalogo       = res.catalogo     || [];
+      S.mese           = res.mese         || S.mese;
+      document.getElementById('tbCred').textContent = '€' + fmt(S.utente.credito);
+      document.getElementById('lockBanner').classList.toggle('on', S.utente.stato === 'attesa');
+      aggiornaCache();
+    }
+  } catch(e) { /* silenzioso */ }
+  finally {
+    if (btn) { btn.classList.remove('loading'); btn.disabled = false; }
+    renderOrdini();
+  }
+}
 
 /* ─── ZOOM ENGINE ────────────────────────────────────────────────────────── */
 const ZOOM_LEVELS = [75, 85, 100, 110, 125];
