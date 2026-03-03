@@ -658,9 +658,23 @@ input{font-family:inherit}
 
         <div class="ord-section">
           <div class="ord-sec-title">
-            Assegna acconti <span class="sec-cnt" id="cntMod">0</span>
+            Da saldare <span class="sec-cnt" id="cntDaSaldare">0</span>
           </div>
-          <div id="ordMod"></div>
+          <div id="ordDaSaldare"></div>
+        </div>
+
+        <div class="ord-section">
+          <div class="ord-sec-title">
+            In lavorazione <span class="sec-cnt" id="cntInLavorazione">0</span>
+          </div>
+          <div id="ordInLavorazione"></div>
+        </div>
+
+        <div class="ord-section">
+          <div class="ord-sec-title">
+            Spedito <span class="sec-cnt" id="cntSpedito">0</span>
+          </div>
+          <div id="ordSpedito"></div>
         </div>
 
         <div class="ord-section">
@@ -672,9 +686,9 @@ input{font-family:inherit}
 
         <div class="ord-section">
           <div class="ord-sec-title">
-            Ordini confermati <span class="sec-cnt" id="cntArch">0</span>
+            Completati <span class="sec-cnt" id="cntSaldato">0</span>
           </div>
-          <div id="ordArch"></div>
+          <div id="ordSaldato"></div>
         </div>
       </div>
     </div>
@@ -1278,28 +1292,42 @@ async function inviaConferma(){
 }
 
 /* ─── RENDER ORDINI ──────────────────────────────────────────────────────── */
+// statoUI: determina la categoria visiva basandosi SOLO su stato_ordine + confermata.
+// "modificabile" NON influenza la sezione — serve solo per mostrare/nascondere il widget acconto extra.
+function statoUI(p){ return !p.confermata ? 'draft' : (p.stato_ordine || 'draft'); }
+
 function renderOrdini(){
-  const flt=p=>{if(filtro==='tutti')return true; const s=!p.confermata?'draft':p.stato_ordine; return s===filtro;};
-  const mod   =S.prenotazioni.filter(p=>p.confermata&&p.modificabile&&p.stato_ordine!=='saldato'&&flt(p));
-  const draft  =S.prenotazioni.filter(p=>!p.confermata&&flt(p));
-  const arch   =S.prenotazioni.filter(p=>p.confermata&&!p.modificabile&&flt(p));
+  const flt = p => filtro==='tutti' || statoUI(p)===filtro;
 
-  document.getElementById('cntMod').textContent=mod.length;
-  document.getElementById('cntDraft').textContent=draft.length;
-  document.getElementById('cntArch').textContent=arch.length;
+  const daSaldare    = S.prenotazioni.filter(p => statoUI(p)==='da_saldare'    && flt(p));
+  const inLavorazione= S.prenotazioni.filter(p => statoUI(p)==='in_lavorazione'&& flt(p));
+  const spedito      = S.prenotazioni.filter(p => statoUI(p)==='spedito'       && flt(p));
+  const draft        = S.prenotazioni.filter(p => statoUI(p)==='draft'         && flt(p));
+  const saldato      = S.prenotazioni.filter(p => statoUI(p)==='saldato'       && flt(p));
 
-  renderOrdSection('ordMod',  mod,  true);
-  renderOrdSection('ordDraft',draft, false);
-  renderOrdSection('ordArch', arch, false);
+  document.getElementById('cntDaSaldare').textContent    = daSaldare.length;
+  document.getElementById('cntInLavorazione').textContent= inLavorazione.length;
+  document.getElementById('cntSpedito').textContent      = spedito.length;
+  document.getElementById('cntDraft').textContent        = draft.length;
+  document.getElementById('cntSaldato').textContent      = saldato.length;
+
+  // conMod=true solo se la prenotazione ha modificabile=true (widget acconto extra)
+  renderOrdSection('ordDaSaldare',    daSaldare,     false);
+  renderOrdSection('ordInLavorazione',inLavorazione, false);
+  renderOrdSection('ordSpedito',      spedito,       false);
+  renderOrdSection('ordDraft',        draft,         false);
+  renderOrdSection('ordSaldato',      saldato,       false);
 }
 
-function renderOrdSection(elId, prens, conMod){
+function renderOrdSection(elId, prens){
   const el=document.getElementById(elId);
   if(!prens.length){el.innerHTML='<div class="ord-empty">Nessun ordine in questa sezione</div>';return;}
   el.innerHTML=prens.map(p=>{
-    const stato=!p.confermata?'draft':p.stato_ordine;
+    const stato=statoUI(p);
     const sl=STATI_LBL[stato]||stato;
     const max=p.residuo||0;
+    // Il widget acconto extra appare SOLO se Alberto ha abilitato modificabile=true per questo ordine
+    const puoModificare = p.modificabile && p.residuo > 0;
     const comm=p.commento_alberto?`<div class="ocard-comment on">💬 ${p.commento_alberto}</div>`:'';
     const nums=`<div class="ocard-nums">
       <div class="onum"><div class="onum-lbl">Prezzo</div><div class="onum-val tot">€${fmt(p.prezzo_totale)}</div></div>
@@ -1307,7 +1335,7 @@ function renderOrdSection(elId, prens, conMod){
       ${p.acconto_extra>0?`<div class="onum"><div class="onum-lbl">Extra</div><div class="onum-val acc">€${fmt(p.acconto_extra)}</div></div>`:''}
       <div class="onum"><div class="onum-lbl">Da saldare</div><div class="onum-val ${p.residuo<=0?'zero':'res'}">€${fmt(p.residuo)}</div></div>
     </div>`;
-    const extra=conMod?`<div class="ocard-extra">
+    const extra=puoModificare?`<div class="ocard-extra">
       <span class="extra-lbl">Assegna acconto:</span>
       <input type="number" class="extra-input" id="ei-${p.id}" placeholder="€" min="1" max="${max}"
              oninput="onEI('${p.id}',${max})">
@@ -1552,15 +1580,13 @@ async function rilevaMieiOrdini(btn) {
   const btnRileva = btn || document.getElementById('btnRileva');
   if (btnRileva) { btnRileva.classList.add('loading'); btnRileva.disabled = true; }
   try {
-    const res = await apiLogin(S.utente.id, pin);
+    // Usa action=ordini (leggero) invece di un login completo: ricarica solo
+    // prenotazioni, credito e stato utente senza ricaricare il catalogo.
+    const res = await _get({ action:'ordini', id: S.utente.id, code: pin });
     if (res.ok) {
-      res.utente.tier = normTier(res.utente.tier);
-      const codice = pin; // preserva sempre il pin corrente
-      S.utente = res.utente;
-      S.utente._codice = codice;
       S.prenotazioni = res.prenotazioni || [];
-      S.catalogo     = res.catalogo     || [];
-      S.mese         = res.mese         || S.mese;
+      S.utente.credito = res.credito ?? S.utente.credito;
+      S.utente.stato   = res.stato   ?? S.utente.stato;
       document.getElementById('tbCred').textContent = '€' + fmt(S.utente.credito);
       document.getElementById('ordCount').textContent = S.prenotazioni.length;
       document.getElementById('lockBanner').classList.toggle('on', S.utente.stato === 'attesa');
