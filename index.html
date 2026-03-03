@@ -209,6 +209,8 @@ input{font-family:inherit}
 .sel-item{display:flex;align-items:center;gap:10px;padding:11px 16px;border-bottom:1px solid var(--line);transition:background .15s}
 .sel-item:hover{background:var(--bg3)}
 .sel-item.dep{border-left:3px solid var(--blue)}.sel-item.fp{border-left:3px solid var(--neon)}
+.sel-del{flex-shrink:0;width:24px;height:24px;display:flex;align-items:center;justify-content:center;border:1px solid var(--line2);border-radius:var(--r);background:transparent;color:var(--text-dim);font-size:13px;transition:all .15s;cursor:pointer}
+.sel-del:hover{border-color:var(--red);color:var(--red);background:rgba(255,60,60,.08)}
 .sel-del{flex-shrink:0;width:24px;height:24px;display:flex;align-items:center;justify-content:center;border:1px solid var(--line2);border-radius:var(--r);background:transparent;color:var(--text-dim);font-size:13px;line-height:1;transition:all .15s;cursor:pointer}
 .sel-del:hover{border-color:var(--red);color:var(--red);background:rgba(255,60,60,.08)}
 .sel-thumb{width:38px;height:38px;flex-shrink:0;background:var(--bg4);overflow:hidden;display:flex;align-items:center;justify-content:center;font-size:14px;opacity:.4}
@@ -241,6 +243,11 @@ input{font-family:inherit}
 .flt-btn{font-family:var(--f-mono);font-size:10px;font-weight:500;letter-spacing:2px;text-transform:uppercase;padding:5px 14px;border:1px solid var(--line2);color:var(--text-dim);background:transparent;transition:all .15s;border-radius:var(--r)}
 .flt-btn:hover{color:var(--text-mid);background:var(--bg3)}
 .flt-btn.active{background:var(--bg3);border-color:var(--neon);color:var(--neon)}
+.btn-rileva{display:flex;align-items:center;gap:7px;font-family:var(--f-mono);font-size:10px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;padding:6px 14px;border:1px solid var(--line2);color:var(--text-mid);background:transparent;transition:all .2s;border-radius:var(--r);white-space:nowrap;cursor:pointer}
+.btn-rileva:hover{border-color:var(--neon);color:var(--neon)}
+.btn-rileva.loading{opacity:.5;pointer-events:none}
+.btn-rileva.loading svg{animation:spin .8s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
 
 .btn-rileva{display:flex;align-items:center;gap:7px;font-family:var(--f-mono);font-size:10px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;padding:6px 14px;border:1px solid var(--line2);color:var(--text-mid);background:transparent;transition:all .2s;border-radius:var(--r);white-space:nowrap}
 .btn-rileva:hover{border-color:var(--neon);color:var(--neon);background:var(--neon-dim)}
@@ -1008,6 +1015,8 @@ function doLogout(){
     localStorage.removeItem('dni_cache');
   } catch(e) {}
   if (_sessionChannel) { _sessionChannel.close(); _sessionChannel = null; }
+  fermaPolling();
+  fermaAutoRefresh();
   S.utente=null;S.catalogo=[];S.prenotazioni=[];S.mese='';
   Object.keys(SEL).forEach(k=>delete SEL[k]);
   document.getElementById('lid').value='';document.getElementById('lpin').value='';
@@ -1016,6 +1025,7 @@ function doLogout(){
 
 /* ─── AVVIO APP ──────────────────────────────────────────────────────────── */
 function avviaApp(){
+  avviaAutoRefresh();    // parte il timer 5 min auto-refresh ordini
   initZoom();
   initLayout();
   const u=S.utente;
@@ -1040,6 +1050,21 @@ function avviaApp(){
   renderCatalogo(); renderOrdini();
   document.getElementById('ordCount').textContent=S.prenotazioni.length;
   showScreen('sApp');
+  avviaPolling();
+}
+
+let _pollTimer = null;
+function avviaPolling() {
+  if (_pollTimer) clearInterval(_pollTimer);
+  _pollTimer = setInterval(() => {
+    // Aggiorna solo se l'app è visibile e l'utente è loggato
+    if (S.utente && document.visibilityState !== 'hidden') {
+      rilevaMieiOrdini();
+    }
+  }, 5 * 60 * 1000); // ogni 5 minuti
+}
+function fermaPolling() {
+  if (_pollTimer) { clearInterval(_pollTimer); _pollTimer = null; }
 }
 
 /* ─── RENDER CATALOGO ────────────────────────────────────────────────────── */
@@ -1371,7 +1396,7 @@ function switchTab(t){
   document.getElementById('pOrd').classList.toggle('active',t==='ord');
   document.getElementById('btnTabCat').classList.toggle('active',t==='cat');
   document.getElementById('btnTabOrd').classList.toggle('active',t==='ord');
-  if(t==='ord')renderOrdini();
+  if(t==='ord') rilevaMieiOrdini();   // sempre dati freschi dal backend
 }
 
 function setFiltro(f,btn){
@@ -1470,9 +1495,13 @@ const DNI_CACHE_TTL = 8 * 60 * 60 * 1000; // 8 ore — ripristino rapido senza s
 function salvaCacheSessione() {
   try {
     localStorage.setItem(DNI_CACHE_KEY, JSON.stringify({
-      utente: S.utente, catalogo: S.catalogo,
-      prenotazioni: S.prenotazioni, mese: S.mese,
-      token: S._sessionToken, savedAt: Date.now(),
+      utente: S.utente,
+      pin: S.utente._codice,        // salvo esplicitamente per sicurezza
+      catalogo: S.catalogo,
+      prenotazioni: S.prenotazioni,
+      mese: S.mese,
+      token: S._sessionToken,
+      savedAt: Date.now(),
     }));
   } catch(e) {}
 }
@@ -1487,7 +1516,10 @@ function ripristinaSessione() {
     if (!c.savedAt || Date.now() - c.savedAt > DNI_CACHE_TTL) {
       localStorage.removeItem(DNI_CACHE_KEY); return false;
     }
-    if (!c.utente || !c.utente.id || !c.utente._codice) return false;
+    if (!c.utente || !c.utente.id) return false;
+    // Ripristina _codice: prima da utente, poi dal campo pin di backup
+    if (!c.utente._codice && c.pin) c.utente._codice = c.pin;
+    if (!c.utente._codice) return false;
     S.utente = c.utente; S.catalogo = c.catalogo || [];
     S.prenotazioni = c.prenotazioni || []; S.mese = c.mese || '';
     S._sessionToken = c.token || null;
@@ -1507,26 +1539,54 @@ function aggiornaCache() { if (S.utente) salvaCacheSessione(); }
  * Chiamato dal tasto "Rileva i miei ordini" e automaticamente dopo conferma.
  */
 async function rilevaMieiOrdini(btn) {
-  if (btn) { btn.classList.add('loading'); btn.disabled = true; }
+  // Recupera il pin: da S.utente._codice o dalla cache come fallback
+  let pin = S.utente && S.utente._codice;
+  if (!pin) {
+    try {
+      const raw = localStorage.getItem(DNI_CACHE_KEY);
+      if (raw) { const c = JSON.parse(raw); pin = c.pin || (c.utente && c.utente._codice); }
+    } catch(e) {}
+  }
+  if (!pin || !S.utente || !S.utente.id) { renderOrdini(); return; }
+
+  const btnRileva = btn || document.getElementById('btnRileva');
+  if (btnRileva) { btnRileva.classList.add('loading'); btnRileva.disabled = true; }
   try {
-    const res = await apiLogin(S.utente.id, S.utente._codice);
+    const res = await apiLogin(S.utente.id, pin);
     if (res.ok) {
       res.utente.tier = normTier(res.utente.tier);
-      // Aggiorna solo i dati dinamici, non sovrascrive le credenziali attive
-      S.utente.credito = res.utente.credito;
-      S.utente.stato   = res.utente.stato;
-      S.prenotazioni   = res.prenotazioni || [];
-      S.catalogo       = res.catalogo     || [];
-      S.mese           = res.mese         || S.mese;
+      const codice = pin; // preserva sempre il pin corrente
+      S.utente = res.utente;
+      S.utente._codice = codice;
+      S.prenotazioni = res.prenotazioni || [];
+      S.catalogo     = res.catalogo     || [];
+      S.mese         = res.mese         || S.mese;
       document.getElementById('tbCred').textContent = '€' + fmt(S.utente.credito);
+      document.getElementById('ordCount').textContent = S.prenotazioni.length;
       document.getElementById('lockBanner').classList.toggle('on', S.utente.stato === 'attesa');
       aggiornaCache();
     }
-  } catch(e) { /* silenzioso */ }
+  } catch(e) { console.error('rilevaMieiOrdini error:', e); }
   finally {
-    if (btn) { btn.classList.remove('loading'); btn.disabled = false; }
+    if (btnRileva) { btnRileva.classList.remove('loading'); btnRileva.disabled = false; }
     renderOrdini();
   }
+}
+
+/* ─── AUTO-REFRESH ogni 5 minuti ─────────────────────────────────────────── */
+let _autoRefreshTimer = null;
+function avviaAutoRefresh() {
+  if (_autoRefreshTimer) clearInterval(_autoRefreshTimer);
+  _autoRefreshTimer = setInterval(() => {
+    // Aggiorna solo se la tab ordini è visibile e la pagina è in foreground
+    if (document.getElementById('pOrd').classList.contains('active') &&
+        !document.hidden) {
+      rilevaMieiOrdini();
+    }
+  }, 5 * 60 * 1000); // 5 minuti
+}
+function fermaAutoRefresh() {
+  if (_autoRefreshTimer) { clearInterval(_autoRefreshTimer); _autoRefreshTimer = null; }
 }
 
 /* ─── ZOOM ENGINE ────────────────────────────────────────────────────────── */
