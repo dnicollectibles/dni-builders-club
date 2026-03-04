@@ -270,7 +270,7 @@ input{font-family:inherit}
 .ord-group-hdr.da_saldare{background:rgba(90,180,255,.06);border-color:rgba(90,180,255,.22);}
 .ord-group-hdr.saldato{background:rgba(180,255,0,.05);border-color:rgba(180,255,0,.18);}
 .ord-group-hdr.spedito{background:rgba(0,212,160,.05);border-color:rgba(0,212,160,.18);}
-.ord-group-hdr.in_conferma,.ord-group-hdr.in_preparazione{background:var(--bg3);border-color:var(--line2);}
+.ord-group-hdr.in_conferma{background:var(--bg3);border-color:var(--line2);}
 .grp-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
 .ord-group-hdr.da_saldare .grp-dot{background:var(--blue);}
 .ord-group-hdr.saldato .grp-dot{background:var(--neon);}
@@ -294,7 +294,7 @@ input{font-family:inherit}
 .ocard.da_saldare::before{background:var(--blue);}
 .ocard.saldato::before{background:var(--neon);}
 .ocard.spedito::before{background:var(--green);}
-.ocard.in_conferma::before,.ocard.in_preparazione::before{background:var(--line2);}
+.ocard.in_conferma::before{background:var(--line2);}
 /* left block */
 .ocard-left{display:flex;align-items:center;gap:12px;flex:1;min-width:0;padding:12px 16px;}
 .ocard-thumb{width:70px;height:100px;flex-shrink:0;background:var(--bg4);border:1px solid var(--line2);border-radius:2px;overflow:hidden;display:flex;align-items:center;justify-content:center;font-size:18px;opacity:.35;}
@@ -381,7 +381,7 @@ input{font-family:inherit}
 .btn-confirm:disabled{opacity:.35;cursor:not-allowed}
 
 /* modal saldo */
-/* modal ordini — struttura con header */
+/* modal ordini */
 .modal-ord{background:var(--bg2);border:1px solid var(--line2);width:440px;max-width:94vw;border-radius:var(--r);overflow:hidden;transform:translateY(16px);transition:transform .2s;}
 .overlay.open .modal-ord{transform:translateY(0);}
 .modal-hdr{padding:13px 20px;border-bottom:1px solid var(--line2);display:flex;align-items:center;justify-content:space-between;background:var(--bg3);}
@@ -890,7 +890,7 @@ const ACC_BASE   = {scout:5, veteran:8, elite:10};
 const TO         = {scout:0, veteran:1, elite:2};
 const TIER_NAMES = {scout:'Scout', veteran:'Veteran', elite:'Élite'};
 const TIER_QUOTA = {scout:25, veteran:45, elite:65};
-const STATI_LBL  = {in_preparazione:'In conferma', da_saldare:'Da saldare',
+const STATI_LBL  = {in_preparazione:'In preparazione', da_saldare:'Da saldare',
                     saldato:'Pronto per la spedizione', spedito:'Spedito'};
 
 /* ─── STATO ──────────────────────────────────────────────────────────────── */
@@ -1588,6 +1588,9 @@ async function eseguiSalda() {
   if (!p) return;
   const val = p.residuo || 0;
   chiudiModalSalda();
+  // Disabilita subito i pulsanti per evitare doppio click o confusione
+  document.querySelectorAll(`[onclick*="apriModalSalda('${id}')"], [onclick*="apriModalAcconto('${id}')"]`)
+    .forEach(btn => { btn.disabled = true; btn.style.opacity = '0.35'; btn.style.cursor = 'not-allowed'; });
   try {
     const res = await apiSalvaExtra(id, val);
     if (!res.ok) { alert('Errore salvataggio. Riprova.'); return; }
@@ -1658,6 +1661,9 @@ async function eseguiAcconto() {
   const p = S.prenotazioni.find(x => x.id === id);
   if (!p || !val || val <= 0) return;
   chiudiModalAcconto();
+  // Disabilita subito i pulsanti per evitare doppio click
+  document.querySelectorAll(`[onclick*="apriModalSalda('${id}')"], [onclick*="apriModalAcconto('${id}')"]`)
+    .forEach(btn => { btn.disabled = true; btn.style.opacity = '0.35'; btn.style.cursor = 'not-allowed'; });
   try {
     const res = await apiSalvaExtra(id, val);
     if (!res.ok) { alert('Errore salvataggio. Riprova.'); return; }
