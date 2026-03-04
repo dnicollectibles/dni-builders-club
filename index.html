@@ -295,7 +295,7 @@ input{font-family:inherit}
 .ocard.in_conferma::before{background:var(--line2);}
 /* left block */
 .ocard-left{display:flex;align-items:center;gap:12px;flex:1;min-width:0;padding:12px 16px;}
-.ocard-thumb{width:50px;height:50px;flex-shrink:0;background:var(--bg4);border:1px solid var(--line2);border-radius:2px;overflow:hidden;display:flex;align-items:center;justify-content:center;font-size:18px;opacity:.35;}
+.ocard-thumb{width:70px;height:100px;flex-shrink:0;background:var(--bg4);border:1px solid var(--line2);border-radius:2px;overflow:hidden;display:flex;align-items:center;justify-content:center;font-size:18px;opacity:.35;}
 .ocard-thumb img{width:100%;height:100%;object-fit:cover;opacity:1;}
 .ocard-info{flex:1;min-width:0;display:flex;flex-direction:column;gap:5px;}
 .ocard-name{font-size:13px;font-weight:500;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
@@ -698,7 +698,7 @@ input{font-family:inherit}
         <div class="filters" style="justify-content:space-between;align-items:center">
           <div style="display:flex;gap:6px;flex-wrap:wrap">
             <button class="flt-btn active" onclick="setFiltro('tutti',this)">Tutti</button>
-            <button class="flt-btn" onclick="setFiltro('in_preparazione',this)">In preparazione</button>
+            <button class="flt-btn" onclick="setFiltro('in_preparazione',this)">In conferma</button>
             <button class="flt-btn" onclick="setFiltro('da_saldare',this)">Da saldare</button>
             <button class="flt-btn" onclick="setFiltro('saldato',this)">Saldato</button>
             <button class="flt-btn" onclick="setFiltro('spedito',this)">Spedito</button>
@@ -751,7 +751,7 @@ input{font-family:inherit}
 </div>
 
 <!-- ═══ MODAL CONFERMA ═══ -->
-<div class="overlay" id="mConferma" onclick="if(event.target===this)chiudiConferma()">
+<div class="overlay" id="mConferma">
   <div class="mbox">
     <div class="mhdr">
       <div class="mtitle">Conferma Ordine</div>
@@ -779,62 +779,90 @@ input{font-family:inherit}
 </div>
 
 <!-- ═══ MODAL SALDA ORDINE ═══ -->
-<div class="overlay" id="mSaldaOrd" onclick="if(event.target===this)chiudiModalSalda()">
+<div class="overlay" id="mSaldaOrd">
   <div class="mbox-saldo" style="width:440px">
+    <div class="mhdr">
+      <div class="mtitle" style="color:var(--neon)">Salda ordine</div>
+      <button class="mclose" id="mSaldaCloseBtn" onclick="chiudiModalSalda()">×</button>
+    </div>
     <div class="mbox-saldo-body" style="gap:14px;align-items:stretch;text-align:left">
-      <div style="font-family:var(--f-title);font-size:16px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--neon)">Salda ordine</div>
-      <div id="mSaldaNome" style="font-size:13px;font-weight:500;color:var(--text);line-height:1.4">—</div>
-      <div style="display:flex;align-items:center;justify-content:space-between;padding:13px 16px;background:var(--bg4);border:1px solid var(--line2);border-radius:var(--r)">
-        <span style="font-family:var(--f-mono);font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--text-dim)">Importo da scalare</span>
-        <span id="mSaldaImporto" style="font-family:var(--f-title);font-size:26px;font-weight:700;color:var(--neon)">—</span>
-      </div>
-      <div style="border:1px solid var(--line2);border-radius:var(--r);overflow:hidden">
-        <div style="display:flex;justify-content:space-between;padding:9px 14px;font-family:var(--f-mono);font-size:10px;border-bottom:1px solid var(--line2)">
-          <span style="color:var(--text-dim)">Credito disponibile</span>
-          <span id="mSaldaCreditoOra" style="font-weight:600;color:var(--text)">—</span>
+      <div id="mSaldaContent">
+        <div style="display:flex;flex-direction:column;gap:14px">
+          <div id="mSaldaNome" style="font-size:13px;font-weight:500;color:var(--text);line-height:1.4">—</div>
+          <div style="display:flex;align-items:center;justify-content:space-between;padding:13px 16px;background:var(--bg4);border:1px solid var(--line2);border-radius:var(--r)">
+            <span style="font-family:var(--f-mono);font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--text-dim)">Importo da scalare</span>
+            <span id="mSaldaImporto" style="font-family:var(--f-title);font-size:26px;font-weight:700;color:var(--neon)">—</span>
+          </div>
+          <div style="border:1px solid var(--line2);border-radius:var(--r);overflow:hidden">
+            <div style="display:flex;justify-content:space-between;padding:9px 14px;font-family:var(--f-mono);font-size:10px;border-bottom:1px solid var(--line2)">
+              <span style="color:var(--text-dim)">Credito disponibile</span>
+              <span id="mSaldaCreditoOra" style="font-weight:600;color:var(--text)">—</span>
+            </div>
+            <div style="display:flex;justify-content:space-between;padding:9px 14px;font-family:var(--f-mono);font-size:10px">
+              <span style="color:var(--text-dim)">Credito dopo operazione</span>
+              <span id="mSaldaCreditoDopo" style="font-weight:600;color:var(--neon)">—</span>
+            </div>
+          </div>
+          <div style="font-family:var(--f-mono);font-size:10px;color:var(--warm);background:var(--warm-dim);border:1px solid rgba(247,201,72,.2);padding:9px 12px;border-radius:var(--r);line-height:1.5">
+            ⚠ Confermando, l'ordine andrà in preparazione spedizione e non sarà più modificabile.
+          </div>
         </div>
-        <div style="display:flex;justify-content:space-between;padding:9px 14px;font-family:var(--f-mono);font-size:10px">
-          <span style="color:var(--text-dim)">Credito dopo operazione</span>
-          <span id="mSaldaCreditoDopo" style="font-weight:600;color:var(--neon)">—</span>
-        </div>
       </div>
-      <div style="font-family:var(--f-mono);font-size:10px;color:var(--warm);background:var(--warm-dim);border:1px solid rgba(247,201,72,.2);padding:9px 12px;border-radius:var(--r);line-height:1.5">
-        ⚠ Confermando, l'ordine andrà in preparazione spedizione e non sarà più modificabile.
+      <div id="mSaldaFeedback" style="display:none;flex-direction:column;align-items:center;gap:12px;padding:12px 0;text-align:center">
+        <div id="mSaldaFbIcon" style="font-size:32px"></div>
+        <div id="mSaldaFbMsg" style="font-family:var(--f-mono);font-size:12px;line-height:1.6"></div>
       </div>
     </div>
-    <div class="mfooter" style="justify-content:flex-end">
+    <div class="mfooter" id="mSaldaFooter" style="justify-content:flex-end">
       <button class="btn-cancel" onclick="chiudiModalSalda()">Annulla</button>
-      <button class="btn-confirm" onclick="eseguiSalda()">Conferma saldo</button>
+      <button class="btn-confirm" id="mSaldaConfirmBtn" onclick="eseguiSalda()">
+        <div class="spin" style="border-color:rgba(0,0,0,.3);border-top-color:#000"></div>
+        <span class="ltxt">Conferma saldo</span>
+      </button>
     </div>
   </div>
 </div>
 
 <!-- ═══ MODAL IMPOSTA ACCONTO ═══ -->
-<div class="overlay" id="mAccontoOrd" onclick="if(event.target===this)chiudiModalAcconto()">
+<div class="overlay" id="mAccontoOrd">
   <div class="mbox-saldo" style="width:440px">
-    <div class="mbox-saldo-body" style="gap:14px;align-items:stretch;text-align:left">
-      <div style="font-family:var(--f-title);font-size:16px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--blue)">Imposta acconto</div>
-      <div id="mAccNome" style="font-size:13px;font-weight:500;color:var(--text);line-height:1.4">—</div>
-      <div>
-        <div style="font-family:var(--f-mono);font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--text-mid);margin-bottom:6px">Importo (€)</div>
-        <input type="number" id="mAccInput" class="extra-input" style="width:100%;padding:11px 14px;font-size:15px;font-family:var(--f-mono)" placeholder="es. 10" min="1" oninput="aggiornaPrevAcc()">
-        <div id="mAccHint" style="font-family:var(--f-mono);font-size:9px;color:var(--text-dim);margin-top:5px">Massimo: — · Credito disponibile: —</div>
-      </div>
-      <div id="mAccPreview" style="border:1px solid var(--line2);border-radius:var(--r);overflow:hidden;opacity:0;transition:opacity .2s">
-        <div style="display:flex;justify-content:space-between;padding:9px 14px;font-family:var(--f-mono);font-size:10px;border-bottom:1px solid var(--line2)">
-          <span style="color:var(--text-dim)">Residuo dopo operazione</span>
-          <span id="mAccResAfter" style="font-weight:600;color:var(--warm)">—</span>
-        </div>
-        <div style="display:flex;justify-content:space-between;padding:9px 14px;font-family:var(--f-mono);font-size:10px">
-          <span style="color:var(--text-dim)">Credito dopo operazione</span>
-          <span id="mAccCreditoDopo" style="font-weight:600;color:var(--neon)">—</span>
-        </div>
-      </div>
-      <div id="mAccErr" style="display:none;font-family:var(--f-mono);font-size:10px;color:var(--red);background:var(--red-dim);border:1px solid rgba(255,90,90,.2);padding:9px 12px;border-radius:var(--r)"></div>
+    <div class="mhdr">
+      <div class="mtitle" style="color:var(--blue)">Imposta acconto</div>
+      <button class="mclose" id="mAccCloseBtn" onclick="chiudiModalAcconto()">×</button>
     </div>
-    <div class="mfooter" style="justify-content:flex-end">
+    <div class="mbox-saldo-body" style="gap:14px;align-items:stretch;text-align:left">
+      <div id="mAccContent">
+        <div style="display:flex;flex-direction:column;gap:14px">
+          <div id="mAccNome" style="font-size:13px;font-weight:500;color:var(--text);line-height:1.4">—</div>
+          <div>
+            <div style="font-family:var(--f-mono);font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--text-mid);margin-bottom:6px">Importo (€)</div>
+            <input type="number" id="mAccInput" class="extra-input" style="width:100%;padding:11px 14px;font-size:15px;font-family:var(--f-mono)" placeholder="es. 10" min="1" oninput="aggiornaPrevAcc()">
+            <div id="mAccHint" style="font-family:var(--f-mono);font-size:9px;color:var(--text-dim);margin-top:5px">Massimo: — · Credito disponibile: —</div>
+          </div>
+          <div id="mAccPreview" style="border:1px solid var(--line2);border-radius:var(--r);overflow:hidden;opacity:0;transition:opacity .2s">
+            <div style="display:flex;justify-content:space-between;padding:9px 14px;font-family:var(--f-mono);font-size:10px;border-bottom:1px solid var(--line2)">
+              <span style="color:var(--text-dim)">Residuo dopo operazione</span>
+              <span id="mAccResAfter" style="font-weight:600;color:var(--warm)">—</span>
+            </div>
+            <div style="display:flex;justify-content:space-between;padding:9px 14px;font-family:var(--f-mono);font-size:10px">
+              <span style="color:var(--text-dim)">Credito dopo operazione</span>
+              <span id="mAccCreditoDopo" style="font-weight:600;color:var(--neon)">—</span>
+            </div>
+          </div>
+          <div id="mAccErr" style="display:none;font-family:var(--f-mono);font-size:10px;color:var(--red);background:var(--red-dim);border:1px solid rgba(255,90,90,.2);padding:9px 12px;border-radius:var(--r)"></div>
+        </div>
+      </div>
+      <div id="mAccFeedback" style="display:none;flex-direction:column;align-items:center;gap:12px;padding:12px 0;text-align:center">
+        <div id="mAccFbIcon" style="font-size:32px"></div>
+        <div id="mAccFbMsg" style="font-family:var(--f-mono);font-size:12px;line-height:1.6"></div>
+      </div>
+    </div>
+    <div class="mfooter" id="mAccFooter" style="justify-content:flex-end">
       <button class="btn-cancel" onclick="chiudiModalAcconto()">Annulla</button>
-      <button class="btn-confirm" id="mAccBtn" disabled onclick="eseguiAcconto()" style="background:var(--blue)">Conferma acconto</button>
+      <button class="btn-confirm" id="mAccBtn" disabled onclick="eseguiAcconto()" style="background:var(--blue)">
+        <div class="spin" style="border-color:rgba(255,255,255,.3);border-top-color:#fff"></div>
+        <span class="ltxt">Conferma acconto</span>
+      </button>
     </div>
   </div>
 </div>
@@ -1377,7 +1405,10 @@ function chiudiConferma(){document.getElementById('mConferma').classList.remove(
 
 async function inviaConferma(){
   const btn=document.getElementById('btnMConf');
+  const closeBtn=document.getElementById('mConferma').querySelector('.mclose');
   btn.classList.add('loading'); btn.disabled=true;
+  if(closeBtn) closeBtn.disabled=true;
+  document.querySelector('#mConferma .btn-cancel').disabled=true;
   try{
     const sels=[];
     for(const p of S.catalogo){
@@ -1388,16 +1419,23 @@ async function inviaConferma(){
                  acconto:t==='deposito'?i.accFinale:i.price, prezzo_totale:i.price});
     }
     const res=await apiConferma({id_utente:S.utente.id, codice:S.utente._codice, mese:S.mese, selezioni:sels});
-    if(!res.ok){alert('Errore: '+(res.errore||'Riprova.'));return;}
+    if(!res.ok){
+      // Mostra errore nel banner interno alla modale
+      const w=document.getElementById('mwarn');
+      w.textContent='❌ Errore: '+(res.errore||'Riprova o contatta DNI.');
+      w.style.display='block';
+      w.style.color='var(--red)'; w.style.background='var(--red-dim)'; w.style.borderColor='rgba(255,90,90,.2)';
+      btn.classList.remove('loading'); btn.disabled=false;
+      if(closeBtn) closeBtn.disabled=false;
+      document.querySelector('#mConferma .btn-cancel').disabled=false;
+      return;
+    }
 
     // Scala il credito localmente in modo permanente (il GAS l'ha già scalato nel foglio).
     const totAcc = sels.reduce((s, x) => s + x.acconto, 0);
     S.utente.credito = Math.max(0, S.utente.credito - totAcc);
     document.getElementById('tbCred').textContent = '€' + fmt(S.utente.credito);
 
-    // NON impostiamo più stato='attesa' automaticamente.
-    // Il portale rimane aperto: il credito bloccato gestisce la disponibilità.
-    // Il banner 'attesa' appare solo se Alberto lo imposta manualmente nel foglio.
     Object.keys(SEL).forEach(k=>delete SEL[k]);
     aggiornaCache();
     chiudiConferma();
@@ -1412,8 +1450,15 @@ async function inviaConferma(){
       switchTab('ord');
     }, 1800);
     rilevaMieiOrdini();
-  }catch(e){alert('Errore di connessione. Riprova.');}
-  finally{btn.classList.remove('loading');btn.disabled=false;}
+  }catch(e){
+    const w=document.getElementById('mwarn');
+    w.textContent='❌ Errore di connessione. Riprova tra qualche secondo.';
+    w.style.display='block';
+    w.style.color='var(--red)'; w.style.background='var(--red-dim)'; w.style.borderColor='rgba(255,90,90,.2)';
+    btn.classList.remove('loading'); btn.disabled=false;
+    if(closeBtn) closeBtn.disabled=false;
+    document.querySelector('#mConferma .btn-cancel').disabled=false;
+  }
 }
 
 /* ─── RENDER ORDINI ──────────────────────────────────────────────────────── */
@@ -1454,7 +1499,6 @@ function renderOrdSection(elId, prens){
     const sl=STATI_LBL[stato]||stato;
     const max=p.residuo||0;
     const puoModificare = p.confermata && p.residuo > 0 && stato !== 'saldato';
-    const tipoLbl = p.tipo==='saldo'?'Full Pay':'Deposito';
     const imgHtml = p.imgFile
       ? `<img src="img_catalogo/${p.imgFile}" alt="" loading="lazy">`
       : '🖼';
@@ -1474,13 +1518,9 @@ function renderOrdSection(elId, prens){
           <div class="onum-val tot">€${fmt(p.prezzo_totale)}</div>
           <div class="onum-lbl">prezzo</div>
         </div>
-        <div class="onum" style="border-right:1px solid var(--line2)">
+        <div class="onum" style="padding-right:16px">
           <div class="onum-val acc">€${fmt((p.acconto||0)+(p.acconto_extra||0))}</div>
           <div class="onum-lbl">versato</div>
-        </div>
-        <div class="onum" style="border-right:1px solid var(--line2);padding-right:16px">
-          <div class="onum-val tipo">${tipoLbl}</div>
-          <div class="onum-lbl">tipo</div>
         </div>
       </div>`;
 
@@ -1544,8 +1584,16 @@ function apriModalSalda(id) {
   dopoEl.textContent = '€' + fmt(Math.max(0, creditoDopo));
   dopoEl.style.color = creditoDopo < 0 ? 'var(--red)' : 'var(--neon)';
   if (creditoDopo < 0) {
-    // credito insufficiente: avviso, non aprire modal
-    alert(`Credito insufficiente. Hai €${fmt(S.utente.credito)} ma servono €${fmt(residuo)}.`);
+    // credito insufficiente: mostra errore dentro la modale
+    document.getElementById('mSaldaOrd').classList.add('open');
+    document.getElementById('mSaldaContent').style.display = 'none';
+    document.getElementById('mSaldaFooter').style.display = 'none';
+    const fb = document.getElementById('mSaldaFeedback');
+    document.getElementById('mSaldaFbIcon').textContent = '⚠️';
+    document.getElementById('mSaldaFbMsg').innerHTML = `Credito insufficiente.<br>Hai <strong>€${fmt(S.utente.credito)}</strong> ma servono <strong>€${fmt(residuo)}</strong>.`;
+    document.getElementById('mSaldaFbMsg').style.color = 'var(--warm)';
+    fb.style.display = 'flex';
+    document.getElementById('mSaldaCloseBtn').disabled = false;
     return;
   }
   document.getElementById('mSaldaOrd').classList.add('open');
@@ -1554,6 +1602,15 @@ function apriModalSalda(id) {
 function chiudiModalSalda() {
   document.getElementById('mSaldaOrd').classList.remove('open');
   _mSaldaId = null;
+  // Reset stato per la prossima apertura
+  document.getElementById('mSaldaContent').style.display = '';
+  document.getElementById('mSaldaFooter').style.display = '';
+  document.getElementById('mSaldaFeedback').style.display = 'none';
+  const confirmBtn = document.getElementById('mSaldaConfirmBtn');
+  confirmBtn.classList.remove('loading'); confirmBtn.disabled = false;
+  const closeBtn = document.getElementById('mSaldaCloseBtn');
+  closeBtn.disabled = false;
+  document.querySelector('#mSaldaFooter .btn-cancel').disabled = false;
 }
 
 async function eseguiSalda() {
@@ -1561,17 +1618,48 @@ async function eseguiSalda() {
   const p = S.prenotazioni.find(x => x.id === id);
   if (!p) return;
   const val = p.residuo || 0;
-  chiudiModalSalda();
+
+  // Blocca i pulsanti e mostra spinner
+  const confirmBtn = document.getElementById('mSaldaConfirmBtn');
+  const closeBtn   = document.getElementById('mSaldaCloseBtn');
+  confirmBtn.classList.add('loading'); confirmBtn.disabled = true;
+  closeBtn.disabled = true;
+  document.querySelector('#mSaldaFooter .btn-cancel').disabled = true;
+
   try {
     const res = await apiSalvaExtra(id, val);
-    if (!res.ok) { alert('Errore salvataggio. Riprova.'); return; }
+    if (!res.ok) {
+      // Errore dal server — mostra dentro la modale
+      _mostraSaldaFeedback(false, 'Errore salvataggio.<br>Riprova o contatta DNI.');
+      return;
+    }
     p.acconto_extra = (p.acconto_extra || 0) + val;
     p.residuo = 0; p.modificabile = false; p.stato_ordine = 'saldato';
     S.utente.credito = Math.max(0, S.utente.credito - val);
     document.getElementById('tbCred').textContent = '€' + fmt(S.utente.credito);
     aggiornaCache();
     renderOrdini();
-  } catch(e) { alert('Errore di connessione. Riprova.'); }
+    // Mostra successo e chiudi automaticamente dopo 1.8s
+    _mostraSaldaFeedback(true, 'Ordine saldato con successo!');
+    setTimeout(() => chiudiModalSalda(), 1800);
+  } catch(e) {
+    _mostraSaldaFeedback(false, 'Errore di connessione.<br>Riprova tra qualche secondo.');
+  }
+}
+
+function _mostraSaldaFeedback(ok, msg) {
+  document.getElementById('mSaldaContent').style.display = 'none';
+  document.getElementById('mSaldaFooter').style.display = 'none';
+  const fb = document.getElementById('mSaldaFeedback');
+  document.getElementById('mSaldaFbIcon').textContent = ok ? '✅' : '❌';
+  document.getElementById('mSaldaFbMsg').innerHTML = msg;
+  document.getElementById('mSaldaFbMsg').style.color = ok ? 'var(--neon)' : 'var(--red)';
+  fb.style.display = 'flex';
+  // In caso di errore riabilita la X per chiudere
+  if (!ok) {
+    const closeBtn = document.getElementById('mSaldaCloseBtn');
+    closeBtn.disabled = false;
+  }
 }
 
 // ─── MODAL IMPOSTA ACCONTO ─────────────────────────────────────────────────────
@@ -1595,6 +1683,15 @@ function apriModalAcconto(id) {
 function chiudiModalAcconto() {
   document.getElementById('mAccontoOrd').classList.remove('open');
   _mAccId = null; _mAccMax = 0;
+  // Reset stato per la prossima apertura
+  document.getElementById('mAccContent').style.display = '';
+  document.getElementById('mAccFooter').style.display = '';
+  document.getElementById('mAccFeedback').style.display = 'none';
+  const confirmBtn = document.getElementById('mAccBtn');
+  confirmBtn.classList.remove('loading'); confirmBtn.disabled = true;
+  const closeBtn = document.getElementById('mAccCloseBtn');
+  closeBtn.disabled = false;
+  document.querySelector('#mAccFooter .btn-cancel').disabled = false;
 }
 
 function aggiornaPrevAcc() {
@@ -1630,10 +1727,20 @@ async function eseguiAcconto() {
   const val = parseFloat(document.getElementById('mAccInput').value);
   const p = S.prenotazioni.find(x => x.id === id);
   if (!p || !val || val <= 0) return;
-  chiudiModalAcconto();
+
+  // Blocca i pulsanti e mostra spinner
+  const confirmBtn = document.getElementById('mAccBtn');
+  const closeBtn   = document.getElementById('mAccCloseBtn');
+  confirmBtn.classList.add('loading'); confirmBtn.disabled = true;
+  closeBtn.disabled = true;
+  document.querySelector('#mAccFooter .btn-cancel').disabled = true;
+
   try {
     const res = await apiSalvaExtra(id, val);
-    if (!res.ok) { alert('Errore salvataggio. Riprova.'); return; }
+    if (!res.ok) {
+      _mostraAccFeedback(false, 'Errore salvataggio.<br>Riprova o contatta DNI.');
+      return;
+    }
     const nE = (p.acconto_extra || 0) + val;
     const nR = Math.max(0, p.prezzo_totale - p.acconto - nE);
     p.acconto_extra = nE; p.residuo = nR;
@@ -1642,7 +1749,24 @@ async function eseguiAcconto() {
     document.getElementById('tbCred').textContent = '€' + fmt(S.utente.credito);
     aggiornaCache();
     renderOrdini();
-  } catch(e) { alert('Errore di connessione. Riprova.'); }
+    _mostraAccFeedback(true, 'Acconto registrato con successo!');
+    setTimeout(() => chiudiModalAcconto(), 1800);
+  } catch(e) {
+    _mostraAccFeedback(false, 'Errore di connessione.<br>Riprova tra qualche secondo.');
+  }
+}
+
+function _mostraAccFeedback(ok, msg) {
+  document.getElementById('mAccContent').style.display = 'none';
+  document.getElementById('mAccFooter').style.display = 'none';
+  const fb = document.getElementById('mAccFeedback');
+  document.getElementById('mAccFbIcon').textContent = ok ? '✅' : '❌';
+  document.getElementById('mAccFbMsg').innerHTML = msg;
+  document.getElementById('mAccFbMsg').style.color = ok ? 'var(--neon)' : 'var(--red)';
+  fb.style.display = 'flex';
+  if (!ok) {
+    document.getElementById('mAccCloseBtn').disabled = false;
+  }
 }
 
 // legacy compat
