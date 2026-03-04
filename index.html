@@ -755,7 +755,6 @@ input{font-family:inherit}
   <div class="mbox">
     <div class="mhdr">
       <div class="mtitle">Conferma Ordine</div>
-      <button class="mclose" onclick="chiudiConferma()">×</button>
     </div>
     <div class="mbody">
       <p class="mintro">
@@ -767,9 +766,12 @@ input{font-family:inherit}
         <span class="total-val" id="recapTot">€0</span>
       </div>
       <div class="mwarn" id="mwarn" style="display:none"></div>
+      <div id="mConfermaWait" style="display:none;font-family:var(--f-mono);font-size:10px;color:var(--warm);background:var(--warm-dim);border:1px solid rgba(247,201,72,.2);padding:10px 12px;border-radius:var(--r);line-height:1.6;text-align:center">
+        ⏳ Invio in corso — attendere e non aggiornare o chiudere la pagina…
+      </div>
     </div>
-    <div class="mfooter">
-      <button class="btn-cancel" onclick="chiudiConferma()">Annulla</button>
+    <div class="mfooter" id="mConfermaFooter">
+      <button class="btn-cancel" id="btnMCancel" onclick="chiudiConferma()">Annulla</button>
       <button class="btn-confirm" id="btnMConf" onclick="inviaConferma()">
         <div class="spin" style="border-color:rgba(0,0,0,.3);border-top-color:#000"></div>
         <span class="ltxt">Conferma definitiva</span>
@@ -1390,6 +1392,14 @@ function toggleSel(prodId, tipo){
 
 /* ─── MODAL CONFERMA ─────────────────────────────────────────────────────── */
 function apriConferma(){
+  // Reset COMPLETO — evita che il tasto resti in loading se la modale viene riaperta
+  const btn = document.getElementById('btnMConf');
+  btn.classList.remove('loading'); btn.disabled = false;
+  document.getElementById('btnMCancel').disabled = false;
+  const w = document.getElementById('mwarn');
+  w.style.display='none'; w.style.color=''; w.style.background=''; w.style.borderColor=''; w.textContent='';
+  document.getElementById('mConfermaWait').style.display = 'none';
+
   let tot=0, html='';
   for(const p of S.catalogo){
     const t=SEL[String(p.id)]; if(!t)continue;
@@ -1403,19 +1413,43 @@ function apriConferma(){
   }
   document.getElementById('recapList').innerHTML=html;
   document.getElementById('recapTot').textContent='€'+fmt(tot);
-  const cr=credSim(), w=document.getElementById('mwarn');
-  if(cr<0){w.textContent=`⚠ Credito residuo negativo (€${fmt(cr)}). Verifica con DNI prima di confermare.`;w.style.display='block';}
-  else w.style.display='none';
+  if(credSim()<0){
+    w.textContent=`⚠ Credito residuo negativo (€${fmt(credSim())}). Verifica con DNI prima di confermare.`;
+    w.style.display='block';
+  }
   document.getElementById('mConferma').classList.add('open');
 }
-function chiudiConferma(){document.getElementById('mConferma').classList.remove('open');}
+
+function chiudiConferma(){
+  // Non chiudere se l'invio è in corso
+  const btn = document.getElementById('btnMConf');
+  if(btn && btn.classList.contains('loading')) return;
+  document.getElementById('mConferma').classList.remove('open');
+}
 
 async function inviaConferma(){
-  const btn=document.getElementById('btnMConf');
-  const closeBtn=document.getElementById('mConferma').querySelector('.mclose');
-  btn.classList.add('loading'); btn.disabled=true;
-  if(closeBtn) closeBtn.disabled=true;
-  document.querySelector('#mConferma .btn-cancel').disabled=true;
+  const btn       = document.getElementById('btnMConf');
+  const btnCancel = document.getElementById('btnMCancel');
+  const wWait     = document.getElementById('mConfermaWait');
+  const wErr      = document.getElementById('mwarn');
+
+  // Blocca tutto immediatamente — evita doppio click
+  if(btn.classList.contains('loading')) return;
+  btn.classList.add('loading'); btn.disabled = true;
+  btnCancel.disabled = true;
+  wErr.style.display = 'none';
+  wWait.style.display = 'block';
+
+  // Timeout 60s — se GAS non risponde, chiude e ricarica ordini
+  let timedOut = false;
+  const timeoutId = setTimeout(async () => {
+    timedOut = true;
+    document.getElementById('mConferma').classList.remove('open');
+    try { await rilevaMieiOrdini(); } catch(e) {}
+    switchTab('ord');
+    mostraToast('⚠ Operazione lenta — verifica gli ordini caricati', 'warm');
+  }, 60000);
+
   try{
     const sels=[];
     for(const p of S.catalogo){
@@ -1426,45 +1460,40 @@ async function inviaConferma(){
                  acconto:t==='deposito'?i.accFinale:i.price, prezzo_totale:i.price});
     }
     const res=await apiConferma({id_utente:S.utente.id, codice:S.utente._codice, mese:S.mese, selezioni:sels});
+
+    if(timedOut) return;
+    clearTimeout(timeoutId);
+
     if(!res.ok){
-      // Mostra errore nel banner interno alla modale
-      const w=document.getElementById('mwarn');
-      w.textContent='❌ Errore: '+(res.errore||'Riprova o contatta DNI.');
-      w.style.display='block';
-      w.style.color='var(--red)'; w.style.background='var(--red-dim)'; w.style.borderColor='rgba(255,90,90,.2)';
+      wWait.style.display = 'none';
+      wErr.textContent='❌ Errore: '+(res.errore||'Riprova o contatta DNI.');
+      wErr.style.display='block';
+      wErr.style.color='var(--red)'; wErr.style.background='var(--red-dim)'; wErr.style.borderColor='rgba(255,90,90,.2)';
       btn.classList.remove('loading'); btn.disabled=false;
-      if(closeBtn) closeBtn.disabled=false;
-      document.querySelector('#mConferma .btn-cancel').disabled=false;
+      btnCancel.disabled=false;
       return;
     }
 
-    // Scala il credito localmente in modo permanente (il GAS l'ha già scalato nel foglio).
-    const totAcc = sels.reduce((s, x) => s + x.acconto, 0);
-    S.utente.credito = Math.max(0, S.utente.credito - totAcc);
-    document.getElementById('tbCred').textContent = '€' + fmt(S.utente.credito);
-
+    const totAcc=sels.reduce((s,x)=>s+x.acconto,0);
+    S.utente.credito=Math.max(0,S.utente.credito-totAcc);
+    document.getElementById('tbCred').textContent='€'+fmt(S.utente.credito);
     Object.keys(SEL).forEach(k=>delete SEL[k]);
     aggiornaCache();
-    chiudiConferma();
+    document.getElementById('mConferma').classList.remove('open');
     renderCatalogo();
-    // Mostra feedback visivo poi passa automaticamente alla tab ordini
-    const fb = document.createElement('div');
-    fb.style.cssText = 'position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);z-index:9999;background:#0b0b0f;border:1px solid var(--neon);padding:20px 36px;font-family:var(--f-title);font-size:18px;font-weight:700;letter-spacing:2px;color:var(--neon);box-shadow:0 0 32px rgba(180,255,0,.2);border-radius:3px;pointer-events:none;';
-    fb.textContent = 'Ordine inviato con successo ✔';
-    document.body.appendChild(fb);
-    setTimeout(() => {
-      document.body.removeChild(fb);
-      switchTab('ord');
-    }, 1800);
     rilevaMieiOrdini();
+    mostraToast('Ordine inviato con successo ✔','neon');
+    setTimeout(()=>switchTab('ord'),1800);
+
   }catch(e){
-    const w=document.getElementById('mwarn');
-    w.textContent='❌ Errore di connessione. Riprova tra qualche secondo.';
-    w.style.display='block';
-    w.style.color='var(--red)'; w.style.background='var(--red-dim)'; w.style.borderColor='rgba(255,90,90,.2)';
+    if(timedOut) return;
+    clearTimeout(timeoutId);
+    wWait.style.display = 'none';
+    wErr.textContent='❌ Errore di connessione. Riprova tra qualche secondo.';
+    wErr.style.display='block';
+    wErr.style.color='var(--red)'; wErr.style.background='var(--red-dim)'; wErr.style.borderColor='rgba(255,90,90,.2)';
     btn.classList.remove('loading'); btn.disabled=false;
-    if(closeBtn) closeBtn.disabled=false;
-    document.querySelector('#mConferma .btn-cancel').disabled=false;
+    btnCancel.disabled=false;
   }
 }
 
@@ -1486,28 +1515,38 @@ function renderOrdini(){
   document.getElementById('cntSaldato').textContent   = saldato.length;
   document.getElementById('cntSpedito').textContent   = spedito.length;
 
+  // Mappa prodotto_id → immagini dal catalogo (le prenotazioni non hanno imgFile)
+  const imgMap = {};
+  for(const c of S.catalogo){
+    imgMap[String(c.id)] = { f1: c.imgFile||'', f2: c.imgFile2||'', f3: c.imgFile3||'' };
+  }
+
   // Nascondi gruppi vuoti, mostra quelli con ordini
   document.getElementById('grpDaSaldare').style.display = daSaldare.length ? 'flex' : 'none';
   document.getElementById('grpSaldato').style.display   = saldato.length   ? 'flex' : 'none';
   document.getElementById('grpSpedito').style.display   = spedito.length   ? 'flex' : 'none';
   document.getElementById('grpDraft').style.display     = inPrep.length    ? 'flex' : 'none';
 
-  renderOrdSection('ordDraft',     inPrep);
-  renderOrdSection('ordDaSaldare', daSaldare);
-  renderOrdSection('ordSaldato',   saldato);
-  renderOrdSection('ordSpedito',   spedito);
+  renderOrdSection('ordDraft',     inPrep,     imgMap);
+  renderOrdSection('ordDaSaldare', daSaldare,  imgMap);
+  renderOrdSection('ordSaldato',   saldato,    imgMap);
+  renderOrdSection('ordSpedito',   spedito,    imgMap);
 }
 
-function renderOrdSection(elId, prens){
+function renderOrdSection(elId, prens, imgMap){
   const el=document.getElementById(elId);
   if(!prens.length){el.innerHTML='';return;}
+  imgMap = imgMap || {};
   el.innerHTML=prens.map(p=>{
     const stato=statoUI(p);
     const sl=STATI_LBL[stato]||stato;
     const max=p.residuo||0;
     const puoModificare = p.confermata && p.residuo > 0 && stato !== 'saldato';
-    const imgHtml = p.imgFile
-      ? `<img src="img_catalogo/${p.imgFile}" alt="" loading="lazy">`
+
+    // Recupera immagine dalla mappa catalogo (le prenotazioni non hanno imgFile)
+    const imgs = imgMap[String(p.prodotto_id)] || {};
+    const imgHtml = imgs.f1
+      ? `<img src="img_catalogo/${imgs.f1}" alt="" loading="lazy">`
       : '🖼';
     const comm = p.commento_alberto
       ? `<span class="ocard-comment">💬 ${p.commento_alberto}</span>` : '';
@@ -1556,9 +1595,17 @@ function renderOrdSection(elId, prens){
       </div>`;
     }
 
+    // Click sulla thumbnail apre lightbox se ci sono immagini
+    const lbImgsJson = imgs.f1
+      ? JSON.stringify([imgs.f1, imgs.f2, imgs.f3].filter(Boolean))
+      : 'null';
+    const thumbClick = imgs.f1
+      ? `onclick="apriLightboxFromUrls(${lbImgsJson},'${p.nome_prodotto.replace(/'/g,"\\'")}')"`
+      : '';
+
     return`<div class="ocard ${stato}" id="oc-${p.id}">
       <div class="ocard-left">
-        <div class="ocard-thumb">${imgHtml}</div>
+        <div class="ocard-thumb" ${thumbClick} style="${imgs.f1?'cursor:pointer':''}">${imgHtml}</div>
         <div class="ocard-info">
           <div class="ocard-name">${p.nome_prodotto}</div>
           <div class="ocard-meta">
@@ -1641,8 +1688,7 @@ async function eseguiSalda() {
     }
     p.acconto_extra = nuovoTotale;
     p.residuo = 0; p.modificabile = false; p.stato_ordine = 'saldato';
-    // Usa il credito restituito dal server (fonte di verità), altrimenti calcolo locale
-    S.utente.credito = res.credito !== undefined ? res.credito : Math.max(0, S.utente.credito - delta);
+    S.utente.credito = Math.max(0, S.utente.credito - delta);
     document.getElementById('tbCred').textContent = '€' + fmt(S.utente.credito);
     aggiornaCache();
     renderOrdini();
@@ -1747,8 +1793,7 @@ async function eseguiAcconto() {
     p.acconto_extra = nuovoTotale;
     p.residuo = nR;
     if (nR === 0) { p.modificabile = false; p.stato_ordine = 'saldato'; }
-    // Usa il credito restituito dal server (fonte di verità), altrimenti calcolo locale
-    S.utente.credito = res.credito !== undefined ? res.credito : Math.max(0, S.utente.credito - delta);
+    S.utente.credito = Math.max(0, S.utente.credito - delta);
     document.getElementById('tbCred').textContent = '€' + fmt(S.utente.credito);
     aggiornaCache();
     renderOrdini();
@@ -1810,6 +1855,18 @@ function apriLightbox(prodId) {
   _lbIdx  = 0;
   _lbName = prod.name;
   document.getElementById('lbTitle').textContent = prod.name;
+  lbRender();
+  document.getElementById('mLightbox').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+// Apre il lightbox a partire da un array di filename (usato dagli order card)
+function apriLightboxFromUrls(fileNames, nome) {
+  _lbImgs = fileNames.map(f => 'img_catalogo/' + f);
+  if (!_lbImgs.length) return;
+  _lbIdx  = 0;
+  _lbName = nome || '';
+  document.getElementById('lbTitle').textContent = nome || '';
   lbRender();
   document.getElementById('mLightbox').classList.add('open');
   document.body.style.overflow = 'hidden';
@@ -1903,7 +1960,13 @@ window.addEventListener('DOMContentLoaded',()=>{
   },700);
 });
 document.addEventListener('keydown',e=>{
-  if(e.key==='Escape'){chiudiConferma();chiudiSaldo();chiudiLightbox();}
+  if(e.key==='Escape'){
+    // Non chiudere la modale conferma se l'invio è in corso
+    const btn = document.getElementById('btnMConf');
+    if(!btn || !btn.classList.contains('loading')) chiudiConferma();
+    chiudiSaldo();
+    chiudiLightbox();
+  }
 });
 
 
