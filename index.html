@@ -1641,7 +1641,8 @@ async function eseguiSalda() {
     }
     p.acconto_extra = nuovoTotale;
     p.residuo = 0; p.modificabile = false; p.stato_ordine = 'saldato';
-    S.utente.credito = Math.max(0, S.utente.credito - delta);
+    // Usa il credito restituito dal server (fonte di verità), altrimenti calcolo locale
+    S.utente.credito = res.credito !== undefined ? res.credito : Math.max(0, S.utente.credito - delta);
     document.getElementById('tbCred').textContent = '€' + fmt(S.utente.credito);
     aggiornaCache();
     renderOrdini();
@@ -1746,7 +1747,8 @@ async function eseguiAcconto() {
     p.acconto_extra = nuovoTotale;
     p.residuo = nR;
     if (nR === 0) { p.modificabile = false; p.stato_ordine = 'saldato'; }
-    S.utente.credito = Math.max(0, S.utente.credito - delta);
+    // Usa il credito restituito dal server (fonte di verità), altrimenti calcolo locale
+    S.utente.credito = res.credito !== undefined ? res.credito : Math.max(0, S.utente.credito - delta);
     document.getElementById('tbCred').textContent = '€' + fmt(S.utente.credito);
     aggiornaCache();
     renderOrdini();
