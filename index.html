@@ -962,17 +962,24 @@ async function apiConferma(payload) {
 
 /**
  * SALVA ACCONTO EXTRA
- * POST body: { action:'acconto_extra', id_prenotazione, id_utente, codice, importo }
- * Risposta attesa: { ok:true }
+ * POST body: {
+ *   action, id_prenotazione, id_utente, codice,
+ *   importo           — delta versato ORA (per log)
+ *   acconto_extra_tot — totale cumulativo da scrivere nel foglio
+ *   op_id             — ID univoco operazione per log e deduplicazione
+ * }
  */
-async function apiSalvaExtra(idPren, importo) {
+async function apiSalvaExtra(idPren, delta, nuovoTotale) {
+  const opId = 'op_' + Date.now() + '_' + Math.random().toString(36).slice(2, 7);
   try {
     return await _post({
       action: 'acconto_extra',
       id_prenotazione: idPren,
       id_utente: S.utente.id,
       codice: S.utente._codice,
-      importo,
+      importo: delta,
+      acconto_extra_tot: nuovoTotale,
+      op_id: opId,
     });
   } catch(e) {
     return { ok:false, errore:'Errore durante il salvataggio.' };
@@ -1617,9 +1624,9 @@ async function eseguiSalda() {
   const id = _mSaldaId;
   const p = S.prenotazioni.find(x => x.id === id);
   if (!p) return;
-  const val = p.residuo || 0;
+  const delta        = p.residuo || 0;
+  const nuovoTotale  = (p.acconto_extra || 0) + delta;  // totale cumulativo
 
-  // Blocca i pulsanti e mostra spinner
   const confirmBtn = document.getElementById('mSaldaConfirmBtn');
   const closeBtn   = document.getElementById('mSaldaCloseBtn');
   confirmBtn.classList.add('loading'); confirmBtn.disabled = true;
@@ -1627,21 +1634,19 @@ async function eseguiSalda() {
   document.querySelector('#mSaldaFooter .btn-cancel').disabled = true;
 
   try {
-    const res = await apiSalvaExtra(id, val);
+    const res = await apiSalvaExtra(id, delta, nuovoTotale);
     if (!res.ok) {
-      // Errore dal server — mostra dentro la modale
       _mostraSaldaFeedback(false, 'Errore salvataggio.<br>Riprova o contatta DNI.');
       return;
     }
-    p.acconto_extra = (p.acconto_extra || 0) + val;
+    p.acconto_extra = nuovoTotale;
     p.residuo = 0; p.modificabile = false; p.stato_ordine = 'saldato';
-    S.utente.credito = Math.max(0, S.utente.credito - val);
+    S.utente.credito = Math.max(0, S.utente.credito - delta);
     document.getElementById('tbCred').textContent = '€' + fmt(S.utente.credito);
     aggiornaCache();
     renderOrdini();
-    // Mostra successo e chiudi automaticamente dopo 1.8s
-    _mostraSaldaFeedback(true, 'Ordine saldato con successo!');
-    setTimeout(() => chiudiModalSalda(), 1800);
+    chiudiModalSalda();
+    mostraToast('Ordine saldato con successo ✔', 'neon');
   } catch(e) {
     _mostraSaldaFeedback(false, 'Errore di connessione.<br>Riprova tra qualche secondo.');
   }
@@ -1651,15 +1656,11 @@ function _mostraSaldaFeedback(ok, msg) {
   document.getElementById('mSaldaContent').style.display = 'none';
   document.getElementById('mSaldaFooter').style.display = 'none';
   const fb = document.getElementById('mSaldaFeedback');
-  document.getElementById('mSaldaFbIcon').textContent = ok ? '✅' : '❌';
+  document.getElementById('mSaldaFbIcon').textContent = '❌';
   document.getElementById('mSaldaFbMsg').innerHTML = msg;
-  document.getElementById('mSaldaFbMsg').style.color = ok ? 'var(--neon)' : 'var(--red)';
+  document.getElementById('mSaldaFbMsg').style.color = 'var(--red)';
   fb.style.display = 'flex';
-  // In caso di errore riabilita la X per chiudere
-  if (!ok) {
-    const closeBtn = document.getElementById('mSaldaCloseBtn');
-    closeBtn.disabled = false;
-  }
+  document.getElementById('mSaldaCloseBtn').disabled = false;
 }
 
 // ─── MODAL IMPOSTA ACCONTO ─────────────────────────────────────────────────────
@@ -1723,12 +1724,12 @@ function aggiornaPrevAcc() {
 }
 
 async function eseguiAcconto() {
-  const id = _mAccId;
-  const val = parseFloat(document.getElementById('mAccInput').value);
-  const p = S.prenotazioni.find(x => x.id === id);
-  if (!p || !val || val <= 0) return;
+  const id    = _mAccId;
+  const delta = parseFloat(document.getElementById('mAccInput').value);
+  const p     = S.prenotazioni.find(x => x.id === id);
+  if (!p || !delta || delta <= 0) return;
+  const nuovoTotale = (p.acconto_extra || 0) + delta;  // totale cumulativo
 
-  // Blocca i pulsanti e mostra spinner
   const confirmBtn = document.getElementById('mAccBtn');
   const closeBtn   = document.getElementById('mAccCloseBtn');
   confirmBtn.classList.add('loading'); confirmBtn.disabled = true;
@@ -1736,21 +1737,21 @@ async function eseguiAcconto() {
   document.querySelector('#mAccFooter .btn-cancel').disabled = true;
 
   try {
-    const res = await apiSalvaExtra(id, val);
+    const res = await apiSalvaExtra(id, delta, nuovoTotale);
     if (!res.ok) {
       _mostraAccFeedback(false, 'Errore salvataggio.<br>Riprova o contatta DNI.');
       return;
     }
-    const nE = (p.acconto_extra || 0) + val;
-    const nR = Math.max(0, p.prezzo_totale - p.acconto - nE);
-    p.acconto_extra = nE; p.residuo = nR;
+    const nR = Math.max(0, p.prezzo_totale - p.acconto - nuovoTotale);
+    p.acconto_extra = nuovoTotale;
+    p.residuo = nR;
     if (nR === 0) { p.modificabile = false; p.stato_ordine = 'saldato'; }
-    S.utente.credito = Math.max(0, S.utente.credito - val);
+    S.utente.credito = Math.max(0, S.utente.credito - delta);
     document.getElementById('tbCred').textContent = '€' + fmt(S.utente.credito);
     aggiornaCache();
     renderOrdini();
-    _mostraAccFeedback(true, 'Acconto registrato con successo!');
-    setTimeout(() => chiudiModalAcconto(), 1800);
+    chiudiModalAcconto();
+    mostraToast('Acconto registrato con successo ✔', 'neon');
   } catch(e) {
     _mostraAccFeedback(false, 'Errore di connessione.<br>Riprova tra qualche secondo.');
   }
@@ -1760,13 +1761,11 @@ function _mostraAccFeedback(ok, msg) {
   document.getElementById('mAccContent').style.display = 'none';
   document.getElementById('mAccFooter').style.display = 'none';
   const fb = document.getElementById('mAccFeedback');
-  document.getElementById('mAccFbIcon').textContent = ok ? '✅' : '❌';
+  document.getElementById('mAccFbIcon').textContent = '❌';
   document.getElementById('mAccFbMsg').innerHTML = msg;
-  document.getElementById('mAccFbMsg').style.color = ok ? 'var(--neon)' : 'var(--red)';
+  document.getElementById('mAccFbMsg').style.color = 'var(--red)';
   fb.style.display = 'flex';
-  if (!ok) {
-    document.getElementById('mAccCloseBtn').disabled = false;
-  }
+  document.getElementById('mAccCloseBtn').disabled = false;
 }
 
 // legacy compat
@@ -1854,6 +1853,42 @@ function lbRender() {
 function lbGoTo(idx) {
   _lbIdx = idx;
   lbRender();
+}
+
+/* ─── TOAST NOTIFICHE ────────────────────────────────────────────────────── */
+function mostraToast(msg, tipo) {
+  const colori = {
+    neon: { border:'var(--neon)', text:'var(--neon)', glow:'rgba(180,255,0,.25)' },
+    red:  { border:'var(--red)',  text:'var(--red)',  glow:'rgba(255,90,90,.2)'  },
+    warm: { border:'var(--warm)', text:'var(--warm)', glow:'rgba(247,201,72,.2)' },
+  };
+  const c = colori[tipo] || colori.neon;
+  const old = document.getElementById('_toast');
+  if (old) old.remove();
+  const el = document.createElement('div');
+  el.id = '_toast';
+  el.style.cssText =
+    'position:fixed;top:50%;left:50%;transform:translate(-50%,-50%) scale(.96);' +
+    'z-index:9999;background:#0b0b0f;' +
+    'border:1px solid ' + c.border + ';' +
+    'padding:18px 38px;' +
+    'font-family:var(--f-title);font-size:18px;font-weight:700;' +
+    'letter-spacing:2px;text-transform:uppercase;' +
+    'color:' + c.text + ';' +
+    'box-shadow:0 0 40px ' + c.glow + ';' +
+    'border-radius:3px;pointer-events:none;' +
+    'opacity:0;transition:opacity .2s,transform .2s;';
+  el.textContent = msg;
+  document.body.appendChild(el);
+  requestAnimationFrame(() => {
+    el.style.opacity = '1';
+    el.style.transform = 'translate(-50%,-50%) scale(1)';
+  });
+  setTimeout(() => {
+    el.style.opacity = '0';
+    el.style.transform = 'translate(-50%,-50%) scale(.96)';
+    setTimeout(() => el.remove(), 200);
+  }, 2000);
 }
 
 /* ─── INIT ───────────────────────────────────────────────────────────────── */
