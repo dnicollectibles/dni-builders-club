@@ -246,74 +246,11 @@ input{font-family:inherit}
 @media(max-width:768px){.sidebar-cta-top{display:none!important}}
 .sidebar-cart-badge{
   display:inline-flex;align-items:center;justify-content:center;
-  min-width:16px;height:16px;padding:0 4px;
+  min-width:18px;height:18px;padding:0 5px;
   background:var(--neon);color:#000;
-  font-family:var(--f-mono);font-size:10px;font-weight:700;
-  border-radius:2px;margin-left:6px;vertical-align:middle;
-  box-sizing:border-box;position:relative;top:-1px;
+  font-family:var(--f-title);font-size:10px;font-weight:700;
+  border-radius:9px;margin-left:6px;vertical-align:middle;
 }
-
-/* ── ICONA CARRELLO TOPBAR MOBILE ─────────────────────────────────── */
-.btn-cart-mob{
-  display:none; /* visibile solo su mobile via media query */
-  position:relative;
-  align-items:center;justify-content:center;
-  width:36px;height:36px;
-  background:transparent;border:1px solid var(--line2);
-  border-radius:var(--r);color:var(--text-mid);
-  cursor:pointer;transition:all .15s;flex-shrink:0;
-}
-.btn-cart-mob:hover{border-color:var(--neon);color:var(--neon)}
-.btn-cart-mob svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
-.btn-cart-mob .cart-mob-badge{
-  position:absolute;top:-5px;right:-5px;
-  min-width:16px;height:16px;padding:0 3px;
-  background:var(--neon);color:#000;
-  font-family:var(--f-mono);font-size:9px;font-weight:700;
-  border-radius:2px;display:none;
-  align-items:center;justify-content:center;
-  box-sizing:border-box;
-}
-
-/* ── DRAWER CARRELLO MOBILE ───────────────────────────────────────── */
-/* backdrop */
-.cart-drawer-backdrop{
-  display:none;position:fixed;inset:0;
-  background:rgba(0,0,0,.6);z-index:300;
-  backdrop-filter:blur(2px);
-}
-.cart-drawer-backdrop.open{display:block}
-/* drawer laterale da destra */
-.cart-drawer{
-  display:none;position:fixed;top:0;right:0;bottom:0;
-  width:min(320px,90vw);
-  background:var(--bg2);border-left:1px solid var(--neon);
-  z-index:301;flex-direction:column;
-  transform:translateX(100%);
-  transition:transform .3s cubic-bezier(.4,0,.2,1);
-}
-.cart-drawer.open{
-  display:flex;transform:translateX(0);
-}
-.cart-drawer-hdr{
-  display:flex;align-items:center;justify-content:space-between;
-  padding:14px 16px;border-bottom:1px solid var(--line);
-  flex-shrink:0;
-}
-.cart-drawer-title{
-  font-family:var(--f-mono);font-size:9px;font-weight:600;
-  letter-spacing:3px;text-transform:uppercase;color:var(--text-mid);
-  display:flex;align-items:center;gap:8px;
-}
-.cart-drawer-close{
-  width:28px;height:28px;display:flex;align-items:center;justify-content:center;
-  background:transparent;border:1px solid var(--line2);border-radius:var(--r);
-  color:var(--text-dim);font-size:16px;cursor:pointer;transition:all .15s;
-}
-.cart-drawer-close:hover{border-color:var(--red);color:var(--red)}
-.cart-drawer-body{flex:1;overflow-y:auto}
-.cart-drawer-cta{padding:12px 16px;border-top:1px solid var(--line);flex-shrink:0}
-.cart-drawer-totals{padding:10px 16px;border-top:1px solid var(--line2);flex-shrink:0}
 .btn-conferma{width:100%;background:var(--neon);color:#000;padding:11px;font-family:var(--f-title);font-size:13px;font-weight:700;letter-spacing:3px;text-transform:uppercase;transition:all .2s;border-radius:var(--r);display:flex;align-items:center;justify-content:center;gap:8px}
 .btn-conferma:hover:not(:disabled){background:#c8ff2a;box-shadow:0 0 20px var(--neon-glow)}
 .btn-conferma:disabled{opacity:.25;cursor:not-allowed}
@@ -326,24 +263,24 @@ input{font-family:inherit}
 .flt-btn{font-family:var(--f-mono);font-size:10px;font-weight:500;letter-spacing:2px;text-transform:uppercase;padding:5px 14px;border:1px solid var(--line2);color:var(--text-dim);background:transparent;transition:all .15s;border-radius:var(--r)}
 .flt-btn:hover{color:var(--text-mid);background:var(--bg3)}
 .flt-btn.active{background:var(--bg3);border-color:var(--neon);color:var(--neon)}
-/* badge numerico sui filtri — rettangolo giallo, font uguale al testo */
+/* badge numerico sui filtri — cerchio giallo centrato */
 .flt-badge{
   display:inline-flex;
   align-items:center;
   justify-content:center;
-  min-width:16px;
-  height:16px;
-  padding:0 4px;
+  min-width:18px;
+  height:18px;
+  padding:0 5px;
   background:var(--warm);
   color:#000;
-  font-family:var(--f-mono);
-  font-size:10px;
-  font-weight:700;
-  border-radius:2px;
-  margin-left:5px;
+  font-family:var(--f-title);
+  font-size:9px;
+  font-weight:800;
+  border-radius:9px;
+  margin-left:6px;
   vertical-align:middle;
+  line-height:1;
   box-sizing:border-box;
-  position:relative;top:-1px;
 }
 .btn-rileva{display:flex;align-items:center;gap:7px;font-family:var(--f-mono);font-size:10px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;padding:6px 14px;border:1px solid var(--line2);color:var(--text-mid);background:transparent;transition:all .2s;border-radius:var(--r);white-space:nowrap;cursor:pointer}
 .btn-rileva:hover{border-color:var(--neon);color:var(--neon)}
@@ -569,7 +506,14 @@ input{font-family:inherit}
 .btn-zoom:disabled{opacity:.3;cursor:default}
 .tb-zoom-lbl{font-family:var(--f-mono);font-size:9px;color:var(--text-dim);
   letter-spacing:1px;min-width:32px;text-align:center;user-select:none}
-.btn-layout-toggle{margin-left:6px;border-left:1px solid var(--line2);padding-left:8px;font-size:13px;opacity:.55}
+/* layout-toggle: separato fisicamente dal gruppo zoom con margin rigido */
+.btn-layout-toggle{
+  margin-left:12px;
+  border-left:1px solid var(--line2);
+  padding-left:12px;
+  font-size:13px;opacity:.55;
+  flex-shrink:0; /* non si schiaccia mai */
+}
 .btn-layout-toggle:hover{opacity:1}
 .btn-layout-toggle.active{color:var(--neon);opacity:1}
 /* Vista mobile su desktop: griglia 1 col, card verticale */
@@ -668,11 +612,21 @@ input{font-family:inherit}
   .prod-price-pub{font-size:12px}
   /* bottoni affiancati orizzontalmente, comodi da toccare */
   .prod-actions{flex-direction:row;gap:5px;margin-top:auto}
-  .prod-btn{flex:1;flex-direction:column;align-items:center;justify-content:center;padding:8px 4px;min-height:46px;gap:2px}
-  .prod-btn-left{align-items:center}
+  /* bottone compatto: label sopra, importo sotto — tutto visibile */
+  .prod-btn{
+    flex:1;flex-direction:column;
+    align-items:center;justify-content:center;
+    padding:7px 4px;min-height:48px;gap:1px;
+  }
+  .prod-btn-left{align-items:center;gap:1px}
   .prod-btn-lbl{font-size:8px;letter-spacing:.3px}
-  .prod-btn-val{font-size:10px}
-  .prod-btn-r{display:none}
+  /* prod-btn-r: importo visibile, adattato */
+  .prod-btn-r{
+    display:flex;align-items:center;gap:3px;
+    margin-top:2px;
+  }
+  .prod-btn-val{font-size:11px;font-weight:700}
+  .prod-dot{display:none} /* nasconde solo il pallino, non il valore */
 
   /* ── SIDEBAR → BARRA FISSA IN FONDO ─────────────────────────────── */
   .cat-sidebar{
@@ -698,10 +652,6 @@ input{font-family:inherit}
   .btn-conferma{width:100%;padding:14px;font-size:12px}
   /* bottone top nascosto su mobile */
   .sidebar-cta-top{display:none!important}
-  /* su mobile la cat-sidebar desktop è nascosta — usiamo il drawer */
-  .cat-sidebar{display:none!important}
-  /* mostra icona carrello in topbar */
-  .btn-cart-mob{display:inline-flex}
 
   /* ── FILTRI ORDINI → scroll orizzontale ─────────────────────────── */
   .filters{
@@ -943,8 +893,8 @@ input{font-family:inherit}
           <button class="btn-zoom" id="btnZoomOut" onclick="zoomStep(-1)" title="Riduci testo">A−</button>
           <span class="tb-zoom-lbl" id="zoomLbl">100%</span>
           <button class="btn-zoom" id="btnZoomIn" onclick="zoomStep(+1)" title="Ingrandisci testo">A+</button>
-          <button class="btn-zoom btn-layout-toggle" id="btnLayout" onclick="toggleLayout()" title="Vista mobile">⊟</button>
         </div>
+        <button class="btn-zoom btn-layout-toggle" id="btnLayout" onclick="toggleLayout()" title="Vista mobile">⊟</button>
         <div class="tb-cred">
           <div class="tb-cred-lbl">Credito</div>
           <div class="tb-cred-val" id="tbCred">€0</div>
@@ -961,11 +911,6 @@ input{font-family:inherit}
       <div class="tb-mob-sep"></div>
       <div class="tb-mob-mese" id="tbMeseMob">—</div>
       <div class="tb-mob-rinnovo" id="tbRinnovoMob" style="display:none">—</div>
-      <!-- icona carrello mobile (visibile solo su mobile) -->
-      <button class="btn-cart-mob" id="btnCartMob" onclick="apriDrawerCarrello()" title="Il tuo carrello">
-        <svg viewBox="0 0 24 24"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
-        <span class="cart-mob-badge" id="cartMobBadge">0</span>
-      </button>
     </div>
   </div>
 
@@ -1079,38 +1024,6 @@ input{font-family:inherit}
       </div>
     </div>
 
-  </div>
-</div>
-
-<!-- ═══ DRAWER CARRELLO MOBILE ═══ -->
-<div class="cart-drawer-backdrop" id="cartDrawerBackdrop" onclick="chiudiDrawerCarrello()"></div>
-<div class="cart-drawer" id="cartDrawer">
-  <div class="cart-drawer-hdr">
-    <div class="cart-drawer-title">
-      Il tuo carrello
-      <span class="sidebar-cart-badge" id="drawerCartBadge" style="display:none"></span>
-    </div>
-    <button class="cart-drawer-close" onclick="chiudiDrawerCarrello()">×</button>
-  </div>
-  <!-- bottone conferma in cima -->
-  <div style="padding:12px 16px;border-bottom:1px solid var(--line2);flex-shrink:0">
-    <button class="btn-conferma" id="btnConfermaDrawer" onclick="chiudiDrawerCarrello();apriConferma()" disabled>
-      Conferma Ordine
-    </button>
-  </div>
-  <!-- lista prodotti (condivisa via JS con sidebar desktop) -->
-  <div class="cart-drawer-body" id="drawerItems">
-    <div class="sidebar-empty" id="drawerEmpty">Nessuna selezione</div>
-  </div>
-  <div class="cart-drawer-totals" id="drawerTotals" style="display:none">
-    <div class="tot-row">
-      <span class="tot-lbl">Totale acconti</span>
-      <span class="tot-val" id="drawerTotAcc" style="color:var(--blue)">€0</span>
-    </div>
-    <div class="tot-row">
-      <span class="tot-lbl">Credito residuo</span>
-      <span class="tot-val" id="drawerCredRes">€0</span>
-    </div>
   </div>
 </div>
 
@@ -1377,11 +1290,10 @@ function calcDepositoInfo(prod, bkCount) {
 }
 
 function countBefore(prodId){
+  // Conta gli ordini deposito non saldati prima di questo prodotto nel catalogo
+  // (usato per calcolare l'acconto speciale progressivo)
   let c=S.prenotazioni.filter(b=>b.stato_ordine!=='saldato').length;
-  for(const p of S.catalogo){
-    if(String(p.id)===String(prodId))break;
-    if(SEL[String(p.id)]?.tipo==='deposito')c++;
-  }
+  for(const p of S.catalogo){if(String(p.id)===String(prodId))break; if(SEL[String(p.id)]==='deposito')c++;}
   return c;
 }
 
@@ -1394,14 +1306,14 @@ function countOrdinatiProd(prodId){
 }
 
 function valRes(){
+  // Considera sia gli ordini confermati da Alberto (confermata=TRUE)
+  // sia gli ordini in_preparazione (inviati dal socio ma non ancora elaborati) — entrambi
+  // hanno già impegnato credito e residuo reale.
   const prenAperte = S.prenotazioni.filter(b => b.stato_ordine !== 'saldato');
   let t = prenAperte.reduce((s,b) => s + (b.residuo||0), 0);
   for(const p of S.catalogo){
-    const sel=SEL[String(p.id)];
-    if(!sel||sel.tipo!=='deposito')continue;
-    // usa acconto congelato
-    const info=calcDepositoInfo(p,countBefore(p.id));
-    t+=info.price-sel.acc;
+    if(SEL[String(p.id)]!=='deposito')continue;
+    const i=calcDepositoInfo(p,countBefore(p.id)); t+=i.price-i.accFinale;
   }
   return t;
 }
@@ -1412,40 +1324,37 @@ function bloccato(){return Math.ceil(valRes()*blPct());}
 function credSim(){
   let s=S.utente.credito;
   for(const p of S.catalogo){
-    const sel=SEL[String(p.id)]; if(!sel)continue;
-    // usa acconto/prezzo congelato al momento della selezione
-    s-=sel.acc;
+    const t=SEL[String(p.id)]; if(!t)continue;
+    const i=calcDepositoInfo(p,countBefore(p.id));
+    if(t==='deposito')s-=i.accFinale; else if(t==='saldo')s-=i.price;
   }
   return s;
 }
 
 function libSimPrima(excId){
+  // rSim include tutti gli ordini non saldati (in_preparazione + confermati aperti)
   let s=S.utente.credito, rSim=S.prenotazioni.filter(b=>b.stato_ordine!=='saldato').reduce((x,b)=>x+(b.residuo||0),0);
   for(const p of S.catalogo){
-    if(String(p.id)===String(excId))continue;
-    const sel=SEL[String(p.id)]; if(!sel)continue;
-    // usa acconto congelato
-    s-=sel.acc;
-    if(sel.tipo==='deposito'){
-      const info=calcDepositoInfo(p,countBefore(p.id));
-      rSim+=info.price-sel.acc;
-    }
+    if(String(p.id)===String(excId))continue; const t=SEL[String(p.id)]; if(!t)continue;
+    const i=calcDepositoInfo(p,countBefore(p.id));
+    if(t==='deposito'){s-=i.accFinale; rSim+=i.price-i.accFinale;}
+    else if(t==='saldo')s-=i.price;
   }
   return Math.max(0,s-Math.ceil(rSim*blPct()));
 }
 
 function hasOpenPos(){
+  // Considera aperti sia i confermati che gli in_preparazione non saldati
   if(S.prenotazioni.some(b=>b.stato_ordine!=='saldato'))return true;
-  return S.catalogo.some(p=>SEL[String(p.id)]?.tipo==='deposito');
+  return S.catalogo.some(p=>SEL[String(p.id)]==='deposito');
 }
 
 function credFP(excId){
   let a=0;
   for(const p of S.catalogo){
     if(String(p.id)===String(excId))continue;
-    const sel=SEL[String(p.id)]; if(!sel)continue;
-    // usa importo congelato
-    a+=sel.acc;
+    if(SEL[String(p.id)]==='saldo')a+=calcDepositoInfo(p,0).price;
+    else if(SEL[String(p.id)]==='deposito')a+=calcDepositoInfo(p,countBefore(p.id)).accFinale;
   }
   return hasOpenPos()?S.utente.credito-a:Math.max(0,S.utente.credito-bloccato())-a;
 }
@@ -1640,7 +1549,7 @@ function renderCatalogo(){
   const html=['scout','veteran','elite'].map(tier=>{
     const prods=S.catalogo.filter(p=>p.tier===tier);
     const pre=S.prenotazioni.filter(b=>b.confermata&&b.tier_prodotto===tier).length;
-    const dr=S.catalogo.filter(p=>p.tier===tier&&SEL[String(p.id)]?.tipo==='deposito').length;
+    const dr=S.catalogo.filter(p=>p.tier===tier&&SEL[String(p.id)]==='deposito').length;
     const tot=pre+dr, left=3-tot;
     const sc=left<=0?'full':left===1?'warn':'ok';
     const st=left<=0?'Slot esauriti':left+' slot liberi';
@@ -1658,17 +1567,15 @@ function renderCatalogo(){
       }
 
       const sel=SEL[String(prod.id)]||null;
-      const selTipo = sel?.tipo || null;
-      const selAcc  = sel?.acc  || null;
       const info=calcDepositoInfo(prod,countBefore(String(prod.id)));
       const nOrd=countOrdinatiProd(String(prod.id));
       const ordCls=nOrd===0?'zero':nOrd===1?'uno':'multi';
       const ordLbl=nOrd===0?'Hai già ordinato: 0':`Hai già ordinato: ${nOrd}`;
       const libP=libSimPrima(String(prod.id));
       const canD=!locked&&libP>=info.accFinale;
-      const depA=selTipo==='deposito'?selAcc:0;
+      const depA=sel==='deposito'?info.accFinale:0;
       const canFP=!locked&&!info.isTbd&&(credFP(String(prod.id))-depA)>=info.price;
-      const isDep=selTipo==='deposito', isFp=selTipo==='saldo';
+      const isDep=sel==='deposito', isFp=sel==='saldo';
       const cc=isDep?'sel-dep':isFp?'sel-fp':'';
 
       // Tier tag dalla transcodifica SKU (es "202603-LAMORAK_SNAA-DBC" → "LAMORAK SNAA")
@@ -1693,9 +1600,6 @@ function renderCatalogo(){
 
       const depLbl=info.isSp?'Prenota ⚡':'Prenota';
       const fpLbl=info.isTbd?'Full Pay — N/D':'Acquista ora';
-      // prezzo mostrato sul bottone: congelato se già selezionato, live altrimenti
-      const depValShow = isDep ? selAcc : info.accFinale;
-      const fpValShow  = isFp  ? selAcc : info.price;
       const imgs=[prod.imgFile,prod.imgFile2,prod.imgFile3].filter(Boolean).map(f=>`img_catalogo/${f}`);
       const img=imgs[0]||'';
       const hasMulti=imgs.length>1;
@@ -1722,12 +1626,12 @@ function renderCatalogo(){
             <button class="prod-btn${isDep?' dep-on':''}${!canD&&!isDep?' blocked':''}"
               onclick="toggleSel('${prod.id}','deposito')">
               <div class="prod-btn-left"><span class="prod-btn-lbl">${depLbl}</span>${disc}</div>
-              <div class="prod-btn-r"><span class="prod-btn-val">€${depValShow}</span><div class="prod-dot"></div></div>
+              <div class="prod-btn-r"><span class="prod-btn-val">€${info.accFinale}</span><div class="prod-dot"></div></div>
             </button>
             <button class="prod-btn${isFp?' fp-on':''}${!canFP&&!isFp?' blocked':''}"
               onclick="toggleSel('${prod.id}','saldo')">
               <div class="prod-btn-left"><span class="prod-btn-lbl">${fpLbl}</span></div>
-              <div class="prod-btn-r"><span class="prod-btn-val">${info.isTbd?'-':'€'+fpValShow}</span><div class="prod-dot"></div></div>
+              <div class="prod-btn-r"><span class="prod-btn-val">${info.isTbd?'-':'€'+info.price}</span><div class="prod-dot"></div></div>
             </button>
           </div>
         </div>
@@ -1753,51 +1657,24 @@ function renderSidebar(){
   const totals=document.getElementById('sideTotals');
   const btn=document.getElementById('btnConferma');
 
-  // drawer mobile
-  const dItems  = document.getElementById('drawerItems');
-  const dEmpty  = document.getElementById('drawerEmpty');
-  const dTotals = document.getElementById('drawerTotals');
-  const dBadge  = document.getElementById('drawerCartBadge');
-  const dBtn    = document.getElementById('btnConfermaDrawer');
-
   const sels=[];
-  for(const p of S.catalogo){
-    const sel=SEL[String(p.id)];
-    if(!sel)continue;
-    sels.push({p, t:sel.tipo, acc:sel.acc});
-  }
+  for(const p of S.catalogo){const t=SEL[String(p.id)];if(!t)continue; const i=calcDepositoInfo(p,countBefore(p.id)); sels.push({p,t,i});}
 
-  // svuota entrambi i contenitori
   Array.from(items.children).forEach(c=>{if(c!==empty)c.remove();});
-  if(dItems) Array.from(dItems.children).forEach(c=>{if(c!==dEmpty)c.remove();});
-
-  // aggiorna badge topbar mobile
-  const mobBadge = document.getElementById('cartMobBadge');
-  if(mobBadge){
-    mobBadge.textContent = sels.length;
-    mobBadge.style.display = sels.length > 0 ? 'inline-flex' : 'none';
-  }
 
   if(!sels.length){
-    empty.style.display='flex'; totals.style.display='none'; btn.disabled=true;
-    if(dEmpty) dEmpty.style.display='flex';
-    if(dTotals) dTotals.style.display='none';
-    if(dBtn) dBtn.disabled=true;
+    empty.style.display='flex';totals.style.display='none';btn.disabled=true;
     const badge=document.getElementById('sideCartBadge');
     if(badge){badge.style.display='none';}
-    if(dBadge){dBadge.style.display='none';}
     return;
   }
   empty.style.display='none'; totals.style.display='flex'; totals.style.flexDirection='column';
-  if(dEmpty) dEmpty.style.display='none';
-  if(dTotals){ dTotals.style.display='flex'; dTotals.style.flexDirection='column'; }
-
   const badge=document.getElementById('sideCartBadge');
   if(badge){badge.textContent=sels.length;badge.style.display='inline-flex';}
-  if(dBadge){dBadge.textContent=sels.length;dBadge.style.display='inline-flex';}
 
-  // funzione che crea una riga prodotto (usata sia per sidebar che per drawer)
-  function creaSelItem(p, t, acc){
+  let tot=0;
+  sels.forEach(({p,t,i})=>{
+    const acc=t==='deposito'?i.accFinale:i.price; tot+=acc;
     const div=document.createElement('div');
     div.className=`sel-item ${t==='deposito'?'dep':'fp'}`;
     const img=p.imgFile?`img_catalogo/${p.imgFile}`:'';
@@ -1807,41 +1684,23 @@ function renderSidebar(){
         <div class="sel-name">${p.name}</div>
         <div class="sel-type ${t==='deposito'?'dep':'fp'}">${t==='deposito'?'Deposito':'Full Payment'}</div>
       </div>
-      <div class="sel-acc ${t==='deposito'?'dep':'fp'}">€${acc}</div>
-      <button class="sel-del" onclick="rimuoviSel('${p.id}')" title="Rimuovi">
-        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4h6v2"/></svg>
-      </button>`;
-    return div;
-  }
-
-  let tot=0;
-  sels.forEach(({p,t,acc})=>{
-    tot+=acc;
-    const rowSide = creaSelItem(p,t,acc);
-    items.insertBefore(rowSide, empty);
-    if(dItems){
-      const rowDraw = creaSelItem(p,t,acc);
-      dItems.insertBefore(rowDraw, dEmpty);
-    }
+      <div class="sel-acc ${t==='deposito'?'dep':'fp'}">€${acc}</div>`;
+    items.insertBefore(div,empty);
   });
 
   document.getElementById('sideTotAcc').textContent='€'+fmt(tot);
-  if(dItems) document.getElementById('drawerTotAcc').textContent='€'+fmt(tot);
-
   const cr=credSim();
   const ce=document.getElementById('sideCredRes');
   ce.textContent='€'+fmt(cr);
   ce.className='tot-val'+(cr<0?' danger':cr<10?' warn':'');
-  const de=document.getElementById('drawerCredRes');
-  if(de){ de.textContent='€'+fmt(cr); de.className='tot-val'+(cr<0?' danger':cr<10?' warn':''); }
-
-  document.getElementById('tbCred').textContent='€'+fmt(S.utente.credito);
-  document.getElementById('tbCredMob').textContent='€'+fmt(S.utente.credito);
+  document.getElementById('tbCred').textContent='€'+fmt(S.utente.credito);document.getElementById('tbCredMob').textContent='€'+fmt(S.utente.credito);
   const disabled = !sels.length || S.utente.stato==='attesa';
   btn.disabled = disabled;
-  if(dBtn) dBtn.disabled = disabled;
+  // sincronizza anche il bottone top (desktop)
   const btnTop = document.getElementById('btnConfermaTop');
+  const ctaTop = document.getElementById('sideCtaTop');
   if(btnTop){ btnTop.disabled = disabled; }
+  if(ctaTop){ ctaTop.style.display = sels.length ? 'block' : 'none'; }
 }
 
 /* ─── TOGGLE SEL ─────────────────────────────────────────────────────────── */
@@ -1849,18 +1708,11 @@ function toggleSel(prodId, tipo){
   const _pid=String(prodId);
   const prod=S.catalogo.find(p=>String(p.id)===_pid), curr=SEL[_pid];
   if(!prod)return;
-  // se già selezionato con lo stesso tipo → deseleziona
-  if(curr && curr.tipo===tipo){ delete SEL[_pid]; }
+  if(curr===tipo){delete SEL[_pid];}
   else{
     const info=calcDepositoInfo(prod,countBefore(_pid));
-    if(tipo==='deposito'){
-      if(libSimPrima(_pid)<info.accFinale)return;
-      // congela il prezzo al momento della selezione
-      SEL[_pid]={tipo:'deposito', acc:info.accFinale};
-    } else {
-      if((credFP(_pid)-(curr&&curr.tipo==='deposito'?curr.acc:0))<info.price)return;
-      SEL[_pid]={tipo:'saldo', acc:info.price};
-    }
+    if(tipo==='deposito'){if(libSimPrima(_pid)<info.accFinale)return; SEL[_pid]='deposito';}
+    else{if((credFP(_pid)-(curr==='deposito'?info.accFinale:0))<info.price)return; SEL[_pid]='saldo';}
   }
   renderCatalogo();
 }
@@ -1877,8 +1729,9 @@ function apriConferma(){
 
   let tot=0, html='';
   for(const p of S.catalogo){
-    const sel=SEL[String(p.id)]; if(!sel)continue;
-    const {tipo:t, acc} = sel; tot+=acc;
+    const t=SEL[String(p.id)]; if(!t)continue;
+    const i=calcDepositoInfo(p,countBefore(p.id));
+    const acc=t==='deposito'?i.accFinale:i.price; tot+=acc;
     html+=`<div class="recap-item">
       <span class="recap-name">${p.name}</span>
       <span class="recap-tipo ${t==='deposito'?'dep':'fp'}">${t==='deposito'?'Deposito':'Full Pay'}</span>
@@ -1927,14 +1780,11 @@ async function inviaConferma(){
   try{
     const sels=[];
     for(const p of S.catalogo){
-      const sel=SEL[String(p.id)]; if(!sel)continue;
-      const {tipo:t, acc} = sel;
-      // prezzo totale sempre ricalcolato fresco per correttezza backend
+      const t=SEL[String(p.id)]; if(!t)continue;
       const i=calcDepositoInfo(p,countBefore(p.id));
       sels.push({prodotto_id:p.id, nome_prodotto:p.name, sku:p.sku,
                  tier_prodotto:p.tier, tipo:t,
-                 acconto:acc,           // usa importo congelato mostrato all'utente
-                 prezzo_totale:i.price});
+                 acconto:t==='deposito'?i.accFinale:i.price, prezzo_totale:i.price});
     }
     const res=await apiConferma({id_utente:S.utente.id, codice:S.utente._codice, mese:S.mese, selezioni:sels});
 
@@ -2454,7 +2304,6 @@ window.addEventListener('DOMContentLoaded',()=>{
 });
 document.addEventListener('keydown',e=>{
   if(e.key==='Escape'){
-    chiudiDrawerCarrello();
     // Non chiudere la modale conferma se l'invio è in corso
     const btn = document.getElementById('btnMConf');
     if(!btn || !btn.classList.contains('loading')) chiudiConferma();
@@ -2624,27 +2473,6 @@ function initZoom() {
 function toggleSidebar() {
   const sb = document.querySelector('.cat-sidebar');
   if (sb) sb.classList.toggle('open');
-}
-
-/* ─── DRAWER CARRELLO MOBILE ─────────────────────────────────────────────── */
-function apriDrawerCarrello() {
-  document.getElementById('cartDrawer').classList.add('open');
-  document.getElementById('cartDrawerBackdrop').classList.add('open');
-  document.body.style.overflow = 'hidden';
-}
-function chiudiDrawerCarrello() {
-  document.getElementById('cartDrawer').classList.remove('open');
-  document.getElementById('cartDrawerBackdrop').classList.remove('open');
-  document.body.style.overflow = '';
-}
-
-/* ─── RIMUOVI DAL CARRELLO ───────────────────────────────────────────────── */
-function rimuoviSel(prodId) {
-  const _pid = String(prodId);
-  if (SEL[_pid]) {
-    delete SEL[_pid];
-    renderCatalogo();  // aggiorna card (rimuove evidenziazione)
-  }
 }
 
 // chiudi sidebar mobile cliccando fuori
