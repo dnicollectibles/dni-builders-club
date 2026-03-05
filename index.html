@@ -248,13 +248,22 @@ input{font-family:inherit}
 .sel-type.dep{color:var(--blue)}.sel-type.fp{color:var(--neon)}
 .sel-acc{font-family:var(--f-title);font-size:15px;font-weight:700;font-variant-numeric:tabular-nums;white-space:nowrap;flex-shrink:0}
 .sel-acc.dep{color:var(--blue)}.sel-acc.fp{color:var(--neon)}
-/* dettaglio garanzia stock nel carrello */
-.sel-garanzia{margin-top:5px;display:flex;flex-direction:column;gap:2px}
-.sel-garanzia-row{display:flex;justify-content:space-between;gap:8px;align-items:center}
-.sel-garanzia-lbl{font-family:var(--f-mono);font-size:8px;color:var(--text-dim);letter-spacing:.5px}
-.sel-garanzia-val{font-family:var(--f-mono);font-size:8px;font-weight:600;color:var(--text-dim);white-space:nowrap}
-.sel-garanzia-row.garanzia .sel-garanzia-lbl{color:var(--warm)}
-.sel-garanzia-row.garanzia .sel-garanzia-val{color:var(--warm)}
+/* riga garanzia stock sommata — sopra la lista prodotti */
+.cart-garanzia-row{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:7px 16px;
+  background:rgba(247,201,72,.07);
+  border-bottom:1px solid rgba(247,201,72,.2);
+  flex-shrink:0;
+}
+.cart-garanzia-lbl{
+  font-family:var(--f-mono);font-size:9px;letter-spacing:1px;
+  color:var(--warm);text-transform:uppercase;
+}
+.cart-garanzia-val{
+  font-family:var(--f-mono);font-size:10px;font-weight:700;
+  color:var(--warm);white-space:nowrap;
+}
 
 .sidebar-totals{border-top:1px solid var(--line);padding:12px 18px;display:flex;flex-direction:column;gap:7px;flex-shrink:0}
 .tot-row{display:flex;justify-content:space-between;align-items:baseline}
@@ -1377,8 +1386,15 @@ function credSim(){
   let s=S.utente.credito;
   for(const p of S.catalogo){
     const t=SEL[String(p.id)]; if(!t)continue;
-    const i=calcDepositoInfo(p,countBefore(p.id));
-    if(t==='deposito')s-=i.accFinale; else if(t==='saldo')s-=i.price;
+    if(t==='deposito'){
+      // usa acconto ottimizzato (include garanzia stock se applicabile)
+      const ott=getAccontoOttimizzato(String(p.id));
+      const i=calcDepositoInfo(p,0);
+      s-=ott?ott.accFinale:i.accConPaypal;
+    } else {
+      const i=calcDepositoInfo(p,0);
+      s-=i.price;
+    }
   }
   return s;
 }
@@ -1743,38 +1759,36 @@ function renderSidebar(){
   const badge=document.getElementById('sideCartBadge');
   if(badge){badge.textContent=sels.length;badge.style.display='inline-flex';}
 
+  // Calcola garanzia totale su tutti i depositi
+  const totGaranzia = sels.reduce((sum,{p,t})=>{
+    if(t!=='deposito') return sum;
+    const ott=getAccontoOttimizzato(String(p.id));
+    return sum + (ott&&ott.isSp&&ott.garanzia>0 ? ott.garanzia : 0);
+  }, 0);
+
+  // Riga garanzia stock sommata — prima di tutti i prodotti
+  if(totGaranzia>0){
+    const rigaGar=document.createElement('div');
+    rigaGar.className='cart-garanzia-row';
+    rigaGar.innerHTML=`
+      <span class="cart-garanzia-lbl">ⓘ Garanzia stock inclusa</span>
+      <span class="cart-garanzia-val">+€${totGaranzia}</span>`;
+    items.insertBefore(rigaGar, empty);
+  }
+
   let tot=0;
   sels.forEach(({p,t,i})=>{
-    const acc=t==='deposito'?i.accFinale:i.price; tot+=acc;
+    const acc=t==='deposito'?(getAccontoOttimizzato(String(p.id))?.accFinale||i.accConPaypal):i.price;
+    tot+=acc;
     const div=document.createElement('div');
     div.className=`sel-item ${t==='deposito'?'dep':'fp'}`;
     const img=p.imgFile?`img_catalogo/${p.imgFile}`:'';
-
-    // Dettaglio garanzia stock se scatta
-    let garanziaHtml='';
-    if(t==='deposito'){
-      const ott=getAccontoOttimizzato(String(p.id));
-      if(ott&&ott.isSp&&ott.garanzia>0){
-        garanziaHtml=`
-          <div class="sel-garanzia">
-            <div class="sel-garanzia-row">
-              <span class="sel-garanzia-lbl">Acconto base</span>
-              <span class="sel-garanzia-val">€${ott.accBase}</span>
-            </div>
-            <div class="sel-garanzia-row garanzia">
-              <span class="sel-garanzia-lbl">+ Garanzia stock</span>
-              <span class="sel-garanzia-val neon">+€${ott.garanzia}</span>
-            </div>
-          </div>`;
-      }
-    }
 
     div.innerHTML=`
       <div class="sel-thumb">${img?`<img src="${img}" alt="">`:'🖼'}</div>
       <div class="sel-info">
         <div class="sel-name">${p.name}</div>
         <div class="sel-type ${t==='deposito'?'dep':'fp'}">${t==='deposito'?'Deposito':'Full Payment'}</div>
-        ${garanziaHtml}
       </div>
       <div class="sel-acc ${t==='deposito'?'dep':'fp'}">€${acc}</div>
       <button class="sel-del" onclick="rimuoviSel('${p.id}')" title="Rimuovi">
