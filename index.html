@@ -3,6 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
+<link rel="icon" type="image/png" sizes="64x64" href="favicon.png">
+<link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
 <title>DNI Builders Club — Portale Soci</title>
 <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&family=JetBrains+Mono:wght@400;500;600&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,300&display=swap" rel="stylesheet">
 <style>
@@ -260,14 +263,24 @@ input{font-family:inherit}
 .flt-btn{font-family:var(--f-mono);font-size:10px;font-weight:500;letter-spacing:2px;text-transform:uppercase;padding:5px 14px;border:1px solid var(--line2);color:var(--text-dim);background:transparent;transition:all .15s;border-radius:var(--r)}
 .flt-btn:hover{color:var(--text-mid);background:var(--bg3)}
 .flt-btn.active{background:var(--bg3);border-color:var(--neon);color:var(--neon)}
-/* badge numerico sui filtri */
+/* badge numerico sui filtri — cerchio giallo centrato */
 .flt-badge{
-  display:inline-flex;align-items:center;justify-content:center;
-  min-width:16px;height:16px;padding:0 4px;
-  background:var(--warm);color:#000;
-  font-family:var(--f-title);font-size:9px;font-weight:700;
-  border-radius:8px;margin-left:5px;vertical-align:middle;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  min-width:18px;
+  height:18px;
+  padding:0 5px;
+  background:var(--warm);
+  color:#000;
+  font-family:var(--f-title);
+  font-size:9px;
+  font-weight:800;
+  border-radius:9px;
+  margin-left:6px;
+  vertical-align:middle;
   line-height:1;
+  box-sizing:border-box;
 }
 .btn-rileva{display:flex;align-items:center;gap:7px;font-family:var(--f-mono);font-size:10px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;padding:6px 14px;border:1px solid var(--line2);color:var(--text-mid);background:transparent;transition:all .2s;border-radius:var(--r);white-space:nowrap;cursor:pointer}
 .btn-rileva:hover{border-color:var(--neon);color:var(--neon)}
@@ -563,24 +576,45 @@ input{font-family:inherit}
 
   /* ── CATALOGO ───────────────────────────────────────────────────── */
   .cat-layout{flex-direction:column}
-  .cat-main{padding:14px 12px 140px;gap:18px;max-width:100%}
-  .prod-grid{grid-template-columns:1fr!important}
-  .prod-card{flex-direction:column;min-height:unset}
-  .prod-photo-half{width:100%;height:180px;aspect-ratio:unset}
-  .prod-info-half{width:100%;padding:12px 14px}
-  .prod-name{font-size:13px;line-height:1.3;white-space:normal}
-  .prod-price{font-size:20px}
-  .prod-actions{gap:8px}
-  /* bottoni azione catalogo: più alti, più facili da toccare */
-  .prod-btn{padding:12px 10px;min-height:52px}
-  .prod-btn-lbl{font-size:9px}
-  .prod-btn-val{font-size:13px}
+  /* padding-bottom = 44px handle sidebar + margine */
+  .cat-main{padding:12px 12px 60px;gap:10px;max-width:100%}
+  .prod-grid{grid-template-columns:1fr!important;gap:10px}
 
-  /* ── SIDEBAR → BARRA FISSA IN FONDO ────────────────────────────── */
+  /* ── CARD PRODOTTO: orizzontale compatta ─────────────────────────
+     foto quadrata a sinistra (120px), info + bottoni a destra        */
+  .prod-card{
+    flex-direction:row;
+    min-height:unset;
+    align-items:stretch;
+  }
+  .prod-photo-half{
+    width:120px;min-width:120px;
+    height:auto;min-height:120px;
+    flex-shrink:0;
+    aspect-ratio:unset;
+  }
+  .prod-info-half{
+    flex:1;width:0;
+    padding:8px 10px 10px 10px;
+    gap:5px;overflow:hidden;
+  }
+  .prod-tier-tag{font-size:9px;padding:4px 10px;margin:0 -10px 4px -10px}
+  .prod-name{font-size:12px;line-height:1.3;white-space:normal}
+  .prod-sku{font-size:8px}
+  .prod-price{font-size:17px}
+  .prod-price-pub{font-size:12px}
+  /* bottoni affiancati orizzontalmente, comodi da toccare */
+  .prod-actions{flex-direction:row;gap:5px;margin-top:auto}
+  .prod-btn{flex:1;flex-direction:column;align-items:center;justify-content:center;padding:8px 4px;min-height:46px;gap:2px}
+  .prod-btn-left{align-items:center}
+  .prod-btn-lbl{font-size:8px;letter-spacing:.3px}
+  .prod-btn-val{font-size:10px}
+  .prod-btn-r{display:none}
+
+  /* ── SIDEBAR → BARRA FISSA IN FONDO ─────────────────────────────── */
   .cat-sidebar{
     position:fixed;bottom:0;left:0;right:0;
     width:100%;max-height:70vh;
-    /* collassata: solo l'handle (44px) visibile */
     transform:translateY(calc(100% - 44px));
     transition:transform .3s cubic-bezier(.4,0,.2,1);
     border-left:none;border-top:2px solid var(--neon);
@@ -591,15 +625,16 @@ input{font-family:inherit}
     cursor:pointer;user-select:none;
     height:44px;min-height:44px;
     display:flex;align-items:center;justify-content:space-between;
-    padding:0 16px;
-    font-size:10px;letter-spacing:2px;
+    padding:0 16px;font-size:10px;letter-spacing:2px;
     -webkit-tap-highlight-color:transparent;
   }
-  .sidebar-hdr::before{display:none}   /* nessun prefisso automatico */
+  .sidebar-hdr::before{display:none}
   .sidebar-hdr::after{content:'▲';font-size:10px;color:var(--neon);transition:transform .3s;flex-shrink:0}
   .cat-sidebar.open .sidebar-hdr::after{transform:rotate(180deg)}
-  /* bottone conferma dentro sidebar: full width, più alto */
+  /* bottone conferma nella sidebar mobile: full-width */
   .btn-conferma{width:100%;padding:14px;font-size:12px}
+  /* bottone top nascosto su mobile */
+  .sidebar-cta-top{display:none!important}
 
   /* ── FILTRI ORDINI → scroll orizzontale ─────────────────────────── */
   .filters{
@@ -1402,6 +1437,7 @@ function doLogout(){
   } catch(e) {}
   if (_sessionChannel) { _sessionChannel.close(); _sessionChannel = null; }
   fermaPolling();
+  fermaAutoLogout();
   fermaAutoRefresh();
   S.utente=null;S.catalogo=[];S.prenotazioni=[];S.mese='';
   Object.keys(SEL).forEach(k=>delete SEL[k]);
@@ -1445,6 +1481,7 @@ function avviaApp(){
   document.getElementById('ordCount').textContent=S.prenotazioni.length;
   showScreen('sApp');
   avviaPolling();
+  avviaAutoLogout();
 }
 
 let _pollTimer = null;
@@ -1459,6 +1496,33 @@ function avviaPolling() {
 }
 function fermaPolling() {
   if (_pollTimer) { clearInterval(_pollTimer); _pollTimer = null; }
+}
+
+/* ─── AUTO-LOGOUT DOPO 30 MINUTI DI INATTIVITÀ ──────────────────────────── */
+const AUTO_LOGOUT_MS = 30 * 60 * 1000; // 30 minuti
+let _autoLogoutTimer = null;
+
+function resetAutoLogout() {
+  if (!S.utente) return;           // non loggato, non serve
+  if (_autoLogoutTimer) clearTimeout(_autoLogoutTimer);
+  _autoLogoutTimer = setTimeout(() => {
+    if (S.utente) {
+      mostraToast('Sessione scaduta per inattività — accedi di nuovo.', 'warm');
+      setTimeout(() => doLogout(), 2000);
+    }
+  }, AUTO_LOGOUT_MS);
+}
+
+function avviaAutoLogout() {
+  // Resetta il timer ad ogni interazione significativa
+  ['click','touchstart','keydown','scroll'].forEach(ev =>
+    document.addEventListener(ev, resetAutoLogout, { passive: true })
+  );
+  resetAutoLogout();
+}
+
+function fermaAutoLogout() {
+  if (_autoLogoutTimer) { clearTimeout(_autoLogoutTimer); _autoLogoutTimer = null; }
 }
 
 /* ─── RENDER CATALOGO ────────────────────────────────────────────────────── */
