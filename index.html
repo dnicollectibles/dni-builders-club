@@ -236,6 +236,14 @@ input{font-family:inherit}
 #sideCredRes.danger{color:var(--red)}
 
 .sidebar-cta{padding:12px 18px;border-top:1px solid var(--line);flex-shrink:0}
+/* badge contatore nel carrello handle */
+.sidebar-cart-badge{
+  display:inline-flex;align-items:center;justify-content:center;
+  min-width:20px;height:20px;padding:0 6px;
+  background:var(--neon);color:#000;
+  font-family:var(--f-title);font-size:11px;font-weight:700;
+  border-radius:10px;flex-shrink:0;
+}
 .btn-conferma{width:100%;background:var(--neon);color:#000;padding:11px;font-family:var(--f-title);font-size:13px;font-weight:700;letter-spacing:3px;text-transform:uppercase;transition:all .2s;border-radius:var(--r);display:flex;align-items:center;justify-content:center;gap:8px}
 .btn-conferma:hover:not(:disabled){background:#c8ff2a;box-shadow:0 0 20px var(--neon-glow)}
 .btn-conferma:disabled{opacity:.25;cursor:not-allowed}
@@ -542,40 +550,84 @@ input{font-family:inherit}
 
   /* ── CATALOGO ───────────────────────────────────────────────────── */
   .cat-layout{flex-direction:column}
-  .cat-main{padding:14px 12px 140px;gap:18px;max-width:100%}
-  .prod-grid{grid-template-columns:1fr!important}
-  .prod-card{flex-direction:column;min-height:unset}
-  .prod-photo-half{width:100%;height:180px;aspect-ratio:unset}
-  .prod-info-half{width:100%;padding:12px 14px}
-  .prod-name{font-size:13px;line-height:1.3;white-space:normal}
-  .prod-price{font-size:20px}
-  .prod-actions{gap:8px}
-  /* bottoni azione catalogo: più alti, più facili da toccare */
-  .prod-btn{padding:12px 10px;min-height:52px}
-  .prod-btn-lbl{font-size:9px}
-  .prod-btn-val{font-size:13px}
+  /* padding bottom = altezza handle sidebar (44px) + un po' di respiro */
+  .cat-main{padding:14px 12px 64px;gap:12px;max-width:100%}
+  .prod-grid{grid-template-columns:1fr!important;gap:10px}
 
-  /* ── SIDEBAR → BOTTOM SHEET ─────────────────────────────────────── */
+  /* ── CARD PRODOTTO MOBILE: orizzontale compatta ─────────────────── */
+  /* foto quadrata a sinistra, tutto il resto a destra in colonna */
+  .prod-card{
+    flex-direction:row;
+    min-height:unset;
+    align-items:stretch;
+  }
+  /* foto: quadrata, dimensione fissa, occupa tutta l'altezza della card */
+  .prod-photo-half{
+    width:120px;
+    min-height:120px;
+    flex-shrink:0;
+    aspect-ratio:unset;
+    height:auto;         /* si adatta all'altezza dell'info */
+  }
+  /* colonna destra: compatta, tutto visibile senza scorrere */
+  .prod-info-half{
+    width:0;             /* flex si occupa di tutto */
+    flex:1;
+    padding:10px 12px 10px 12px;
+    gap:6px;
+    overflow:hidden;
+  }
+  /* tier tag: più compatto */
+  .prod-tier-tag{
+    font-size:9px;padding:4px 12px;margin:0 -12px 4px -12px;
+  }
+  .prod-name{font-size:12px;line-height:1.35;white-space:normal}
+  .prod-sku{font-size:8px}
+  .prod-price{font-size:18px}
+  .prod-price-pub{font-size:12px}
+  /* bottoni azione: affiancati orizzontalmente, più alti (finger-friendly) */
+  .prod-actions{
+    flex-direction:row;
+    gap:6px;
+    margin-top:auto;
+  }
+  .prod-btn{
+    flex:1;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    padding:9px 6px;
+    min-height:48px;
+    gap:3px;
+  }
+  .prod-btn-left{align-items:center}
+  .prod-btn-lbl{font-size:8px;letter-spacing:.3px}
+  .prod-btn-val{font-size:11px}
+  .prod-btn-r{display:none} /* nasconde il dot indicator su mobile: spazio prezioso */
+
+  /* ── SIDEBAR → BARRA in fondo, si apre cliccando ───────────────── */
   .cat-sidebar{
     position:fixed;bottom:0;left:0;right:0;
-    width:100%;max-height:55vh;
-    transform:translateY(calc(100% - 52px));
+    width:100%;max-height:70vh;
+    /* collassata = solo l'handle (44px) visibile */
+    transform:translateY(calc(100% - 44px));
     transition:transform .3s cubic-bezier(.4,0,.2,1);
     border-left:none;border-top:2px solid var(--neon);
     z-index:200;border-radius:0;
   }
   .cat-sidebar.open{transform:translateY(0)}
   .sidebar-hdr{
-    cursor:pointer;user-select:none;min-height:52px;
+    cursor:pointer;user-select:none;
+    height:44px;          /* handle fisso, compatto */
+    min-height:44px;
     display:flex;align-items:center;justify-content:space-between;
+    padding:0 16px;
     -webkit-tap-highlight-color:transparent;
   }
-  .sidebar-hdr::after{content:'▲';font-size:10px;color:var(--neon);transition:transform .3s}
+  /* rimuove il prefisso "Selezionati ·" — ora c'è solo il testo dell'header */
+  .sidebar-hdr::before{display:none}
+  .sidebar-hdr::after{content:'▲';font-size:10px;color:var(--neon);transition:transform .3s;flex-shrink:0}
   .cat-sidebar.open .sidebar-hdr::after{transform:rotate(180deg)}
-  .sidebar-hdr::before{
-    content:'Selezionati · ';font-family:var(--f-mono);font-size:9px;
-    color:var(--text-dim);letter-spacing:1px;text-transform:uppercase
-  }
   /* bottone conferma dentro sidebar: full width, più alto */
   .btn-conferma{width:100%;padding:14px;font-size:12px}
 
@@ -864,7 +916,10 @@ input{font-family:inherit}
       <div class="cat-layout">
         <div class="cat-main" id="catMain"></div>
         <div class="cat-sidebar">
-          <div class="sidebar-hdr" onclick="toggleSidebar()">Piano corrente</div>
+          <div class="sidebar-hdr" onclick="toggleSidebar()">
+            Il tuo carrello
+            <span class="sidebar-cart-badge" id="sideCartBadge" style="display:none"></span>
+          </div>
           <div class="sidebar-items" id="sideItems">
             <div class="sidebar-empty" id="sideEmpty">Nessuna selezione</div>
           </div>
@@ -1551,8 +1606,14 @@ function renderSidebar(){
 
   Array.from(items.children).forEach(c=>{if(c!==empty)c.remove();});
 
-  if(!sels.length){empty.style.display='flex';totals.style.display='none';btn.disabled=true;return;}
+  if(!sels.length){empty.style.display='flex';totals.style.display='none';btn.disabled=true;
+    const badge=document.getElementById('sideCartBadge');
+    if(badge){badge.style.display='none';}
+    return;
+  }
   empty.style.display='none'; totals.style.display='flex'; totals.style.flexDirection='column';
+  const badge=document.getElementById('sideCartBadge');
+  if(badge){badge.textContent=sels.length;badge.style.display='inline-flex';}
 
   let tot=0;
   sels.forEach(({p,t,i})=>{
