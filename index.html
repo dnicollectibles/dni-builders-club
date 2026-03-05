@@ -2,7 +2,7 @@
 <html lang="it">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=5.0, user-scalable=yes">
 <title>DNI Builders Club — Portale Soci</title>
 <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&family=JetBrains+Mono:wght@400;500;600&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,300&display=swap" rel="stylesheet">
 <style>
@@ -236,13 +236,17 @@ input{font-family:inherit}
 #sideCredRes.danger{color:var(--red)}
 
 .sidebar-cta{padding:12px 18px;border-top:1px solid var(--line);flex-shrink:0}
-/* badge contatore nel carrello handle */
+/* bottone conferma in cima alla sidebar (desktop) */
+.sidebar-cta-top{padding:12px 18px;border-bottom:1px solid var(--line);flex-shrink:0}
+.btn-conferma-top{margin-bottom:0}
+/* su mobile il bottone top è nascosto (c'è già quello in fondo alla sidebar) */
+@media(max-width:768px){.sidebar-cta-top{display:none!important}}
 .sidebar-cart-badge{
   display:inline-flex;align-items:center;justify-content:center;
-  min-width:20px;height:20px;padding:0 6px;
+  min-width:18px;height:18px;padding:0 5px;
   background:var(--neon);color:#000;
-  font-family:var(--f-title);font-size:11px;font-weight:700;
-  border-radius:10px;flex-shrink:0;
+  font-family:var(--f-title);font-size:10px;font-weight:700;
+  border-radius:9px;margin-left:6px;vertical-align:middle;
 }
 .btn-conferma{width:100%;background:var(--neon);color:#000;padding:11px;font-family:var(--f-title);font-size:13px;font-weight:700;letter-spacing:3px;text-transform:uppercase;transition:all .2s;border-radius:var(--r);display:flex;align-items:center;justify-content:center;gap:8px}
 .btn-conferma:hover:not(:disabled){background:#c8ff2a;box-shadow:0 0 20px var(--neon-glow)}
@@ -256,6 +260,15 @@ input{font-family:inherit}
 .flt-btn{font-family:var(--f-mono);font-size:10px;font-weight:500;letter-spacing:2px;text-transform:uppercase;padding:5px 14px;border:1px solid var(--line2);color:var(--text-dim);background:transparent;transition:all .15s;border-radius:var(--r)}
 .flt-btn:hover{color:var(--text-mid);background:var(--bg3)}
 .flt-btn.active{background:var(--bg3);border-color:var(--neon);color:var(--neon)}
+/* badge numerico sui filtri */
+.flt-badge{
+  display:inline-flex;align-items:center;justify-content:center;
+  min-width:16px;height:16px;padding:0 4px;
+  background:var(--warm);color:#000;
+  font-family:var(--f-title);font-size:9px;font-weight:700;
+  border-radius:8px;margin-left:5px;vertical-align:middle;
+  line-height:1;
+}
 .btn-rileva{display:flex;align-items:center;gap:7px;font-family:var(--f-mono);font-size:10px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;padding:6px 14px;border:1px solid var(--line2);color:var(--text-mid);background:transparent;transition:all .2s;border-radius:var(--r);white-space:nowrap;cursor:pointer}
 .btn-rileva:hover{border-color:var(--neon);color:var(--neon)}
 .btn-rileva.loading{opacity:.5;pointer-events:none}
@@ -550,66 +563,24 @@ input{font-family:inherit}
 
   /* ── CATALOGO ───────────────────────────────────────────────────── */
   .cat-layout{flex-direction:column}
-  /* padding bottom = altezza handle sidebar (44px) + un po' di respiro */
-  .cat-main{padding:14px 12px 64px;gap:12px;max-width:100%}
-  .prod-grid{grid-template-columns:1fr!important;gap:10px}
+  .cat-main{padding:14px 12px 140px;gap:18px;max-width:100%}
+  .prod-grid{grid-template-columns:1fr!important}
+  .prod-card{flex-direction:column;min-height:unset}
+  .prod-photo-half{width:100%;height:180px;aspect-ratio:unset}
+  .prod-info-half{width:100%;padding:12px 14px}
+  .prod-name{font-size:13px;line-height:1.3;white-space:normal}
+  .prod-price{font-size:20px}
+  .prod-actions{gap:8px}
+  /* bottoni azione catalogo: più alti, più facili da toccare */
+  .prod-btn{padding:12px 10px;min-height:52px}
+  .prod-btn-lbl{font-size:9px}
+  .prod-btn-val{font-size:13px}
 
-  /* ── CARD PRODOTTO MOBILE: orizzontale compatta ─────────────────── */
-  /* foto quadrata a sinistra, tutto il resto a destra in colonna */
-  .prod-card{
-    flex-direction:row;
-    min-height:unset;
-    align-items:stretch;
-  }
-  /* foto: quadrata, dimensione fissa, occupa tutta l'altezza della card */
-  .prod-photo-half{
-    width:120px;
-    min-height:120px;
-    flex-shrink:0;
-    aspect-ratio:unset;
-    height:auto;         /* si adatta all'altezza dell'info */
-  }
-  /* colonna destra: compatta, tutto visibile senza scorrere */
-  .prod-info-half{
-    width:0;             /* flex si occupa di tutto */
-    flex:1;
-    padding:10px 12px 10px 12px;
-    gap:6px;
-    overflow:hidden;
-  }
-  /* tier tag: più compatto */
-  .prod-tier-tag{
-    font-size:9px;padding:4px 12px;margin:0 -12px 4px -12px;
-  }
-  .prod-name{font-size:12px;line-height:1.35;white-space:normal}
-  .prod-sku{font-size:8px}
-  .prod-price{font-size:18px}
-  .prod-price-pub{font-size:12px}
-  /* bottoni azione: affiancati orizzontalmente, più alti (finger-friendly) */
-  .prod-actions{
-    flex-direction:row;
-    gap:6px;
-    margin-top:auto;
-  }
-  .prod-btn{
-    flex:1;
-    flex-direction:column;
-    align-items:center;
-    justify-content:center;
-    padding:9px 6px;
-    min-height:48px;
-    gap:3px;
-  }
-  .prod-btn-left{align-items:center}
-  .prod-btn-lbl{font-size:8px;letter-spacing:.3px}
-  .prod-btn-val{font-size:11px}
-  .prod-btn-r{display:none} /* nasconde il dot indicator su mobile: spazio prezioso */
-
-  /* ── SIDEBAR → BARRA in fondo, si apre cliccando ───────────────── */
+  /* ── SIDEBAR → BARRA FISSA IN FONDO ────────────────────────────── */
   .cat-sidebar{
     position:fixed;bottom:0;left:0;right:0;
     width:100%;max-height:70vh;
-    /* collassata = solo l'handle (44px) visibile */
+    /* collassata: solo l'handle (44px) visibile */
     transform:translateY(calc(100% - 44px));
     transition:transform .3s cubic-bezier(.4,0,.2,1);
     border-left:none;border-top:2px solid var(--neon);
@@ -618,14 +589,13 @@ input{font-family:inherit}
   .cat-sidebar.open{transform:translateY(0)}
   .sidebar-hdr{
     cursor:pointer;user-select:none;
-    height:44px;          /* handle fisso, compatto */
-    min-height:44px;
+    height:44px;min-height:44px;
     display:flex;align-items:center;justify-content:space-between;
     padding:0 16px;
+    font-size:10px;letter-spacing:2px;
     -webkit-tap-highlight-color:transparent;
   }
-  /* rimuove il prefisso "Selezionati ·" — ora c'è solo il testo dell'header */
-  .sidebar-hdr::before{display:none}
+  .sidebar-hdr::before{display:none}   /* nessun prefisso automatico */
   .sidebar-hdr::after{content:'▲';font-size:10px;color:var(--neon);transition:transform .3s;flex-shrink:0}
   .cat-sidebar.open .sidebar-hdr::after{transform:rotate(180deg)}
   /* bottone conferma dentro sidebar: full width, più alto */
@@ -917,8 +887,13 @@ input{font-family:inherit}
         <div class="cat-main" id="catMain"></div>
         <div class="cat-sidebar">
           <div class="sidebar-hdr" onclick="toggleSidebar()">
-            Il tuo carrello
-            <span class="sidebar-cart-badge" id="sideCartBadge" style="display:none"></span>
+            <span>Il tuo carrello <span class="sidebar-cart-badge" id="sideCartBadge" style="display:none"></span></span>
+          </div>
+          <!-- bottone conferma in cima (desktop): sempre visibile scrollando -->
+          <div class="sidebar-cta-top" id="sideCtaTop" style="display:none">
+            <button class="btn-conferma btn-conferma-top" id="btnConfermaTop" onclick="apriConferma()" disabled>
+              Conferma Ordine
+            </button>
           </div>
           <div class="sidebar-items" id="sideItems">
             <div class="sidebar-empty" id="sideEmpty">Nessuna selezione</div>
@@ -947,11 +922,11 @@ input{font-family:inherit}
       <div class="orders-wrap">
         <div class="filters" style="justify-content:space-between;align-items:center">
           <div style="display:flex;gap:6px;flex-wrap:wrap">
-            <button class="flt-btn active" onclick="setFiltro('tutti',this)">Tutti</button>
-            <button class="flt-btn" onclick="setFiltro('in_preparazione',this)">In conferma</button>
-            <button class="flt-btn" onclick="setFiltro('da_saldare',this)">Da saldare</button>
-            <button class="flt-btn" onclick="setFiltro('saldato',this)">Saldato</button>
-            <button class="flt-btn" onclick="setFiltro('spedito',this)">Spedito</button>
+            <button class="flt-btn active" onclick="setFiltro('tutti',this)">Tutti <span class="flt-badge" id="fltBadgeTutti" style="display:none"></span></button>
+            <button class="flt-btn" onclick="setFiltro('in_preparazione',this)">In conferma <span class="flt-badge" id="fltBadgeConferma" style="display:none"></span></button>
+            <button class="flt-btn" onclick="setFiltro('da_saldare',this)">Da saldare <span class="flt-badge" id="fltBadgeSaldare" style="display:none"></span></button>
+            <button class="flt-btn" onclick="setFiltro('saldato',this)">Saldato <span class="flt-badge" id="fltBadgeSaldato" style="display:none"></span></button>
+            <button class="flt-btn" onclick="setFiltro('spedito',this)">Spedito <span class="flt-badge" id="fltBadgeSpedito" style="display:none"></span></button>
           </div>
           <button class="btn-rileva" id="btnRileva" onclick="rilevaMieiOrdini(this)" title="Ricarica ordini dal server">
             <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
@@ -1606,7 +1581,8 @@ function renderSidebar(){
 
   Array.from(items.children).forEach(c=>{if(c!==empty)c.remove();});
 
-  if(!sels.length){empty.style.display='flex';totals.style.display='none';btn.disabled=true;
+  if(!sels.length){
+    empty.style.display='flex';totals.style.display='none';btn.disabled=true;
     const badge=document.getElementById('sideCartBadge');
     if(badge){badge.style.display='none';}
     return;
@@ -1637,7 +1613,13 @@ function renderSidebar(){
   ce.textContent='€'+fmt(cr);
   ce.className='tot-val'+(cr<0?' danger':cr<10?' warn':'');
   document.getElementById('tbCred').textContent='€'+fmt(S.utente.credito);document.getElementById('tbCredMob').textContent='€'+fmt(S.utente.credito);
-  btn.disabled=!sels.length||S.utente.stato==='attesa';
+  const disabled = !sels.length || S.utente.stato==='attesa';
+  btn.disabled = disabled;
+  // sincronizza anche il bottone top (desktop)
+  const btnTop = document.getElementById('btnConfermaTop');
+  const ctaTop = document.getElementById('sideCtaTop');
+  if(btnTop){ btnTop.disabled = disabled; }
+  if(ctaTop){ ctaTop.style.display = sels.length ? 'block' : 'none'; }
 }
 
 /* ─── TOGGLE SEL ─────────────────────────────────────────────────────────── */
@@ -1778,6 +1760,22 @@ function renderOrdini(){
   document.getElementById('cntDaSaldare').textContent = daSaldare.length;
   document.getElementById('cntSaldato').textContent   = saldato.length;
   document.getElementById('cntSpedito').textContent   = spedito.length;
+
+  // Badge gialli sui filtri — contano TUTTI gli ordini (indipendente dal filtro attivo)
+  const allInPrep    = S.prenotazioni.filter(p => statoUI(p)==='in_preparazione');
+  const allDaSaldare = S.prenotazioni.filter(p => statoUI(p)==='da_saldare');
+  const allSaldato   = S.prenotazioni.filter(p => statoUI(p)==='saldato');
+  const allSpedito   = S.prenotazioni.filter(p => statoUI(p)==='spedito');
+  const allTot       = S.prenotazioni.length;
+  function aggiornaBadgeFiltro(id, n){
+    const el = document.getElementById(id); if(!el) return;
+    el.textContent = n; el.style.display = n > 0 ? 'inline-flex' : 'none';
+  }
+  aggiornaBadgeFiltro('fltBadgeTutti',    allTot);
+  aggiornaBadgeFiltro('fltBadgeConferma', allInPrep.length);
+  aggiornaBadgeFiltro('fltBadgeSaldare',  allDaSaldare.length);
+  aggiornaBadgeFiltro('fltBadgeSaldato',  allSaldato.length);
+  aggiornaBadgeFiltro('fltBadgeSpedito',  allSpedito.length);
 
   // Mappa prodotto_id → immagini dal catalogo (le prenotazioni non hanno imgFile)
   const imgMap = {};
