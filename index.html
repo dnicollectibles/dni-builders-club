@@ -640,11 +640,12 @@ input{font-family:inherit}
   .prod-price-pub{font-size:12px}
   /* bottoni affiancati orizzontalmente, comodi da toccare */
   .prod-actions{flex-direction:row;gap:5px;margin-top:auto}
-  .prod-btn{flex:1;flex-direction:column;align-items:center;justify-content:center;padding:8px 4px;min-height:46px;gap:2px}
-  .prod-btn-left{align-items:center}
+  .prod-btn{flex:1;flex-direction:column;align-items:center;justify-content:center;padding:7px 4px;min-height:48px;gap:1px}
+  .prod-btn-left{align-items:center;gap:1px}
   .prod-btn-lbl{font-size:8px;letter-spacing:.3px}
-  .prod-btn-val{font-size:10px}
-  .prod-btn-r{display:none}
+  .prod-btn-val{font-size:11px;font-weight:700}
+  .prod-btn-r{display:flex;align-items:center;gap:3px;margin-top:2px}
+  .prod-dot{display:none} /* nasconde il pallino, non il valore */
 
   /* ── SIDEBAR → BARRA FISSA IN FONDO ─────────────────────────────── */
   .cat-sidebar{
@@ -2591,6 +2592,26 @@ function initZoom() {
 function toggleSidebar() {
   const sb = document.querySelector('.cat-sidebar');
   if (sb) sb.classList.toggle('open');
+}
+
+/* ─── RIMUOVI DAL CARRELLO ───────────────────────────────────────────────── */
+function rimuoviSel(prodId) {
+  const _pid = String(prodId);
+  if (SEL[_pid]) { delete SEL[_pid]; renderCatalogo(); }
+}
+
+/* ─── DRAWER CARRELLO MOBILE ─────────────────────────────────────────────── */
+function apriDrawerCarrello() {
+  document.getElementById('cartDrawer').classList.add('open');
+  document.getElementById('cartDrawerBackdrop').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function chiudiDrawerCarrello() {
+  const d = document.getElementById('cartDrawer');
+  const b = document.getElementById('cartDrawerBackdrop');
+  if(d) d.classList.remove('open');
+  if(b) b.classList.remove('open');
+  document.body.style.overflow = '';
 }
 
 // chiudi sidebar mobile cliccando fuori
