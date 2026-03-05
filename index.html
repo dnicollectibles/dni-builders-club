@@ -279,8 +279,10 @@ input{font-family:inherit}
   border-radius:9px;
   margin-left:6px;
   vertical-align:middle;
-  line-height:1;
+  line-height:18px;
   box-sizing:border-box;
+  position:relative;
+  top:-1px;
 }
 .btn-rileva{display:flex;align-items:center;gap:7px;font-family:var(--f-mono);font-size:10px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;padding:6px 14px;border:1px solid var(--line2);color:var(--text-mid);background:transparent;transition:all .2s;border-radius:var(--r);white-space:nowrap;cursor:pointer}
 .btn-rileva:hover{border-color:var(--neon);color:var(--neon)}
@@ -575,9 +577,10 @@ input{font-family:inherit}
   .lock-banner{padding:7px 14px;font-size:11px}
 
   /* ── CATALOGO ───────────────────────────────────────────────────── */
-  .cat-layout{flex-direction:column}
-  /* padding-bottom = 44px handle sidebar + margine */
-  .cat-main{padding:12px 12px 60px;gap:10px;max-width:100%}
+  /* cat-layout: solo cat-main occupa lo spazio, sidebar è fixed */
+  .cat-layout{flex-direction:column;overflow:hidden}
+  /* padding-bottom = handle 44px + respiro */
+  .cat-main{padding:12px 12px 56px;gap:10px;max-width:100%;overflow-y:auto;flex:1}
   .prod-grid{grid-template-columns:1fr!important;gap:10px}
 
   /* ── CARD PRODOTTO: orizzontale compatta ─────────────────────────
@@ -612,6 +615,9 @@ input{font-family:inherit}
   .prod-btn-r{display:none}
 
   /* ── SIDEBAR → BARRA FISSA IN FONDO ─────────────────────────────── */
+  /* position:fixed toglie dal flusso normale MA alcuni browser mobile
+     calcolano ancora lo spazio per elementi fixed dentro flex.
+     Soluzione: margin-top negativo pari all'altezza stimata + overflow hidden sul parent */
   .cat-sidebar{
     position:fixed;bottom:0;left:0;right:0;
     width:100%;max-height:70vh;
@@ -619,6 +625,8 @@ input{font-family:inherit}
     transition:transform .3s cubic-bezier(.4,0,.2,1);
     border-left:none;border-top:2px solid var(--neon);
     z-index:200;border-radius:0;
+    /* annulla l'altezza che il browser riserverebbe nel flusso */
+    margin-top:0;
   }
   .cat-sidebar.open{transform:translateY(0)}
   .sidebar-hdr{
@@ -924,8 +932,8 @@ input{font-family:inherit}
           <div class="sidebar-hdr" onclick="toggleSidebar()">
             <span>Il tuo carrello <span class="sidebar-cart-badge" id="sideCartBadge" style="display:none"></span></span>
           </div>
-          <!-- bottone conferma in cima (desktop): sempre visibile scrollando -->
-          <div class="sidebar-cta-top" id="sideCtaTop" style="display:none">
+          <!-- bottone conferma in cima (desktop): sempre visibile -->
+          <div class="sidebar-cta-top" id="sideCtaTop">
             <button class="btn-conferma btn-conferma-top" id="btnConfermaTop" onclick="apriConferma()" disabled>
               Conferma Ordine
             </button>
@@ -1679,11 +1687,9 @@ function renderSidebar(){
   document.getElementById('tbCred').textContent='€'+fmt(S.utente.credito);document.getElementById('tbCredMob').textContent='€'+fmt(S.utente.credito);
   const disabled = !sels.length || S.utente.stato==='attesa';
   btn.disabled = disabled;
-  // sincronizza anche il bottone top (desktop)
+  // sincronizza il bottone top (desktop) — solo disabled, mai nascosto
   const btnTop = document.getElementById('btnConfermaTop');
-  const ctaTop = document.getElementById('sideCtaTop');
   if(btnTop){ btnTop.disabled = disabled; }
-  if(ctaTop){ ctaTop.style.display = sels.length ? 'block' : 'none'; }
 }
 
 /* ─── TOGGLE SEL ─────────────────────────────────────────────────────────── */
@@ -2278,6 +2284,28 @@ function mostraToast(msg, tipo) {
 
 /* ─── INIT ───────────────────────────────────────────────────────────────── */
 window.addEventListener('DOMContentLoaded',()=>{
+  // Fix mobile: sposta la sidebar FUORI da cat-layout nel DOM
+  // così position:fixed non occupa spazio nel flusso flex
+  if(window.innerWidth <= 768){
+    const sb = document.querySelector('.cat-sidebar');
+    const app = document.getElementById('sApp');
+    if(sb && app && sb.parentElement !== app){
+      app.appendChild(sb);
+    }
+  }
+  // Ri-applica se il resize porta su mobile
+  window.addEventListener('resize', ()=>{
+    const sb = document.querySelector('.cat-sidebar');
+    const app = document.getElementById('sApp');
+    const catLayout = document.querySelector('.cat-layout');
+    if(!sb || !app || !catLayout) return;
+    if(window.innerWidth <= 768 && sb.parentElement === catLayout){
+      app.appendChild(sb);
+    } else if(window.innerWidth > 768 && sb.parentElement !== catLayout){
+      catLayout.appendChild(sb);
+    }
+  });
+
   const gl=document.getElementById('gLoad');
   setTimeout(()=>{
     gl.classList.add('out');
