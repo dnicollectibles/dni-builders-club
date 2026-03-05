@@ -139,6 +139,25 @@ input{font-family:inherit}
 .cat-layout{display:flex;flex:1;overflow:hidden;min-height:0;justify-content:center}
 .cat-main{flex:1;overflow-y:auto;padding:28px 40px 60px;display:flex;flex-direction:column;gap:32px;max-width:1400px;width:100%}
 
+/* ── BANNER GARANZIA STOCK ─────────────────────────────────────────── */
+.garanzia-banner{
+  display:flex;align-items:flex-start;gap:12px;
+  padding:12px 16px;
+  background:rgba(180,255,0,.05);
+  border:1px solid rgba(180,255,0,.2);
+  border-radius:var(--r);
+  margin-bottom:-16px; /* si avvicina alla sezione scout */
+}
+.garanzia-banner-icon{
+  color:var(--neon);font-size:16px;flex-shrink:0;line-height:1.4;
+  font-family:var(--f-mono);
+}
+.garanzia-banner-txt{
+  font-family:var(--f-mono);font-size:10px;color:var(--text-dim);
+  letter-spacing:.3px;line-height:1.6;
+}
+.garanzia-banner-txt strong{color:var(--text-mid)}
+
 /* tier section */
 .tier-section{display:flex;flex-direction:row;align-items:stretch;gap:16px;margin-bottom:0}
 /* barra tier verticale */
@@ -229,6 +248,13 @@ input{font-family:inherit}
 .sel-type.dep{color:var(--blue)}.sel-type.fp{color:var(--neon)}
 .sel-acc{font-family:var(--f-title);font-size:15px;font-weight:700;font-variant-numeric:tabular-nums;white-space:nowrap;flex-shrink:0}
 .sel-acc.dep{color:var(--blue)}.sel-acc.fp{color:var(--neon)}
+/* dettaglio garanzia stock nel carrello */
+.sel-garanzia{margin-top:5px;display:flex;flex-direction:column;gap:2px}
+.sel-garanzia-row{display:flex;justify-content:space-between;gap:8px;align-items:center}
+.sel-garanzia-lbl{font-family:var(--f-mono);font-size:8px;color:var(--text-dim);letter-spacing:.5px}
+.sel-garanzia-val{font-family:var(--f-mono);font-size:8px;font-weight:600;color:var(--text-dim);white-space:nowrap}
+.sel-garanzia-row.garanzia .sel-garanzia-lbl{color:var(--warm)}
+.sel-garanzia-row.garanzia .sel-garanzia-val{color:var(--warm)}
 
 .sidebar-totals{border-top:1px solid var(--line);padding:12px 18px;display:flex;flex-direction:column;gap:7px;flex-shrink:0}
 .tot-row{display:flex;justify-content:space-between;align-items:baseline}
@@ -506,14 +532,7 @@ input{font-family:inherit}
 .btn-zoom:disabled{opacity:.3;cursor:default}
 .tb-zoom-lbl{font-family:var(--f-mono);font-size:9px;color:var(--text-dim);
   letter-spacing:1px;min-width:32px;text-align:center;user-select:none}
-/* layout-toggle: separato fisicamente dal gruppo zoom con margin rigido */
-.btn-layout-toggle{
-  margin-left:12px;
-  border-left:1px solid var(--line2);
-  padding-left:12px;
-  font-size:13px;opacity:.55;
-  flex-shrink:0; /* non si schiaccia mai */
-}
+.btn-layout-toggle{margin-left:6px;border-left:1px solid var(--line2);padding-left:8px;font-size:13px;opacity:.55}
 .btn-layout-toggle:hover{opacity:1}
 .btn-layout-toggle.active{color:var(--neon);opacity:1}
 /* Vista mobile su desktop: griglia 1 col, card verticale */
@@ -612,21 +631,11 @@ input{font-family:inherit}
   .prod-price-pub{font-size:12px}
   /* bottoni affiancati orizzontalmente, comodi da toccare */
   .prod-actions{flex-direction:row;gap:5px;margin-top:auto}
-  /* bottone compatto: label sopra, importo sotto — tutto visibile */
-  .prod-btn{
-    flex:1;flex-direction:column;
-    align-items:center;justify-content:center;
-    padding:7px 4px;min-height:48px;gap:1px;
-  }
-  .prod-btn-left{align-items:center;gap:1px}
+  .prod-btn{flex:1;flex-direction:column;align-items:center;justify-content:center;padding:8px 4px;min-height:46px;gap:2px}
+  .prod-btn-left{align-items:center}
   .prod-btn-lbl{font-size:8px;letter-spacing:.3px}
-  /* prod-btn-r: importo visibile, adattato */
-  .prod-btn-r{
-    display:flex;align-items:center;gap:3px;
-    margin-top:2px;
-  }
-  .prod-btn-val{font-size:11px;font-weight:700}
-  .prod-dot{display:none} /* nasconde solo il pallino, non il valore */
+  .prod-btn-val{font-size:10px}
+  .prod-btn-r{display:none}
 
   /* ── SIDEBAR → BARRA FISSA IN FONDO ─────────────────────────────── */
   .cat-sidebar{
@@ -893,8 +902,8 @@ input{font-family:inherit}
           <button class="btn-zoom" id="btnZoomOut" onclick="zoomStep(-1)" title="Riduci testo">A−</button>
           <span class="tb-zoom-lbl" id="zoomLbl">100%</span>
           <button class="btn-zoom" id="btnZoomIn" onclick="zoomStep(+1)" title="Ingrandisci testo">A+</button>
+          <button class="btn-zoom btn-layout-toggle" id="btnLayout" onclick="toggleLayout()" title="Vista mobile">⊟</button>
         </div>
-        <button class="btn-zoom btn-layout-toggle" id="btnLayout" onclick="toggleLayout()" title="Vista mobile">⊟</button>
         <div class="tb-cred">
           <div class="tb-cred-lbl">Credito</div>
           <div class="tb-cred-val" id="tbCred">€0</div>
@@ -1289,12 +1298,55 @@ function calcDepositoInfo(prod, bkCount) {
   return{crossDir:uO===pO?'same':(uO>pO?'down':'up'), accCT, accConPaypal:accCP, accFinale:accF, isSp, price, isTbd:!!prod.isTbd};
 }
 
+/* ─── CALCOLO OTTIMIZZATO ACCONTI ────────────────────────────────────────────
+   Per ogni prodotto nel carrello calcoliamo l'acconto assegnando i 2 slot "base"
+   (senza garanzia stock) ai prodotti più costosi — indipendentemente dall'ordine
+   in cui l'utente li ha selezionati.
+   Funzione pubblica: getAccontoOttimizzato(prodId) → {accFinale, accBase, garanzia, isSp}
+   ────────────────────────────────────────────────────────────────────────── */
+function buildAccontiOttimizzati(){
+  // Ordini storici aperti (già confermati o in_preparazione, non saldati)
+  const storici = S.prenotazioni.filter(b=>b.stato_ordine!=='saldato').length;
+
+  // Prodotti deposito nel carrello corrente, ordinati per prezzo decrescente
+  const depositi = S.catalogo
+    .filter(p => SEL[String(p.id)]==='deposito')
+    .map(p => {
+      const info = calcDepositoInfo(p, 0); // acconto base senza speciale
+      return { id: String(p.id), price: info.price, accBase: info.accConPaypal, info };
+    })
+    .sort((a,b) => b.price - a.price); // più costosi prima → ottengono i 2 slot base
+
+  // Assegna: i primi (2 - storici) slot base, il resto paga garanzia stock
+  const slotsBaseLiberi = Math.max(0, 2 - storici);
+  const map = {}; // prodId → {accFinale, accBase, garanzia, isSp}
+
+  depositi.forEach((d, idx) => {
+    if(idx < slotsBaseLiberi){
+      // slot base: acconto normale
+      map[d.id] = { accFinale: d.accBase, accBase: d.accBase, garanzia: 0, isSp: false };
+    } else {
+      // slot garanzia: acconto speciale
+      const pct = S.utente.accontoSpecialePct[S.utente.tier]/100;
+      const accSp = Math.ceil((d.price - d.accBase) * pct);
+      map[d.id] = { accFinale: accSp, accBase: d.accBase, garanzia: accSp - d.accBase, isSp: true };
+    }
+  });
+
+  return map;
+}
+
+// Cache dell'ottimizzazione — ricalcolata ad ogni render
+let _accontiOtt = {};
+
+function getAccontoOttimizzato(prodId){
+  return _accontiOtt[String(prodId)] || null;
+}
+
 function countBefore(prodId){
-  // Conta gli ordini deposito non saldati prima di questo prodotto nel catalogo
-  // (usato per calcolare l'acconto speciale progressivo)
-  let c=S.prenotazioni.filter(b=>b.stato_ordine!=='saldato').length;
-  for(const p of S.catalogo){if(String(p.id)===String(prodId))break; if(SEL[String(p.id)]==='deposito')c++;}
-  return c;
+  // Manteniamo per compatibilità con credSim/libSimPrima — restituisce il totale
+  // degli ordini aperti storici (non del carrello, che è già gestito dall'ottimizzatore)
+  return S.prenotazioni.filter(b=>b.stato_ordine!=='saldato').length;
 }
 
 function countOrdinatiProd(prodId){
@@ -1544,6 +1596,9 @@ function fermaAutoLogout() {
 
 /* ─── RENDER CATALOGO ────────────────────────────────────────────────────── */
 function renderCatalogo(){
+  // Ricalcola la distribuzione ottimizzata degli acconti
+  _accontiOtt = buildAccontiOttimizzati();
+
   const locked=S.utente.stato==='attesa';
   const QUOTA={scout:'€25/mese',veteran:'€45/mese',elite:'€65/mese'};
   const html=['scout','veteran','elite'].map(tier=>{
@@ -1553,6 +1608,18 @@ function renderCatalogo(){
     const tot=pre+dr, left=3-tot;
     const sc=left<=0?'full':left===1?'warn':'ok';
     const st=left<=0?'Slot esauriti':left+' slot liberi';
+
+    // Banner garanzia stock — mostrato solo prima del tier Scout, solo se ci sono prodotti
+    const hasGaranzia = Object.values(_accontiOtt).some(a=>a.isSp);
+    const storiciAperti = S.prenotazioni.filter(b=>b.stato_ordine!=='saldato').length;
+    const banner = tier==='scout' && S.catalogo.length > 0 ? `
+      <div class="garanzia-banner" id="garanziaBanner">
+        <div class="garanzia-banner-icon">ⓘ</div>
+        <div class="garanzia-banner-txt">
+          <strong>Scegli i prodotti nell'ordine che preferisci</strong> — li ordiniamo automaticamente per minimizzare il costo complessivo degli acconti.
+          ${storiciAperti>=2 ? `Dal 3° prenotazione aperta, l'acconto include una <strong>Garanzia Stock</strong>: una conferma più solida per Alberto di fare lo stock, e per te di averlo riservato. Il dettaglio compare nel carrello.` : `Dalla 3ª prenotazione aperta scatta una <strong>Garanzia Stock</strong> sull'acconto. Il sistema la distribuisce sempre in modo ottimale.`}
+        </div>
+      </div>` : '';
 
     // Sempre 3 slot (prodotto o vuoto)
     const slots=Array.from({length:3},(_,i)=>prods[i]||null);
@@ -1567,24 +1634,27 @@ function renderCatalogo(){
       }
 
       const sel=SEL[String(prod.id)]||null;
+      // info con bkCount=0 → acconto base puro (stabile, non cambia mai)
+      const infoBase=calcDepositoInfo(prod, 0);
+      // info con conteggio reale → usato solo per check credito
       const info=calcDepositoInfo(prod,countBefore(String(prod.id)));
       const nOrd=countOrdinatiProd(String(prod.id));
       const ordCls=nOrd===0?'zero':nOrd===1?'uno':'multi';
       const ordLbl=nOrd===0?'Hai già ordinato: 0':`Hai già ordinato: ${nOrd}`;
       const libP=libSimPrima(String(prod.id));
-      const canD=!locked&&libP>=info.accFinale;
-      const depA=sel==='deposito'?info.accFinale:0;
+      const canD=!locked&&libP>=infoBase.accConPaypal;
+      const depA=sel==='deposito'?(getAccontoOttimizzato(String(prod.id))?.accFinale||infoBase.accConPaypal):0;
       const canFP=!locked&&!info.isTbd&&(credFP(String(prod.id))-depA)>=info.price;
       const isDep=sel==='deposito', isFp=sel==='saldo';
       const cc=isDep?'sel-dep':isFp?'sel-fp':'';
 
-      // Tier tag dalla transcodifica SKU (es "202603-LAMORAK_SNAA-DBC" → "LAMORAK SNAA")
+      // Tier tag dalla transcodifica SKU
       const tierLbl=prod.sku
         ?prod.sku.replace(/^\d{6}-/,'').replace(/-DBC$/i,'').replace(/_/g,' ')
         :tier.toUpperCase();
 
-      // Non mostrare % sconto se l'acconto è maggiorato (⚡): messaggi contraddittori
-      const disc=(!info.isSp && info.crossDir==='down')
+      // Sconto soci (solo se tier down e nessun ⚡)
+      const disc=(info.crossDir==='down')
         ?`<div class="prod-disc-bdg">-${S.utente.tier==='elite'&&prod.tier==='scout'?35:25}% soci</div>`:'';
       const badge=isDep
         ?`<div class="prod-sel-bdg"><div class="prod-sel-bdg-in dep">⊙ Prenotato</div></div>`
@@ -1598,7 +1668,8 @@ function renderCatalogo(){
           return`<div class="prod-price-row"><div class="prod-price">€${fmt(info.price)}</div>${pub}</div>`;
         })();
 
-      const depLbl=info.isSp?'Prenota ⚡':'Prenota';
+      // Bottoni: mostrano SEMPRE l'acconto base — stabile, non cambia con le selezioni
+      const depLbl='Prenota';
       const fpLbl=info.isTbd?'Full Pay — N/D':'Acquista ora';
       const imgs=[prod.imgFile,prod.imgFile2,prod.imgFile3].filter(Boolean).map(f=>`img_catalogo/${f}`);
       const img=imgs[0]||'';
@@ -1626,7 +1697,7 @@ function renderCatalogo(){
             <button class="prod-btn${isDep?' dep-on':''}${!canD&&!isDep?' blocked':''}"
               onclick="toggleSel('${prod.id}','deposito')">
               <div class="prod-btn-left"><span class="prod-btn-lbl">${depLbl}</span>${disc}</div>
-              <div class="prod-btn-r"><span class="prod-btn-val">€${info.accFinale}</span><div class="prod-dot"></div></div>
+              <div class="prod-btn-r"><span class="prod-btn-val">€${infoBase.accConPaypal}</span><div class="prod-dot"></div></div>
             </button>
             <button class="prod-btn${isFp?' fp-on':''}${!canFP&&!isFp?' blocked':''}"
               onclick="toggleSel('${prod.id}','saldo')">
@@ -1638,7 +1709,7 @@ function renderCatalogo(){
       </div>`;
     }).join('');
 
-    return`<div class="tier-section">
+    return`${banner}<div class="tier-section">
       <div class="tier-vtag ${tier}"><span>${TIER_NAMES[tier]}</span></div>
       <div class="tier-body">
         <div class="prod-grid">${cards}</div>
@@ -1678,13 +1749,37 @@ function renderSidebar(){
     const div=document.createElement('div');
     div.className=`sel-item ${t==='deposito'?'dep':'fp'}`;
     const img=p.imgFile?`img_catalogo/${p.imgFile}`:'';
+
+    // Dettaglio garanzia stock se scatta
+    let garanziaHtml='';
+    if(t==='deposito'){
+      const ott=getAccontoOttimizzato(String(p.id));
+      if(ott&&ott.isSp&&ott.garanzia>0){
+        garanziaHtml=`
+          <div class="sel-garanzia">
+            <div class="sel-garanzia-row">
+              <span class="sel-garanzia-lbl">Acconto base</span>
+              <span class="sel-garanzia-val">€${ott.accBase}</span>
+            </div>
+            <div class="sel-garanzia-row garanzia">
+              <span class="sel-garanzia-lbl">+ Garanzia stock</span>
+              <span class="sel-garanzia-val neon">+€${ott.garanzia}</span>
+            </div>
+          </div>`;
+      }
+    }
+
     div.innerHTML=`
       <div class="sel-thumb">${img?`<img src="${img}" alt="">`:'🖼'}</div>
       <div class="sel-info">
         <div class="sel-name">${p.name}</div>
         <div class="sel-type ${t==='deposito'?'dep':'fp'}">${t==='deposito'?'Deposito':'Full Payment'}</div>
+        ${garanziaHtml}
       </div>
-      <div class="sel-acc ${t==='deposito'?'dep':'fp'}">€${acc}</div>`;
+      <div class="sel-acc ${t==='deposito'?'dep':'fp'}">€${acc}</div>
+      <button class="sel-del" onclick="rimuoviSel('${p.id}')" title="Rimuovi">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4h6v2"/></svg>
+      </button>`;
     items.insertBefore(div,empty);
   });
 
@@ -1710,9 +1805,15 @@ function toggleSel(prodId, tipo){
   if(!prod)return;
   if(curr===tipo){delete SEL[_pid];}
   else{
-    const info=calcDepositoInfo(prod,countBefore(_pid));
-    if(tipo==='deposito'){if(libSimPrima(_pid)<info.accFinale)return; SEL[_pid]='deposito';}
-    else{if((credFP(_pid)-(curr==='deposito'?info.accFinale:0))<info.price)return; SEL[_pid]='saldo';}
+    const infoBase=calcDepositoInfo(prod,0);
+    if(tipo==='deposito'){
+      if(libSimPrima(_pid)<infoBase.accConPaypal)return;
+      SEL[_pid]='deposito';
+    } else {
+      const info=calcDepositoInfo(prod,countBefore(_pid));
+      if((credFP(_pid)-(curr==='deposito'?(getAccontoOttimizzato(_pid)?.accFinale||infoBase.accConPaypal):0))<info.price)return;
+      SEL[_pid]='saldo';
+    }
   }
   renderCatalogo();
 }
@@ -1781,10 +1882,13 @@ async function inviaConferma(){
     const sels=[];
     for(const p of S.catalogo){
       const t=SEL[String(p.id)]; if(!t)continue;
-      const i=calcDepositoInfo(p,countBefore(p.id));
+      const iBase=calcDepositoInfo(p,0);
+      const ott=t==='deposito'?getAccontoOttimizzato(String(p.id)):null;
+      const acconto=t==='deposito'?(ott?ott.accFinale:iBase.accConPaypal):iBase.price;
       sels.push({prodotto_id:p.id, nome_prodotto:p.name, sku:p.sku,
                  tier_prodotto:p.tier, tipo:t,
-                 acconto:t==='deposito'?i.accFinale:i.price, prezzo_totale:i.price});
+                 acconto, prezzo_totale:iBase.price,
+                 garanzia_stock: ott?.garanzia||0});
     }
     const res=await apiConferma({id_utente:S.utente.id, codice:S.utente._codice, mese:S.mese, selezioni:sels});
 
