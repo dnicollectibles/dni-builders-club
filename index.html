@@ -246,11 +246,74 @@ input{font-family:inherit}
 @media(max-width:768px){.sidebar-cta-top{display:none!important}}
 .sidebar-cart-badge{
   display:inline-flex;align-items:center;justify-content:center;
-  min-width:18px;height:18px;padding:0 5px;
+  min-width:16px;height:16px;padding:0 4px;
   background:var(--neon);color:#000;
-  font-family:var(--f-title);font-size:10px;font-weight:700;
-  border-radius:9px;margin-left:6px;vertical-align:middle;
+  font-family:var(--f-mono);font-size:10px;font-weight:700;
+  border-radius:2px;margin-left:6px;vertical-align:middle;
+  box-sizing:border-box;position:relative;top:-1px;
 }
+
+/* ── ICONA CARRELLO TOPBAR MOBILE ─────────────────────────────────── */
+.btn-cart-mob{
+  display:none; /* visibile solo su mobile via media query */
+  position:relative;
+  align-items:center;justify-content:center;
+  width:36px;height:36px;
+  background:transparent;border:1px solid var(--line2);
+  border-radius:var(--r);color:var(--text-mid);
+  cursor:pointer;transition:all .15s;flex-shrink:0;
+}
+.btn-cart-mob:hover{border-color:var(--neon);color:var(--neon)}
+.btn-cart-mob svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.btn-cart-mob .cart-mob-badge{
+  position:absolute;top:-5px;right:-5px;
+  min-width:16px;height:16px;padding:0 3px;
+  background:var(--neon);color:#000;
+  font-family:var(--f-mono);font-size:9px;font-weight:700;
+  border-radius:2px;display:none;
+  align-items:center;justify-content:center;
+  box-sizing:border-box;
+}
+
+/* ── DRAWER CARRELLO MOBILE ───────────────────────────────────────── */
+/* backdrop */
+.cart-drawer-backdrop{
+  display:none;position:fixed;inset:0;
+  background:rgba(0,0,0,.6);z-index:300;
+  backdrop-filter:blur(2px);
+}
+.cart-drawer-backdrop.open{display:block}
+/* drawer laterale da destra */
+.cart-drawer{
+  display:none;position:fixed;top:0;right:0;bottom:0;
+  width:min(320px,90vw);
+  background:var(--bg2);border-left:1px solid var(--neon);
+  z-index:301;flex-direction:column;
+  transform:translateX(100%);
+  transition:transform .3s cubic-bezier(.4,0,.2,1);
+}
+.cart-drawer.open{
+  display:flex;transform:translateX(0);
+}
+.cart-drawer-hdr{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:14px 16px;border-bottom:1px solid var(--line);
+  flex-shrink:0;
+}
+.cart-drawer-title{
+  font-family:var(--f-mono);font-size:9px;font-weight:600;
+  letter-spacing:3px;text-transform:uppercase;color:var(--text-mid);
+  display:flex;align-items:center;gap:8px;
+}
+.cart-drawer-close{
+  width:28px;height:28px;display:flex;align-items:center;justify-content:center;
+  background:transparent;border:1px solid var(--line2);border-radius:var(--r);
+  color:var(--text-dim);font-size:16px;cursor:pointer;transition:all .15s;
+}
+.cart-drawer-close:hover{border-color:var(--red);color:var(--red)}
+.cart-drawer-body{flex:1;overflow-y:auto}
+.cart-drawer-cta{padding:12px 16px;border-top:1px solid var(--line);flex-shrink:0}
+.cart-drawer-totals{padding:10px 16px;border-top:1px solid var(--line2);flex-shrink:0}
 .btn-conferma{width:100%;background:var(--neon);color:#000;padding:11px;font-family:var(--f-title);font-size:13px;font-weight:700;letter-spacing:3px;text-transform:uppercase;transition:all .2s;border-radius:var(--r);display:flex;align-items:center;justify-content:center;gap:8px}
 .btn-conferma:hover:not(:disabled){background:#c8ff2a;box-shadow:0 0 20px var(--neon-glow)}
 .btn-conferma:disabled{opacity:.25;cursor:not-allowed}
@@ -263,26 +326,24 @@ input{font-family:inherit}
 .flt-btn{font-family:var(--f-mono);font-size:10px;font-weight:500;letter-spacing:2px;text-transform:uppercase;padding:5px 14px;border:1px solid var(--line2);color:var(--text-dim);background:transparent;transition:all .15s;border-radius:var(--r)}
 .flt-btn:hover{color:var(--text-mid);background:var(--bg3)}
 .flt-btn.active{background:var(--bg3);border-color:var(--neon);color:var(--neon)}
-/* badge numerico sui filtri — cerchio giallo centrato */
+/* badge numerico sui filtri — rettangolo giallo, font uguale al testo */
 .flt-badge{
   display:inline-flex;
   align-items:center;
   justify-content:center;
-  min-width:18px;
-  height:18px;
-  padding:0 5px;
+  min-width:16px;
+  height:16px;
+  padding:0 4px;
   background:var(--warm);
   color:#000;
-  font-family:var(--f-title);
-  font-size:9px;
-  font-weight:800;
-  border-radius:9px;
-  margin-left:6px;
+  font-family:var(--f-mono);
+  font-size:10px;
+  font-weight:700;
+  border-radius:2px;
+  margin-left:5px;
   vertical-align:middle;
-  line-height:18px;
   box-sizing:border-box;
-  position:relative;
-  top:-1px;
+  position:relative;top:-1px;
 }
 .btn-rileva{display:flex;align-items:center;gap:7px;font-family:var(--f-mono);font-size:10px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;padding:6px 14px;border:1px solid var(--line2);color:var(--text-mid);background:transparent;transition:all .2s;border-radius:var(--r);white-space:nowrap;cursor:pointer}
 .btn-rileva:hover{border-color:var(--neon);color:var(--neon)}
@@ -577,10 +638,9 @@ input{font-family:inherit}
   .lock-banner{padding:7px 14px;font-size:11px}
 
   /* ── CATALOGO ───────────────────────────────────────────────────── */
-  /* cat-layout: solo cat-main occupa lo spazio, sidebar è fixed */
-  .cat-layout{flex-direction:column;overflow:hidden}
-  /* padding-bottom = handle 44px + respiro */
-  .cat-main{padding:12px 12px 56px;gap:10px;max-width:100%;overflow-y:auto;flex:1}
+  .cat-layout{flex-direction:column}
+  /* padding-bottom = 44px handle sidebar + margine */
+  .cat-main{padding:12px 12px 60px;gap:10px;max-width:100%}
   .prod-grid{grid-template-columns:1fr!important;gap:10px}
 
   /* ── CARD PRODOTTO: orizzontale compatta ─────────────────────────
@@ -615,9 +675,6 @@ input{font-family:inherit}
   .prod-btn-r{display:none}
 
   /* ── SIDEBAR → BARRA FISSA IN FONDO ─────────────────────────────── */
-  /* position:fixed toglie dal flusso normale MA alcuni browser mobile
-     calcolano ancora lo spazio per elementi fixed dentro flex.
-     Soluzione: margin-top negativo pari all'altezza stimata + overflow hidden sul parent */
   .cat-sidebar{
     position:fixed;bottom:0;left:0;right:0;
     width:100%;max-height:70vh;
@@ -625,8 +682,6 @@ input{font-family:inherit}
     transition:transform .3s cubic-bezier(.4,0,.2,1);
     border-left:none;border-top:2px solid var(--neon);
     z-index:200;border-radius:0;
-    /* annulla l'altezza che il browser riserverebbe nel flusso */
-    margin-top:0;
   }
   .cat-sidebar.open{transform:translateY(0)}
   .sidebar-hdr{
@@ -643,6 +698,10 @@ input{font-family:inherit}
   .btn-conferma{width:100%;padding:14px;font-size:12px}
   /* bottone top nascosto su mobile */
   .sidebar-cta-top{display:none!important}
+  /* su mobile la cat-sidebar desktop è nascosta — usiamo il drawer */
+  .cat-sidebar{display:none!important}
+  /* mostra icona carrello in topbar */
+  .btn-cart-mob{display:inline-flex}
 
   /* ── FILTRI ORDINI → scroll orizzontale ─────────────────────────── */
   .filters{
@@ -902,6 +961,11 @@ input{font-family:inherit}
       <div class="tb-mob-sep"></div>
       <div class="tb-mob-mese" id="tbMeseMob">—</div>
       <div class="tb-mob-rinnovo" id="tbRinnovoMob" style="display:none">—</div>
+      <!-- icona carrello mobile (visibile solo su mobile) -->
+      <button class="btn-cart-mob" id="btnCartMob" onclick="apriDrawerCarrello()" title="Il tuo carrello">
+        <svg viewBox="0 0 24 24"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
+        <span class="cart-mob-badge" id="cartMobBadge">0</span>
+      </button>
     </div>
   </div>
 
@@ -932,8 +996,8 @@ input{font-family:inherit}
           <div class="sidebar-hdr" onclick="toggleSidebar()">
             <span>Il tuo carrello <span class="sidebar-cart-badge" id="sideCartBadge" style="display:none"></span></span>
           </div>
-          <!-- bottone conferma in cima (desktop): sempre visibile -->
-          <div class="sidebar-cta-top" id="sideCtaTop">
+          <!-- bottone conferma in cima (desktop): sempre visibile scrollando -->
+          <div class="sidebar-cta-top" id="sideCtaTop" style="display:none">
             <button class="btn-conferma btn-conferma-top" id="btnConfermaTop" onclick="apriConferma()" disabled>
               Conferma Ordine
             </button>
@@ -1015,6 +1079,38 @@ input{font-family:inherit}
       </div>
     </div>
 
+  </div>
+</div>
+
+<!-- ═══ DRAWER CARRELLO MOBILE ═══ -->
+<div class="cart-drawer-backdrop" id="cartDrawerBackdrop" onclick="chiudiDrawerCarrello()"></div>
+<div class="cart-drawer" id="cartDrawer">
+  <div class="cart-drawer-hdr">
+    <div class="cart-drawer-title">
+      Il tuo carrello
+      <span class="sidebar-cart-badge" id="drawerCartBadge" style="display:none"></span>
+    </div>
+    <button class="cart-drawer-close" onclick="chiudiDrawerCarrello()">×</button>
+  </div>
+  <!-- bottone conferma in cima -->
+  <div style="padding:12px 16px;border-bottom:1px solid var(--line2);flex-shrink:0">
+    <button class="btn-conferma" id="btnConfermaDrawer" onclick="chiudiDrawerCarrello();apriConferma()" disabled>
+      Conferma Ordine
+    </button>
+  </div>
+  <!-- lista prodotti (condivisa via JS con sidebar desktop) -->
+  <div class="cart-drawer-body" id="drawerItems">
+    <div class="sidebar-empty" id="drawerEmpty">Nessuna selezione</div>
+  </div>
+  <div class="cart-drawer-totals" id="drawerTotals" style="display:none">
+    <div class="tot-row">
+      <span class="tot-lbl">Totale acconti</span>
+      <span class="tot-val" id="drawerTotAcc" style="color:var(--blue)">€0</span>
+    </div>
+    <div class="tot-row">
+      <span class="tot-lbl">Credito residuo</span>
+      <span class="tot-val" id="drawerCredRes">€0</span>
+    </div>
   </div>
 </div>
 
@@ -1648,24 +1744,47 @@ function renderSidebar(){
   const totals=document.getElementById('sideTotals');
   const btn=document.getElementById('btnConferma');
 
+  // drawer mobile
+  const dItems  = document.getElementById('drawerItems');
+  const dEmpty  = document.getElementById('drawerEmpty');
+  const dTotals = document.getElementById('drawerTotals');
+  const dBadge  = document.getElementById('drawerCartBadge');
+  const dBtn    = document.getElementById('btnConfermaDrawer');
+
   const sels=[];
   for(const p of S.catalogo){const t=SEL[String(p.id)];if(!t)continue; const i=calcDepositoInfo(p,countBefore(p.id)); sels.push({p,t,i});}
 
+  // svuota entrambi i contenitori
   Array.from(items.children).forEach(c=>{if(c!==empty)c.remove();});
+  if(dItems) Array.from(dItems.children).forEach(c=>{if(c!==dEmpty)c.remove();});
+
+  // aggiorna badge topbar mobile
+  const mobBadge = document.getElementById('cartMobBadge');
+  if(mobBadge){
+    mobBadge.textContent = sels.length;
+    mobBadge.style.display = sels.length > 0 ? 'inline-flex' : 'none';
+  }
 
   if(!sels.length){
-    empty.style.display='flex';totals.style.display='none';btn.disabled=true;
+    empty.style.display='flex'; totals.style.display='none'; btn.disabled=true;
+    if(dEmpty) dEmpty.style.display='flex';
+    if(dTotals) dTotals.style.display='none';
+    if(dBtn) dBtn.disabled=true;
     const badge=document.getElementById('sideCartBadge');
     if(badge){badge.style.display='none';}
+    if(dBadge){dBadge.style.display='none';}
     return;
   }
   empty.style.display='none'; totals.style.display='flex'; totals.style.flexDirection='column';
+  if(dEmpty) dEmpty.style.display='none';
+  if(dTotals){ dTotals.style.display='flex'; dTotals.style.flexDirection='column'; }
+
   const badge=document.getElementById('sideCartBadge');
   if(badge){badge.textContent=sels.length;badge.style.display='inline-flex';}
+  if(dBadge){dBadge.textContent=sels.length;dBadge.style.display='inline-flex';}
 
-  let tot=0;
-  sels.forEach(({p,t,i})=>{
-    const acc=t==='deposito'?i.accFinale:i.price; tot+=acc;
+  // funzione che crea una riga prodotto (usata sia per sidebar che per drawer)
+  function creaSelItem(p, t, acc){
     const div=document.createElement('div');
     div.className=`sel-item ${t==='deposito'?'dep':'fp'}`;
     const img=p.imgFile?`img_catalogo/${p.imgFile}`:'';
@@ -1675,19 +1794,39 @@ function renderSidebar(){
         <div class="sel-name">${p.name}</div>
         <div class="sel-type ${t==='deposito'?'dep':'fp'}">${t==='deposito'?'Deposito':'Full Payment'}</div>
       </div>
-      <div class="sel-acc ${t==='deposito'?'dep':'fp'}">€${acc}</div>`;
-    items.insertBefore(div,empty);
+      <div class="sel-acc ${t==='deposito'?'dep':'fp'}">€${acc}</div>
+      <button class="sel-del" onclick="rimuoviSel('${p.id}')" title="Rimuovi">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4h6v2"/></svg>
+      </button>`;
+    return div;
+  }
+
+  let tot=0;
+  sels.forEach(({p,t,i})=>{
+    const acc=t==='deposito'?i.accFinale:i.price; tot+=acc;
+    const rowSide = creaSelItem(p,t,acc);
+    items.insertBefore(rowSide, empty);
+    if(dItems){
+      const rowDraw = creaSelItem(p,t,acc);
+      dItems.insertBefore(rowDraw, dEmpty);
+    }
   });
 
   document.getElementById('sideTotAcc').textContent='€'+fmt(tot);
+  if(dItems) document.getElementById('drawerTotAcc').textContent='€'+fmt(tot);
+
   const cr=credSim();
   const ce=document.getElementById('sideCredRes');
   ce.textContent='€'+fmt(cr);
   ce.className='tot-val'+(cr<0?' danger':cr<10?' warn':'');
-  document.getElementById('tbCred').textContent='€'+fmt(S.utente.credito);document.getElementById('tbCredMob').textContent='€'+fmt(S.utente.credito);
+  const de=document.getElementById('drawerCredRes');
+  if(de){ de.textContent='€'+fmt(cr); de.className='tot-val'+(cr<0?' danger':cr<10?' warn':''); }
+
+  document.getElementById('tbCred').textContent='€'+fmt(S.utente.credito);
+  document.getElementById('tbCredMob').textContent='€'+fmt(S.utente.credito);
   const disabled = !sels.length || S.utente.stato==='attesa';
   btn.disabled = disabled;
-  // sincronizza il bottone top (desktop) — solo disabled, mai nascosto
+  if(dBtn) dBtn.disabled = disabled;
   const btnTop = document.getElementById('btnConfermaTop');
   if(btnTop){ btnTop.disabled = disabled; }
 }
@@ -2284,28 +2423,6 @@ function mostraToast(msg, tipo) {
 
 /* ─── INIT ───────────────────────────────────────────────────────────────── */
 window.addEventListener('DOMContentLoaded',()=>{
-  // Fix mobile: sposta la sidebar FUORI da cat-layout nel DOM
-  // così position:fixed non occupa spazio nel flusso flex
-  if(window.innerWidth <= 768){
-    const sb = document.querySelector('.cat-sidebar');
-    const app = document.getElementById('sApp');
-    if(sb && app && sb.parentElement !== app){
-      app.appendChild(sb);
-    }
-  }
-  // Ri-applica se il resize porta su mobile
-  window.addEventListener('resize', ()=>{
-    const sb = document.querySelector('.cat-sidebar');
-    const app = document.getElementById('sApp');
-    const catLayout = document.querySelector('.cat-layout');
-    if(!sb || !app || !catLayout) return;
-    if(window.innerWidth <= 768 && sb.parentElement === catLayout){
-      app.appendChild(sb);
-    } else if(window.innerWidth > 768 && sb.parentElement !== catLayout){
-      catLayout.appendChild(sb);
-    }
-  });
-
   const gl=document.getElementById('gLoad');
   setTimeout(()=>{
     gl.classList.add('out');
@@ -2315,6 +2432,7 @@ window.addEventListener('DOMContentLoaded',()=>{
 });
 document.addEventListener('keydown',e=>{
   if(e.key==='Escape'){
+    chiudiDrawerCarrello();
     // Non chiudere la modale conferma se l'invio è in corso
     const btn = document.getElementById('btnMConf');
     if(!btn || !btn.classList.contains('loading')) chiudiConferma();
@@ -2484,6 +2602,27 @@ function initZoom() {
 function toggleSidebar() {
   const sb = document.querySelector('.cat-sidebar');
   if (sb) sb.classList.toggle('open');
+}
+
+/* ─── DRAWER CARRELLO MOBILE ─────────────────────────────────────────────── */
+function apriDrawerCarrello() {
+  document.getElementById('cartDrawer').classList.add('open');
+  document.getElementById('cartDrawerBackdrop').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function chiudiDrawerCarrello() {
+  document.getElementById('cartDrawer').classList.remove('open');
+  document.getElementById('cartDrawerBackdrop').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+/* ─── RIMUOVI DAL CARRELLO ───────────────────────────────────────────────── */
+function rimuoviSel(prodId) {
+  const _pid = String(prodId);
+  if (SEL[_pid]) {
+    delete SEL[_pid];
+    renderCatalogo();  // aggiorna card (rimuove evidenziazione)
+  }
 }
 
 // chiudi sidebar mobile cliccando fuori
