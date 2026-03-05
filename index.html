@@ -95,6 +95,9 @@ input{font-family:inherit}
 
 /* topbar */
 .topbar{background:#080810;border-bottom:1px solid var(--line2);padding:0 32px;height:54px;display:flex;align-items:center;gap:16px;flex-shrink:0}
+/* righe mobile topbar: nascoste su desktop */
+.tb-top-row{display:contents} /* su desktop usa il flex del genitore */
+.tb-bottom-row{display:none}  /* visibile solo su mobile via media query */
 .tb-logo{font-family:var(--f-title);font-size:17px;font-weight:700;text-transform:uppercase;letter-spacing:1px;white-space:nowrap}
 .tb-logo span{color:var(--neon)}
 .tb-sep{width:1px;height:20px;background:var(--line2)}
@@ -482,82 +485,252 @@ input{font-family:inherit}
 
 
 /* ═══════════════════════════════════════════════════════════════════
-   MOBILE RESPONSIVE  (≤ 768px)
+   MOBILE RESPONSIVE  (≤ 768px)  — redesign completo
 ═══════════════════════════════════════════════════════════════════ */
 @media (max-width:768px){
-  /* topbar compatta */
-  .topbar{padding:0 14px;height:48px;gap:10px}
-  .tb-logo{font-size:14px}
-  .tb-user,.tb-mese,.tb-sep,.tb-zoom{display:none}
+
+  /* ── TOPBAR ── due righe su mobile ──────────────────────────────── */
+  .topbar{
+    padding:0;height:auto;gap:0;flex-direction:column;
+    border-bottom:1px solid var(--line2);
+  }
+  /* riga 1: logo + tier + logout */
+  .topbar::before{display:none} /* rimuove pseudo-elementi eventuali */
+  .tb-top-row{
+    display:flex;align-items:center;gap:8px;
+    padding:0 14px;height:44px;width:100%;box-sizing:border-box;
+    border-bottom:1px solid var(--line2);
+  }
+  .tb-logo{font-size:13px}
   .tb-tier{font-size:8px;padding:2px 7px}
-  .tb-cred-val{font-size:16px}
-  .btn-logout{font-size:9px;padding:4px 9px}
+  .tb-user,.tb-mese,.tb-sep,.tb-zoom{display:none}
+  .tb-right{margin-left:auto;display:flex;align-items:center;gap:8px}
+  .btn-logout{font-size:9px;padding:4px 10px}
 
-  /* nav tabs */
-  .nav-tabs{padding:0 8px}
-  .nav-tab{padding:0 12px;font-size:9px;letter-spacing:1px}
+  /* riga 2: credito + mese + rinnovo — sempre visibili */
+  .tb-bottom-row{
+    display:flex;align-items:center;gap:0;
+    padding:0 14px;height:36px;width:100%;box-sizing:border-box;
+    background:var(--bg3);
+  }
+  .tb-mob-credito{
+    display:flex;align-items:center;gap:6px;
+    font-family:var(--f-mono);font-size:11px;
+  }
+  .tb-mob-credito-lbl{color:var(--text-dim);font-size:9px;letter-spacing:1px;text-transform:uppercase}
+  .tb-mob-credito-val{font-weight:700;color:var(--neon);font-size:14px}
+  .tb-mob-sep{width:1px;height:16px;background:var(--line2);margin:0 12px}
+  .tb-mob-mese{font-family:var(--f-mono);font-size:9px;color:var(--text-dim);letter-spacing:1px}
+  .tb-mob-rinnovo{
+    margin-left:auto;font-family:var(--f-mono);font-size:9px;
+    font-weight:600;letter-spacing:1px;
+  }
+  .tb-mob-rinnovo.warn{color:var(--warm)}
+  .tb-mob-rinnovo.urgent{color:var(--red);animation:pulse-urgent 1.5s ease-in-out infinite}
 
-  /* lock banner */
-  .lock-banner{padding:7px 14px}
+  /* nascondi il blocco credito desktop dalla topbar (ora è nella seconda riga) */
+  .tb-cred{display:none}
+  /* nascondi rinnovo desktop */
+  .tb-rinnovo{display:none!important}
 
-  /* catalogo layout: colonna singola, no sidebar fissa */
+  /* ── NAV TABS ───────────────────────────────────────────────────── */
+  .nav-tabs{padding:0 12px}
+  .nav-tab{padding:0 14px;font-size:9px;letter-spacing:1.5px}
+
+  /* ── LOCK BANNER ────────────────────────────────────────────────── */
+  .lock-banner{padding:7px 14px;font-size:11px}
+
+  /* ── CATALOGO ───────────────────────────────────────────────────── */
   .cat-layout{flex-direction:column}
-  .cat-main{padding:16px 12px 120px;gap:20px;max-width:100%}
-
-  /* product grid: sempre 1 colonna su mobile */
+  .cat-main{padding:14px 12px 140px;gap:18px;max-width:100%}
   .prod-grid{grid-template-columns:1fr!important}
-
-  /* card mobile: foto sopra, info sotto (torna verticale) */
   .prod-card{flex-direction:column;min-height:unset}
-  .prod-photo-half{width:100%;height:160px;aspect-ratio:unset}
-  .prod-info-half{width:100%;padding:10px 12px}
-  .prod-name{font-size:12px}
-  .prod-price{font-size:18px}
-  .prod-actions{gap:5px}
-  .prod-btn{padding:8px 10px}
+  .prod-photo-half{width:100%;height:180px;aspect-ratio:unset}
+  .prod-info-half{width:100%;padding:12px 14px}
+  .prod-name{font-size:13px;line-height:1.3;white-space:normal}
+  .prod-price{font-size:20px}
+  .prod-actions{gap:8px}
+  /* bottoni azione catalogo: più alti, più facili da toccare */
+  .prod-btn{padding:12px 10px;min-height:52px}
   .prod-btn-lbl{font-size:9px}
-  .prod-btn-val{font-size:11px}
+  .prod-btn-val{font-size:13px}
 
-  /* sidebar → bottom sheet */
+  /* ── SIDEBAR → BOTTOM SHEET ─────────────────────────────────────── */
   .cat-sidebar{
     position:fixed;bottom:0;left:0;right:0;
-    width:100%;max-height:50vh;
-    transform:translateY(calc(100% - 48px));
+    width:100%;max-height:55vh;
+    transform:translateY(calc(100% - 52px));
     transition:transform .3s cubic-bezier(.4,0,.2,1);
     border-left:none;border-top:2px solid var(--neon);
-    z-index:200;border-radius:0
+    z-index:200;border-radius:0;
   }
   .cat-sidebar.open{transform:translateY(0)}
   .sidebar-hdr{
-    cursor:pointer;user-select:none;
-    display:flex;align-items:center;justify-content:space-between
+    cursor:pointer;user-select:none;min-height:52px;
+    display:flex;align-items:center;justify-content:space-between;
+    -webkit-tap-highlight-color:transparent;
   }
-  .sidebar-hdr::after{
-    content:'▲';font-size:10px;color:var(--neon);
-    transition:transform .3s
-  }
+  .sidebar-hdr::after{content:'▲';font-size:10px;color:var(--neon);transition:transform .3s}
   .cat-sidebar.open .sidebar-hdr::after{transform:rotate(180deg)}
   .sidebar-hdr::before{
-    content:'Piano · ';font-family:var(--f-mono);font-size:9px;
+    content:'Selezionati · ';font-family:var(--f-mono);font-size:9px;
     color:var(--text-dim);letter-spacing:1px;text-transform:uppercase
   }
+  /* bottone conferma dentro sidebar: full width, più alto */
+  .btn-conferma{width:100%;padding:14px;font-size:12px}
 
-  /* ordini: stack verticale */
-  .orders-wrap{padding:16px 12px 80px;max-width:100%}
-  .ocard{flex-direction:column;align-items:stretch;}
-  .ocard-left{border-bottom:1px solid var(--line2);}
-  .ocard-sep{display:none;}
-  .ocard-nums{display:none;}
-  .ocard-mobile-nums{display:flex;border-bottom:1px solid var(--line2);}
-  .omob-num{flex:1;display:flex;flex-direction:column;align-items:center;padding:9px 6px;gap:2px;}
-  .omob-num:not(:last-child){border-right:1px solid var(--line2);}
-  .omob-val{font-family:var(--f-mono);font-size:13px;font-weight:600;font-variant-numeric:tabular-nums;}
-  .omob-val.warn{color:var(--warm);} .omob-val.zero{color:var(--text-dim);} .omob-val.blue{color:var(--blue);} .omob-val.dim{color:var(--text-mid);}
-  .omob-lbl{font-family:var(--f-mono);font-size:8px;letter-spacing:1px;text-transform:uppercase;color:var(--text-dim);}
-  .ocard-actions{flex-direction:row;min-width:auto;padding:10px 12px;}
+  /* ── FILTRI ORDINI → scroll orizzontale ─────────────────────────── */
+  .filters{
+    flex-wrap:nowrap!important;overflow-x:auto;
+    -webkit-overflow-scrolling:touch;
+    scrollbar-width:none;gap:6px;
+    padding-bottom:6px;
+    /* nasconde la scrollbar visivamente ma mantiene lo scroll */
+  }
+  .filters::-webkit-scrollbar{display:none}
+  .flt-btn{white-space:nowrap;flex-shrink:0;padding:7px 16px;font-size:10px;min-height:36px}
+  /* btn Rileva: icona only su mobile, nessun testo */
+  .btn-rileva{flex-shrink:0;padding:7px 10px;min-height:36px}
+  .btn-rileva span.rileva-txt{display:none}
 
-  /* modal: full screen */
-  .modal-box{width:95vw;max-height:90vh;overflow-y:auto;padding:20px 16px}
+  /* ── ORDINI: card completamente verticale ───────────────────────── */
+  .orders-wrap{padding:14px 12px 80px;max-width:100%}
+  .ord-group{margin-bottom:16px}
+
+  /* card ordine: layout verticale pulito */
+  .ocard{flex-direction:column;align-items:stretch;border-radius:var(--r)}
+  .ocard-left{
+    display:grid;
+    grid-template-columns:80px 1fr;
+    gap:0;
+    border-bottom:1px solid var(--line2);
+    padding:0;
+    align-items:stretch;
+  }
+  .ocard-thumb{
+    width:80px;height:80px;
+    border-right:1px solid var(--line2);
+    border-radius:0;border:none;
+    border-right:1px solid var(--line2);
+    flex-shrink:0;
+  }
+  .ocard-info{
+    padding:10px 12px;
+    display:flex;flex-direction:column;gap:6px;justify-content:center;
+  }
+  .ocard-name{
+    font-size:13px;font-weight:500;line-height:1.3;
+    white-space:normal;          /* vai a capo, non troncare */
+    overflow:visible;
+    text-overflow:unset;
+  }
+  .ocard-meta{gap:5px}
+  .ocard-sep{display:none}
+  .ocard-nums{display:none}
+
+  /* numeri mobile: 3 colonne con valori grandi */
+  .ocard-mobile-nums{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    border-bottom:1px solid var(--line2);
+  }
+  .omob-num{
+    flex:unset;display:flex;flex-direction:column;
+    align-items:center;padding:11px 6px;gap:3px;
+  }
+  .omob-num:not(:last-child){border-right:1px solid var(--line2)}
+  .omob-val{
+    font-family:var(--f-mono);font-size:15px;
+    font-weight:700;font-variant-numeric:tabular-nums;
+  }
+  .omob-val.warn{color:var(--warm)}
+  .omob-val.zero{color:var(--text-dim)}
+  .omob-val.blue{color:var(--blue)}
+  .omob-val.dim{color:var(--text-mid)}
+  .omob-lbl{
+    font-family:var(--f-mono);font-size:8px;
+    letter-spacing:1px;text-transform:uppercase;color:var(--text-dim);
+  }
+
+  /* azioni ordine: due bottoni full-width, più alti (finger-friendly) */
+  .ocard-actions{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:0;
+    padding:0;
+    min-width:auto;
+  }
+  .btn-salda-ord{
+    padding:14px 10px;font-size:12px;letter-spacing:1.5px;
+    border-radius:0 0 0 var(--r);
+    border-top:1px solid var(--line2);
+    /* active state per tap feedback */
+  }
+  .btn-salda-ord:active{background:#c8ff2a;transform:scale(.97)}
+  .btn-acc-ord{
+    padding:14px 10px;font-size:11px;letter-spacing:1px;
+    border-radius:0 0 var(--r) 0;
+    border-top:1px solid var(--line2);
+    border-left:1px solid rgba(90,180,255,.3);
+  }
+  .btn-acc-ord:active{background:var(--blue-dim);transform:scale(.97)}
+
+  /* ── MODALI: full-screen bottom sheet ───────────────────────────── */
+  .overlay{align-items:flex-end}          /* ancorate in basso */
+  .mbox{
+    width:100%;max-width:100%;
+    max-height:92vh;overflow-y:auto;
+    border-radius:16px 16px 0 0;         /* angoli arrotondati in alto */
+    border:none;border-top:2px solid var(--line2);
+    /* handle visivo */
+    padding-top:12px;
+  }
+  /* drag handle sopra la modale */
+  .mbox::before{
+    content:'';display:block;
+    width:40px;height:4px;
+    background:var(--line2);border-radius:2px;
+    margin:0 auto 12px;
+  }
+  .mbox-saldo{
+    width:100%;max-width:100%;
+    border-radius:16px 16px 0 0;
+    border:none;border-top:2px solid var(--neon);
+    padding-top:12px;
+    max-height:92vh;overflow-y:auto;
+  }
+  .mbox-saldo::before{
+    content:'';display:block;
+    width:40px;height:4px;
+    background:rgba(180,255,0,.3);border-radius:2px;
+    margin:0 auto 12px;
+  }
+  /* header modale più alto per touch */
+  .mhdr{padding:14px 20px;min-height:52px}
+  .mtitle{font-size:15px}
+  /* footer modale: bottoni full width, più alti */
+  .mfooter{
+    flex-direction:column-reverse;gap:8px;
+    padding:14px 16px calc(14px + env(safe-area-inset-bottom));
+  }
+  .btn-confirm,.btn-cancel{
+    width:100%;padding:15px;font-size:12px;justify-content:center;
+  }
+  /* input acconto: più grande per touch e tastiera mobile */
+  .extra-input{
+    font-size:20px!important;
+    padding:14px 16px!important;
+    min-height:56px;
+  }
+  /* body modale acconto/salda: padding ottimizzato */
+  .mbox-saldo-body{padding:16px 18px!important}
+  /* assicura che il modal salga sopra la tastiera */
+  .overlay.open{
+    padding-bottom:env(safe-area-inset-bottom);
+  }
+  /* recap list nella modale conferma */
+  .recap-item{padding:10px 0;gap:8px}
+  .recap-name{font-size:12px}
 }
 
 /* tablet (769–1024px) */
@@ -566,9 +739,18 @@ input{font-family:inherit}
   .prod-grid{grid-template-columns:repeat(min(var(--prod-count,3),2),1fr)!important}
   .cat-sidebar{width:240px}
   .tb-zoom .tb-zoom-lbl{display:none}
+  /* nascondi righe mobile della topbar su tablet */
+  .tb-bottom-row{display:none}
+  .tb-top-row{display:flex}
 }
 
-/* rinnovo in topbar */
+/* su desktop nascondi le righe mobile della topbar */
+@media (min-width:769px){
+  .tb-bottom-row{display:none}
+  .tb-top-row{display:flex}
+}
+
+/* rinnovo in topbar (desktop) */
 .tb-rinnovo{display:flex;flex-direction:column;align-items:flex-start;gap:1px;padding:0 10px;border-left:1px solid var(--line2)}
 .tb-rinnovo-lbl{font-family:var(--f-mono);font-size:8px;letter-spacing:2px;text-transform:uppercase;color:var(--text-dim)}
 .tb-rinnovo-val{font-family:var(--f-mono);font-size:12px;font-weight:600;color:var(--text-mid);font-variant-numeric:tabular-nums}
@@ -621,27 +803,40 @@ input{font-family:inherit}
 <div class="screen" id="sApp">
 
   <div class="topbar">
-    <div class="tb-logo">DNI <span>Builders</span> Club</div>
-    <div class="tb-sep"></div>
-    <div class="tb-user">Benvenuto, <strong id="tbNome">—</strong></div>
-    <div class="tb-tier" id="tbTier">—</div>
-    <div class="tb-mese" id="tbMese">—</div>
-    <div class="tb-rinnovo" id="tbRinnovoWrap" style="display:none">
-      <div class="tb-rinnovo-lbl">Rinnovo</div>
-      <div class="tb-rinnovo-val" id="tbRinnovo">—</div>
+    <!-- riga 1 desktop / riga superiore mobile -->
+    <div class="tb-top-row" style="display:contents">
+      <div class="tb-logo">DNI <span>Builders</span> Club</div>
+      <div class="tb-sep"></div>
+      <div class="tb-user">Benvenuto, <strong id="tbNome">—</strong></div>
+      <div class="tb-tier" id="tbTier">—</div>
+      <div class="tb-mese" id="tbMese">—</div>
+      <div class="tb-rinnovo" id="tbRinnovoWrap" style="display:none">
+        <div class="tb-rinnovo-lbl">Rinnovo</div>
+        <div class="tb-rinnovo-val" id="tbRinnovo">—</div>
+      </div>
+      <div class="tb-right">
+        <div class="tb-zoom">
+          <button class="btn-zoom" id="btnZoomOut" onclick="zoomStep(-1)" title="Riduci testo">A−</button>
+          <span class="tb-zoom-lbl" id="zoomLbl">100%</span>
+          <button class="btn-zoom" id="btnZoomIn" onclick="zoomStep(+1)" title="Ingrandisci testo">A+</button>
+          <button class="btn-zoom btn-layout-toggle" id="btnLayout" onclick="toggleLayout()" title="Vista mobile">⊟</button>
+        </div>
+        <div class="tb-cred">
+          <div class="tb-cred-lbl">Credito</div>
+          <div class="tb-cred-val" id="tbCred">€0</div>
+        </div>
+        <button class="btn-logout" onclick="doLogout()">Esci</button>
+      </div>
     </div>
-    <div class="tb-right">
-      <div class="tb-zoom">
-        <button class="btn-zoom" id="btnZoomOut" onclick="zoomStep(-1)" title="Riduci testo">A−</button>
-        <span class="tb-zoom-lbl" id="zoomLbl">100%</span>
-        <button class="btn-zoom" id="btnZoomIn" onclick="zoomStep(+1)" title="Ingrandisci testo">A+</button>
-        <button class="btn-zoom btn-layout-toggle" id="btnLayout" onclick="toggleLayout()" title="Vista mobile">⊟</button>
+    <!-- riga inferiore mobile: credito + mese + rinnovo -->
+    <div class="tb-bottom-row">
+      <div class="tb-mob-credito">
+        <span class="tb-mob-credito-lbl">Credito</span>
+        <span class="tb-mob-credito-val" id="tbCredMob">€0</span>
       </div>
-      <div class="tb-cred">
-        <div class="tb-cred-lbl">Credito</div>
-        <div class="tb-cred-val" id="tbCred">€0</div>
-      </div>
-      <button class="btn-logout" onclick="doLogout()">Esci</button>
+      <div class="tb-mob-sep"></div>
+      <div class="tb-mob-mese" id="tbMeseMob">—</div>
+      <div class="tb-mob-rinnovo" id="tbRinnovoMob" style="display:none">—</div>
     </div>
   </div>
 
@@ -705,7 +900,7 @@ input{font-family:inherit}
           </div>
           <button class="btn-rileva" id="btnRileva" onclick="rilevaMieiOrdini(this)" title="Ricarica ordini dal server">
             <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
-            Rileva i miei ordini
+            <span class="rileva-txt">Rileva i miei ordini</span>
           </button>
         </div>
 
@@ -1192,20 +1387,28 @@ function avviaApp(){
   const u=S.utente;
   document.getElementById('tbNome').textContent=u.nome;
   document.getElementById('tbCred').textContent='€'+fmt(u.credito);
+  document.getElementById('tbCredMob').textContent='€'+fmt(u.credito);
   const te=document.getElementById('tbTier');
   te.textContent=TIER_NAMES[u.tier]; te.className='tb-tier '+u.tier;
   document.getElementById('tbMese').textContent=S.mese?'Mese: '+S.mese:'';
+  document.getElementById('tbMeseMob').textContent=S.mese?'Mese: '+S.mese:'';
   // Mostra data prossimo rinnovo (se fornita dal backend)
   const rinEl = document.getElementById('tbRinnovo');
   const rinWrap = document.getElementById('tbRinnovoWrap');
+  const rinMob = document.getElementById('tbRinnovoMob');
   if (u.prossima_data_rinnovo) {
     const rDate = new Date(u.prossima_data_rinnovo);
     const oggi = new Date(); oggi.setHours(0,0,0,0);
     const diff = Math.round((rDate - oggi) / 86400000);
     const fmtDate = rDate.toLocaleDateString('it-IT', {day:'2-digit', month:'2-digit', year:'numeric'});
+    const cls = diff < 0 ? ' urgent' : diff <= 7 ? ' urgent' : diff <= 14 ? ' warn' : '';
     rinEl.textContent = fmtDate + (diff >= 0 ? ' (' + diff + 'gg)' : ' (scaduto)');
-    rinEl.className = 'tb-rinnovo-val' + (diff < 0 ? ' urgent' : diff <= 7 ? ' urgent' : diff <= 14 ? ' warn' : '');
+    rinEl.className = 'tb-rinnovo-val' + cls;
     rinWrap.style.display = 'flex';
+    // versione mobile: mostra solo i giorni rimanenti
+    rinMob.textContent = '⟳ ' + (diff >= 0 ? diff + 'gg' : 'Scaduto');
+    rinMob.className = 'tb-mob-rinnovo' + cls;
+    rinMob.style.display = 'block';
   }
   document.getElementById('lockBanner').classList.toggle('on', u.stato==='attesa');
   renderCatalogo(); renderOrdini();
@@ -1372,7 +1575,7 @@ function renderSidebar(){
   const ce=document.getElementById('sideCredRes');
   ce.textContent='€'+fmt(cr);
   ce.className='tot-val'+(cr<0?' danger':cr<10?' warn':'');
-  document.getElementById('tbCred').textContent='€'+fmt(S.utente.credito);
+  document.getElementById('tbCred').textContent='€'+fmt(S.utente.credito);document.getElementById('tbCredMob').textContent='€'+fmt(S.utente.credito);
   btn.disabled=!sels.length||S.utente.stato==='attesa';
 }
 
@@ -1476,7 +1679,7 @@ async function inviaConferma(){
 
     const totAcc=sels.reduce((s,x)=>s+x.acconto,0);
     S.utente.credito=Math.max(0,S.utente.credito-totAcc);
-    document.getElementById('tbCred').textContent='€'+fmt(S.utente.credito);
+    document.getElementById('tbCred').textContent='€'+fmt(S.utente.credito);document.getElementById('tbCredMob').textContent='€'+fmt(S.utente.credito);
     Object.keys(SEL).forEach(k=>delete SEL[k]);
     aggiornaCache();
     document.getElementById('mConferma').classList.remove('open');
@@ -1689,7 +1892,7 @@ async function eseguiSalda() {
     p.acconto_extra = nuovoTotale;
     p.residuo = 0; p.modificabile = false; p.stato_ordine = 'saldato';
     S.utente.credito = Math.max(0, S.utente.credito - delta);
-    document.getElementById('tbCred').textContent = '€' + fmt(S.utente.credito);
+    document.getElementById('tbCred').textContent = '€' + fmt(S.utente.credito); document.getElementById('tbCredMob').textContent = '€' + fmt(S.utente.credito);
     aggiornaCache();
     renderOrdini();
     chiudiModalSalda();
@@ -1794,7 +1997,7 @@ async function eseguiAcconto() {
     p.residuo = nR;
     if (nR === 0) { p.modificabile = false; p.stato_ordine = 'saldato'; }
     S.utente.credito = Math.max(0, S.utente.credito - delta);
-    document.getElementById('tbCred').textContent = '€' + fmt(S.utente.credito);
+    document.getElementById('tbCred').textContent = '€' + fmt(S.utente.credito); document.getElementById('tbCredMob').textContent = '€' + fmt(S.utente.credito);
     aggiornaCache();
     renderOrdini();
     chiudiModalAcconto();
@@ -2041,7 +2244,7 @@ async function rilevaMieiOrdini(btn) {
       S.prenotazioni = res.prenotazioni || [];
       S.utente.credito = res.credito ?? S.utente.credito;
       S.utente.stato   = res.stato   ?? S.utente.stato;
-      document.getElementById('tbCred').textContent = '€' + fmt(S.utente.credito);
+      document.getElementById('tbCred').textContent = '€' + fmt(S.utente.credito); document.getElementById('tbCredMob').textContent = '€' + fmt(S.utente.credito);
       document.getElementById('ordCount').textContent = S.prenotazioni.length;
       document.getElementById('lockBanner').classList.toggle('on', S.utente.stato === 'attesa');
       aggiornaCache();
