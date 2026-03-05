@@ -1377,10 +1377,11 @@ function calcDepositoInfo(prod, bkCount) {
 }
 
 function countBefore(prodId){
-  // Conta gli ordini deposito non saldati prima di questo prodotto nel catalogo
-  // (usato per calcolare l'acconto speciale progressivo)
   let c=S.prenotazioni.filter(b=>b.stato_ordine!=='saldato').length;
-  for(const p of S.catalogo){if(String(p.id)===String(prodId))break; if(SEL[String(p.id)]==='deposito')c++;}
+  for(const p of S.catalogo){
+    if(String(p.id)===String(prodId))break;
+    if(SEL[String(p.id)]?.tipo==='deposito')c++;
+  }
   return c;
 }
 
@@ -1393,14 +1394,14 @@ function countOrdinatiProd(prodId){
 }
 
 function valRes(){
-  // Considera sia gli ordini confermati da Alberto (confermata=TRUE)
-  // sia gli ordini in_preparazione (inviati dal socio ma non ancora elaborati) — entrambi
-  // hanno già impegnato credito e residuo reale.
   const prenAperte = S.prenotazioni.filter(b => b.stato_ordine !== 'saldato');
   let t = prenAperte.reduce((s,b) => s + (b.residuo||0), 0);
   for(const p of S.catalogo){
-    if(SEL[String(p.id)]!=='deposito')continue;
-    const i=calcDepositoInfo(p,countBefore(p.id)); t+=i.price-i.accFinale;
+    const sel=SEL[String(p.id)];
+    if(!sel||sel.tipo!=='deposito')continue;
+    // usa acconto congelato
+    const info=calcDepositoInfo(p,countBefore(p.id));
+    t+=info.price-sel.acc;
   }
   return t;
 }
@@ -1411,37 +1412,40 @@ function bloccato(){return Math.ceil(valRes()*blPct());}
 function credSim(){
   let s=S.utente.credito;
   for(const p of S.catalogo){
-    const t=SEL[String(p.id)]; if(!t)continue;
-    const i=calcDepositoInfo(p,countBefore(p.id));
-    if(t==='deposito')s-=i.accFinale; else if(t==='saldo')s-=i.price;
+    const sel=SEL[String(p.id)]; if(!sel)continue;
+    // usa acconto/prezzo congelato al momento della selezione
+    s-=sel.acc;
   }
   return s;
 }
 
 function libSimPrima(excId){
-  // rSim include tutti gli ordini non saldati (in_preparazione + confermati aperti)
   let s=S.utente.credito, rSim=S.prenotazioni.filter(b=>b.stato_ordine!=='saldato').reduce((x,b)=>x+(b.residuo||0),0);
   for(const p of S.catalogo){
-    if(String(p.id)===String(excId))continue; const t=SEL[String(p.id)]; if(!t)continue;
-    const i=calcDepositoInfo(p,countBefore(p.id));
-    if(t==='deposito'){s-=i.accFinale; rSim+=i.price-i.accFinale;}
-    else if(t==='saldo')s-=i.price;
+    if(String(p.id)===String(excId))continue;
+    const sel=SEL[String(p.id)]; if(!sel)continue;
+    // usa acconto congelato
+    s-=sel.acc;
+    if(sel.tipo==='deposito'){
+      const info=calcDepositoInfo(p,countBefore(p.id));
+      rSim+=info.price-sel.acc;
+    }
   }
   return Math.max(0,s-Math.ceil(rSim*blPct()));
 }
 
 function hasOpenPos(){
-  // Considera aperti sia i confermati che gli in_preparazione non saldati
   if(S.prenotazioni.some(b=>b.stato_ordine!=='saldato'))return true;
-  return S.catalogo.some(p=>SEL[String(p.id)]==='deposito');
+  return S.catalogo.some(p=>SEL[String(p.id)]?.tipo==='deposito');
 }
 
 function credFP(excId){
   let a=0;
   for(const p of S.catalogo){
     if(String(p.id)===String(excId))continue;
-    if(SEL[String(p.id)]==='saldo')a+=calcDepositoInfo(p,0).price;
-    else if(SEL[String(p.id)]==='deposito')a+=calcDepositoInfo(p,countBefore(p.id)).accFinale;
+    const sel=SEL[String(p.id)]; if(!sel)continue;
+    // usa importo congelato
+    a+=sel.acc;
   }
   return hasOpenPos()?S.utente.credito-a:Math.max(0,S.utente.credito-bloccato())-a;
 }
@@ -1636,7 +1640,7 @@ function renderCatalogo(){
   const html=['scout','veteran','elite'].map(tier=>{
     const prods=S.catalogo.filter(p=>p.tier===tier);
     const pre=S.prenotazioni.filter(b=>b.confermata&&b.tier_prodotto===tier).length;
-    const dr=S.catalogo.filter(p=>p.tier===tier&&SEL[String(p.id)]==='deposito').length;
+    const dr=S.catalogo.filter(p=>p.tier===tier&&SEL[String(p.id)]?.tipo==='deposito').length;
     const tot=pre+dr, left=3-tot;
     const sc=left<=0?'full':left===1?'warn':'ok';
     const st=left<=0?'Slot esauriti':left+' slot liberi';
@@ -1654,15 +1658,17 @@ function renderCatalogo(){
       }
 
       const sel=SEL[String(prod.id)]||null;
+      const selTipo = sel?.tipo || null;
+      const selAcc  = sel?.acc  || null;
       const info=calcDepositoInfo(prod,countBefore(String(prod.id)));
       const nOrd=countOrdinatiProd(String(prod.id));
       const ordCls=nOrd===0?'zero':nOrd===1?'uno':'multi';
       const ordLbl=nOrd===0?'Hai già ordinato: 0':`Hai già ordinato: ${nOrd}`;
       const libP=libSimPrima(String(prod.id));
       const canD=!locked&&libP>=info.accFinale;
-      const depA=sel==='deposito'?info.accFinale:0;
+      const depA=selTipo==='deposito'?selAcc:0;
       const canFP=!locked&&!info.isTbd&&(credFP(String(prod.id))-depA)>=info.price;
-      const isDep=sel==='deposito', isFp=sel==='saldo';
+      const isDep=selTipo==='deposito', isFp=selTipo==='saldo';
       const cc=isDep?'sel-dep':isFp?'sel-fp':'';
 
       // Tier tag dalla transcodifica SKU (es "202603-LAMORAK_SNAA-DBC" → "LAMORAK SNAA")
@@ -1687,6 +1693,9 @@ function renderCatalogo(){
 
       const depLbl=info.isSp?'Prenota ⚡':'Prenota';
       const fpLbl=info.isTbd?'Full Pay — N/D':'Acquista ora';
+      // prezzo mostrato sul bottone: congelato se già selezionato, live altrimenti
+      const depValShow = isDep ? selAcc : info.accFinale;
+      const fpValShow  = isFp  ? selAcc : info.price;
       const imgs=[prod.imgFile,prod.imgFile2,prod.imgFile3].filter(Boolean).map(f=>`img_catalogo/${f}`);
       const img=imgs[0]||'';
       const hasMulti=imgs.length>1;
@@ -1713,12 +1722,12 @@ function renderCatalogo(){
             <button class="prod-btn${isDep?' dep-on':''}${!canD&&!isDep?' blocked':''}"
               onclick="toggleSel('${prod.id}','deposito')">
               <div class="prod-btn-left"><span class="prod-btn-lbl">${depLbl}</span>${disc}</div>
-              <div class="prod-btn-r"><span class="prod-btn-val">€${info.accFinale}</span><div class="prod-dot"></div></div>
+              <div class="prod-btn-r"><span class="prod-btn-val">€${depValShow}</span><div class="prod-dot"></div></div>
             </button>
             <button class="prod-btn${isFp?' fp-on':''}${!canFP&&!isFp?' blocked':''}"
               onclick="toggleSel('${prod.id}','saldo')">
               <div class="prod-btn-left"><span class="prod-btn-lbl">${fpLbl}</span></div>
-              <div class="prod-btn-r"><span class="prod-btn-val">${info.isTbd?'-':'€'+info.price}</span><div class="prod-dot"></div></div>
+              <div class="prod-btn-r"><span class="prod-btn-val">${info.isTbd?'-':'€'+fpValShow}</span><div class="prod-dot"></div></div>
             </button>
           </div>
         </div>
@@ -1752,7 +1761,11 @@ function renderSidebar(){
   const dBtn    = document.getElementById('btnConfermaDrawer');
 
   const sels=[];
-  for(const p of S.catalogo){const t=SEL[String(p.id)];if(!t)continue; const i=calcDepositoInfo(p,countBefore(p.id)); sels.push({p,t,i});}
+  for(const p of S.catalogo){
+    const sel=SEL[String(p.id)];
+    if(!sel)continue;
+    sels.push({p, t:sel.tipo, acc:sel.acc});
+  }
 
   // svuota entrambi i contenitori
   Array.from(items.children).forEach(c=>{if(c!==empty)c.remove();});
@@ -1802,8 +1815,8 @@ function renderSidebar(){
   }
 
   let tot=0;
-  sels.forEach(({p,t,i})=>{
-    const acc=t==='deposito'?i.accFinale:i.price; tot+=acc;
+  sels.forEach(({p,t,acc})=>{
+    tot+=acc;
     const rowSide = creaSelItem(p,t,acc);
     items.insertBefore(rowSide, empty);
     if(dItems){
@@ -1836,11 +1849,18 @@ function toggleSel(prodId, tipo){
   const _pid=String(prodId);
   const prod=S.catalogo.find(p=>String(p.id)===_pid), curr=SEL[_pid];
   if(!prod)return;
-  if(curr===tipo){delete SEL[_pid];}
+  // se già selezionato con lo stesso tipo → deseleziona
+  if(curr && curr.tipo===tipo){ delete SEL[_pid]; }
   else{
     const info=calcDepositoInfo(prod,countBefore(_pid));
-    if(tipo==='deposito'){if(libSimPrima(_pid)<info.accFinale)return; SEL[_pid]='deposito';}
-    else{if((credFP(_pid)-(curr==='deposito'?info.accFinale:0))<info.price)return; SEL[_pid]='saldo';}
+    if(tipo==='deposito'){
+      if(libSimPrima(_pid)<info.accFinale)return;
+      // congela il prezzo al momento della selezione
+      SEL[_pid]={tipo:'deposito', acc:info.accFinale};
+    } else {
+      if((credFP(_pid)-(curr&&curr.tipo==='deposito'?curr.acc:0))<info.price)return;
+      SEL[_pid]={tipo:'saldo', acc:info.price};
+    }
   }
   renderCatalogo();
 }
@@ -1857,9 +1877,8 @@ function apriConferma(){
 
   let tot=0, html='';
   for(const p of S.catalogo){
-    const t=SEL[String(p.id)]; if(!t)continue;
-    const i=calcDepositoInfo(p,countBefore(p.id));
-    const acc=t==='deposito'?i.accFinale:i.price; tot+=acc;
+    const sel=SEL[String(p.id)]; if(!sel)continue;
+    const {tipo:t, acc} = sel; tot+=acc;
     html+=`<div class="recap-item">
       <span class="recap-name">${p.name}</span>
       <span class="recap-tipo ${t==='deposito'?'dep':'fp'}">${t==='deposito'?'Deposito':'Full Pay'}</span>
@@ -1908,11 +1927,14 @@ async function inviaConferma(){
   try{
     const sels=[];
     for(const p of S.catalogo){
-      const t=SEL[String(p.id)]; if(!t)continue;
+      const sel=SEL[String(p.id)]; if(!sel)continue;
+      const {tipo:t, acc} = sel;
+      // prezzo totale sempre ricalcolato fresco per correttezza backend
       const i=calcDepositoInfo(p,countBefore(p.id));
       sels.push({prodotto_id:p.id, nome_prodotto:p.name, sku:p.sku,
                  tier_prodotto:p.tier, tipo:t,
-                 acconto:t==='deposito'?i.accFinale:i.price, prezzo_totale:i.price});
+                 acconto:acc,           // usa importo congelato mostrato all'utente
+                 prezzo_totale:i.price});
     }
     const res=await apiConferma({id_utente:S.utente.id, codice:S.utente._codice, mese:S.mese, selezioni:sels});
 
