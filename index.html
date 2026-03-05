@@ -544,6 +544,69 @@ input{font-family:inherit}
 .btn-layout-toggle{margin-left:6px;border-left:1px solid var(--line2);padding-left:8px;font-size:13px;opacity:.55}
 .btn-layout-toggle:hover{opacity:1}
 .btn-layout-toggle.active{color:var(--neon);opacity:1}
+
+/* ── ICONA CARRELLO TOPBAR MOBILE ─────────────────────────────────── */
+.btn-cart-mob{
+  display:none;
+  position:relative;align-items:center;justify-content:center;
+  width:34px;height:34px;flex-shrink:0;
+  background:transparent;border:1px solid var(--line2);
+  border-radius:var(--r);color:var(--text-mid);
+  cursor:pointer;transition:all .15s;
+}
+.btn-cart-mob:hover{border-color:var(--neon);color:var(--neon)}
+.btn-cart-mob svg{width:16px;height:16px;pointer-events:none}
+.cart-mob-badge{
+  position:absolute;top:-5px;right:-5px;
+  min-width:16px;height:16px;padding:0 3px;
+  background:var(--neon);color:#000;
+  font-family:var(--f-mono);font-size:9px;font-weight:700;
+  border-radius:2px;display:none;
+  align-items:center;justify-content:center;
+  box-sizing:border-box;
+}
+
+/* ── DRAWER CARRELLO MOBILE ───────────────────────────────────────── */
+.cart-drawer-backdrop{
+  display:none;position:fixed;inset:0;
+  background:rgba(0,0,0,.6);z-index:300;
+  backdrop-filter:blur(2px);
+}
+.cart-drawer-backdrop.open{display:block}
+.cart-drawer{
+  display:none;position:fixed;top:0;right:0;bottom:0;
+  width:min(320px,90vw);
+  background:var(--bg2);border-left:1px solid var(--neon);
+  z-index:301;flex-direction:column;
+  transform:translateX(100%);
+  transition:transform .3s cubic-bezier(.4,0,.2,1);
+}
+.cart-drawer.open{display:flex;transform:translateX(0)}
+.cart-drawer-hdr{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:14px 16px;border-bottom:1px solid var(--line);flex-shrink:0;
+}
+.cart-drawer-title{
+  font-family:var(--f-mono);font-size:9px;font-weight:600;
+  letter-spacing:3px;text-transform:uppercase;color:var(--text-mid);
+  display:flex;align-items:center;gap:8px;
+}
+.cart-drawer-close{
+  width:28px;height:28px;display:flex;align-items:center;justify-content:center;
+  background:transparent;border:1px solid var(--line2);border-radius:var(--r);
+  color:var(--text-dim);font-size:18px;line-height:1;cursor:pointer;transition:all .15s;
+}
+.cart-drawer-close:hover{border-color:var(--red);color:var(--red)}
+.cart-drawer-body{flex:1;overflow-y:auto}
+.cart-drawer-totals{padding:10px 16px;border-top:1px solid var(--line2);flex-shrink:0}
+.cart-drawer-cta{padding:12px 16px;border-top:1px solid var(--line);flex-shrink:0}
+
+/* ── GARANZIA STOCK SOTTO ACCONTO SULLA CARD (desktop) ───────────── */
+.prod-btn-garanzia{
+  font-family:var(--f-mono);font-size:8px;font-weight:600;
+  color:var(--warm);letter-spacing:.3px;white-space:nowrap;
+  margin-top:1px;
+}
 /* Vista mobile su desktop: griglia 1 col, card verticale */
 @media(min-width:769px){
   body.layout-mobile .prod-grid{grid-template-columns:1fr!important}
@@ -671,6 +734,12 @@ input{font-family:inherit}
   .btn-conferma{width:100%;padding:14px;font-size:12px}
   /* bottone top nascosto su mobile */
   .sidebar-cta-top{display:none!important}
+  /* sidebar desktop nascosta su mobile — usiamo il drawer */
+  .cat-sidebar{display:none!important}
+  /* mostra icona carrello in topbar */
+  .btn-cart-mob{display:inline-flex}
+  /* garanzia stock sulla card: nascosta su mobile (lo spazio è poco) */
+  .prod-btn-garanzia{display:none}
 
   /* ── FILTRI ORDINI → scroll orizzontale ─────────────────────────── */
   .filters{
@@ -930,6 +999,14 @@ input{font-family:inherit}
       <div class="tb-mob-sep"></div>
       <div class="tb-mob-mese" id="tbMeseMob">—</div>
       <div class="tb-mob-rinnovo" id="tbRinnovoMob" style="display:none">—</div>
+      <!-- icona carrello mobile (solo mobile) -->
+      <button class="btn-cart-mob" id="btnCartMob" onclick="apriDrawerCarrello()" title="Il tuo carrello">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/>
+          <path d="M1 1h4l2.68 13.39a2 2 0 001.99 1.61h9.72a2 2 0 001.99-1.61L23 6H6"/>
+        </svg>
+        <span class="cart-mob-badge" id="cartMobBadge">0</span>
+      </button>
     </div>
   </div>
 
@@ -1043,6 +1120,36 @@ input{font-family:inherit}
       </div>
     </div>
 
+  </div>
+</div>
+
+<!-- ═══ DRAWER CARRELLO MOBILE ═══ -->
+<div class="cart-drawer-backdrop" id="cartDrawerBackdrop" onclick="chiudiDrawerCarrello()"></div>
+<div class="cart-drawer" id="cartDrawer">
+  <div class="cart-drawer-hdr">
+    <div class="cart-drawer-title">
+      Il tuo carrello
+      <span class="sidebar-cart-badge" id="drawerCartBadge" style="display:none"></span>
+    </div>
+    <button class="cart-drawer-close" onclick="chiudiDrawerCarrello()">×</button>
+  </div>
+  <div style="padding:10px 14px;border-bottom:1px solid var(--line2);flex-shrink:0">
+    <button class="btn-conferma" id="btnConfermaDrawer" onclick="chiudiDrawerCarrello();apriConferma()" disabled>
+      Conferma Ordine
+    </button>
+  </div>
+  <div class="cart-drawer-body" id="drawerItems">
+    <div class="sidebar-empty" id="drawerEmpty">Nessuna selezione</div>
+  </div>
+  <div class="cart-drawer-totals" id="drawerTotals" style="display:none">
+    <div class="tot-row">
+      <span class="tot-lbl">Totale acconti</span>
+      <span class="tot-val" id="drawerTotAcc" style="color:var(--blue)">€0</span>
+    </div>
+    <div class="tot-row">
+      <span class="tot-lbl">Credito residuo</span>
+      <span class="tot-val" id="drawerCredRes">€0</span>
+    </div>
   </div>
 </div>
 
@@ -1688,6 +1795,10 @@ function renderCatalogo(){
       // Bottoni: mostrano SEMPRE l'acconto base — stabile, non cambia con le selezioni
       const depLbl='Prenota';
       const fpLbl=info.isTbd?'Full Pay — N/D':'Acquista ora';
+      // Garanzia stock sotto il bottone Prenota (solo se selezionato e garanzia>0, solo desktop)
+      const ottCard = isDep ? getAccontoOttimizzato(String(prod.id)) : null;
+      const garanziaCard = ottCard&&ottCard.isSp&&ottCard.garanzia>0
+        ? `<div class="prod-btn-garanzia">+ Garanzia stock €${ottCard.garanzia}</div>` : '';
       const imgs=[prod.imgFile,prod.imgFile2,prod.imgFile3].filter(Boolean).map(f=>`img_catalogo/${f}`);
       const img=imgs[0]||'';
       const hasMulti=imgs.length>1;
@@ -1722,6 +1833,7 @@ function renderCatalogo(){
               <div class="prod-btn-r"><span class="prod-btn-val">${info.isTbd?'-':'€'+info.price}</span><div class="prod-dot"></div></div>
             </button>
           </div>
+          ${garanziaCard}
         </div>
       </div>`;
     }).join('');
@@ -1744,47 +1856,52 @@ function renderSidebar(){
   const empty=document.getElementById('sideEmpty');
   const totals=document.getElementById('sideTotals');
   const btn=document.getElementById('btnConferma');
+  // drawer mobile
+  const dItems  = document.getElementById('drawerItems');
+  const dEmpty  = document.getElementById('drawerEmpty');
+  const dTotals = document.getElementById('drawerTotals');
+  const dBtn    = document.getElementById('btnConfermaDrawer');
+  const dBadge  = document.getElementById('drawerCartBadge');
 
   const sels=[];
-  for(const p of S.catalogo){const t=SEL[String(p.id)];if(!t)continue; const i=calcDepositoInfo(p,countBefore(p.id)); sels.push({p,t,i});}
+  for(const p of S.catalogo){const t=SEL[String(p.id)];if(!t)continue; const i=calcDepositoInfo(p,0); sels.push({p,t,i});}
 
   Array.from(items.children).forEach(c=>{if(c!==empty)c.remove();});
+  if(dItems) Array.from(dItems.children).forEach(c=>{if(c!==dEmpty)c.remove();});
+
+  // badge topbar mobile
+  const mobBadge=document.getElementById('cartMobBadge');
+  if(mobBadge){mobBadge.textContent=sels.length;mobBadge.style.display=sels.length>0?'inline-flex':'none';}
 
   if(!sels.length){
     empty.style.display='flex';totals.style.display='none';btn.disabled=true;
+    if(dEmpty)dEmpty.style.display='flex';
+    if(dTotals)dTotals.style.display='none';
+    if(dBtn)dBtn.disabled=true;
+    if(dBadge)dBadge.style.display='none';
     const badge=document.getElementById('sideCartBadge');
     if(badge){badge.style.display='none';}
     return;
   }
   empty.style.display='none'; totals.style.display='flex'; totals.style.flexDirection='column';
+  if(dEmpty)dEmpty.style.display='none';
+  if(dTotals){dTotals.style.display='flex';dTotals.style.flexDirection='column';}
   const badge=document.getElementById('sideCartBadge');
   if(badge){badge.textContent=sels.length;badge.style.display='inline-flex';}
+  if(dBadge){dBadge.textContent=sels.length;dBadge.style.display='inline-flex';}
 
-  // Calcola garanzia totale su tutti i depositi
+  // Calcola garanzia totale
   const totGaranzia = sels.reduce((sum,{p,t})=>{
     if(t!=='deposito') return sum;
     const ott=getAccontoOttimizzato(String(p.id));
     return sum + (ott&&ott.isSp&&ott.garanzia>0 ? ott.garanzia : 0);
   }, 0);
 
-  // Riga garanzia stock sommata — prima di tutti i prodotti
-  if(totGaranzia>0){
-    const rigaGar=document.createElement('div');
-    rigaGar.className='cart-garanzia-row';
-    rigaGar.innerHTML=`
-      <span class="cart-garanzia-lbl">ⓘ Garanzia stock inclusa</span>
-      <span class="cart-garanzia-val">+€${totGaranzia}</span>`;
-    items.insertBefore(rigaGar, empty);
-  }
-
-  let tot=0;
-  sels.forEach(({p,t,i})=>{
-    const acc=t==='deposito'?(getAccontoOttimizzato(String(p.id))?.accFinale||i.accConPaypal):i.price;
-    tot+=acc;
+  // Funzione che crea una riga prodotto (usata per sidebar e drawer)
+  function creaSelItem(p,t,acc){
     const div=document.createElement('div');
     div.className=`sel-item ${t==='deposito'?'dep':'fp'}`;
     const img=p.imgFile?`img_catalogo/${p.imgFile}`:'';
-
     div.innerHTML=`
       <div class="sel-thumb">${img?`<img src="${img}" alt="">`:'🖼'}</div>
       <div class="sel-info">
@@ -1795,18 +1912,45 @@ function renderSidebar(){
       <button class="sel-del" onclick="rimuoviSel('${p.id}')" title="Rimuovi">
         <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4h6v2"/></svg>
       </button>`;
-    items.insertBefore(div,empty);
+    return div;
+  }
+
+  // Riga garanzia sommata in cima (sidebar desktop e drawer mobile)
+  function creaRigaGaranzia(){
+    const r=document.createElement('div');
+    r.className='cart-garanzia-row';
+    r.innerHTML=`<span class="cart-garanzia-lbl">ⓘ Garanzia stock inclusa</span><span class="cart-garanzia-val">+€${totGaranzia}</span>`;
+    return r;
+  }
+  if(totGaranzia>0){
+    items.insertBefore(creaRigaGaranzia(), empty);
+    if(dItems) dItems.insertBefore(creaRigaGaranzia(), dEmpty);
+  }
+
+  let tot=0;
+  sels.forEach(({p,t,i})=>{
+    const ott=t==='deposito'?getAccontoOttimizzato(String(p.id)):null;
+    const acc=t==='deposito'?(ott?ott.accFinale:i.accConPaypal):i.price;
+    tot+=acc;
+    items.insertBefore(creaSelItem(p,t,acc), empty);
+    if(dItems) dItems.insertBefore(creaSelItem(p,t,acc), dEmpty);
   });
 
-  document.getElementById('sideTotAcc').textContent='€'+fmt(tot);
+  const totStr='€'+fmt(tot);
+  document.getElementById('sideTotAcc').textContent=totStr;
+  if(document.getElementById('drawerTotAcc')) document.getElementById('drawerTotAcc').textContent=totStr;
+
   const cr=credSim();
   const ce=document.getElementById('sideCredRes');
-  ce.textContent='€'+fmt(cr);
-  ce.className='tot-val'+(cr<0?' danger':cr<10?' warn':'');
-  document.getElementById('tbCred').textContent='€'+fmt(S.utente.credito);document.getElementById('tbCredMob').textContent='€'+fmt(S.utente.credito);
+  ce.textContent='€'+fmt(cr); ce.className='tot-val'+(cr<0?' danger':cr<10?' warn':'');
+  const de=document.getElementById('drawerCredRes');
+  if(de){de.textContent='€'+fmt(cr); de.className='tot-val'+(cr<0?' danger':cr<10?' warn':'');}
+
+  document.getElementById('tbCred').textContent='€'+fmt(S.utente.credito);
+  document.getElementById('tbCredMob').textContent='€'+fmt(S.utente.credito);
   const disabled = !sels.length || S.utente.stato==='attesa';
   btn.disabled = disabled;
-  // sincronizza anche il bottone top (desktop)
+  if(dBtn) dBtn.disabled = disabled;
   const btnTop = document.getElementById('btnConfermaTop');
   const ctaTop = document.getElementById('sideCtaTop');
   if(btnTop){ btnTop.disabled = disabled; }
@@ -2423,6 +2567,7 @@ window.addEventListener('DOMContentLoaded',()=>{
 });
 document.addEventListener('keydown',e=>{
   if(e.key==='Escape'){
+    chiudiDrawerCarrello();
     // Non chiudere la modale conferma se l'invio è in corso
     const btn = document.getElementById('btnMConf');
     if(!btn || !btn.classList.contains('loading')) chiudiConferma();
