@@ -171,15 +171,15 @@ input{font-family:inherit}
 .prod-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;background:transparent;border:none}
 
 /* card split: foto sinistra + info destra */
-.prod-card{background:var(--bg2);display:flex;flex-direction:row;position:relative;overflow:hidden;transition:background .15s,box-shadow .15s;min-height:380px;border:1px solid var(--line2);border-radius:var(--r)}
+.prod-card{background:var(--bg2);display:flex;flex-direction:row;position:relative;overflow:hidden;transition:background .15s,box-shadow .15s;border:1px solid var(--line2);border-radius:var(--r)}
 .prod-card:hover{background:var(--bg3);box-shadow:0 4px 20px rgba(0,0,0,.35)}
 .prod-card.sel-dep{background:#050e1a;border-color:var(--blue);box-shadow:0 0 0 1px var(--blue),0 4px 24px rgba(77,166,255,.15)}
 .prod-card.sel-fp{background:#050d00;border-color:var(--neon);box-shadow:0 0 0 1px var(--neon),0 4px 24px rgba(180,255,0,.12)}
 .prod-card-empty{opacity:.35;pointer-events:none}
 
 /* metà sinistra: foto */
-.prod-photo-half{width:50%;flex-shrink:0;background:linear-gradient(135deg,var(--bg3) 0%,var(--bg4) 100%);display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden}
-.prod-photo-half img{width:100%;height:100%;object-fit:cover;position:absolute;inset:0}
+.prod-photo-half{width:50%;flex-shrink:0;background:linear-gradient(135deg,var(--bg3) 0%,var(--bg4) 100%);display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;aspect-ratio:2/3;min-height:280px}
+.prod-photo-half img{width:100%;height:100%;object-fit:cover;object-position:center top;position:absolute;inset:0}
 .prod-photo-ph{display:flex;flex-direction:column;align-items:center;gap:6px;opacity:.15}
 .prod-photo-ph svg{width:32px;height:32px}
 .prod-photo-ph span{font-family:var(--f-mono);font-size:8px;letter-spacing:2px;text-transform:uppercase}
@@ -2588,8 +2588,8 @@ function salvaCacheSessione() {
   } catch(e) {}
 }
 
-// Sincrona e veloce: carica dalla cache, nessuna chiamata al backend.
-// I dati freschi si ottengono con "Rileva i miei ordini" o dopo conferma.
+// Carica dalla cache per apertura istantanea (nessuna schermata nera),
+// poi chiama rilevaMieiOrdini() in background per aggiornare i dati dal backend.
 function ripristinaSessione() {
   try {
     const raw = localStorage.getItem(DNI_CACHE_KEY);
@@ -2610,6 +2610,9 @@ function ripristinaSessione() {
       avviaSessionWatch(S.utente.id);
     }
     avviaApp();
+    // Aggiorna silenziosamente ordini, credito e stato dal backend dopo il ripristino.
+    // L'app è già visibile dalla cache; i dati freschi arrivano in background.
+    setTimeout(() => rilevaMieiOrdini(), 100);
     return true;
   } catch(e) { localStorage.removeItem(DNI_CACHE_KEY); return false; }
 }
