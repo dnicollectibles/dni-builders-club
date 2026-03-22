@@ -1845,7 +1845,9 @@ function renderCatalogo(){
       const ottCard = isDep ? getAccontoOttimizzato(String(prod.id)) : null;
       const garInBtn = ottCard&&ottCard.isSp&&ottCard.garanzia>0
         ? `<span class="prod-btn-gar">+ Gar. stock €${ottCard.garanzia}</span>` : '';
-      const imgs=[prod.imgFile,prod.imgFile2,prod.imgFile3].filter(Boolean).map(f=>`img_catalogo/${f}`);
+      const imgs = (prod.imgs && prod.imgs.length)
+        ? prod.imgs.map(f => `img_catalogo/${prod.imgBase}/${f}`)
+        : (prod.imgFile ? [`img_catalogo/${prod.imgFile}`] : []); // fallback retrocompat
       const img=imgs[0]||'';
       const hasMulti=imgs.length>1;
 
@@ -1946,7 +1948,7 @@ function renderSidebar(){
   function creaSelItem(p,t,acc){
     const div=document.createElement('div');
     div.className=`sel-item ${t==='deposito'?'dep':'fp'}`;
-    const img=p.imgFile?`img_catalogo/${p.imgFile}`:'';
+    const img = (p.imgs && p.imgs.length) ? `img_catalogo/${p.imgBase}/${p.imgs[0]}` : (p.imgFile ? `img_catalogo/${p.imgFile}` : '');
     div.innerHTML=`
       <div class="sel-thumb">${img?`<img src="${img}" alt="">`:'🖼'}</div>
       <div class="sel-info">
@@ -2177,10 +2179,14 @@ function renderOrdini(){
   aggiornaBadgeFiltro('fltBadgeSaldato',  allSaldato.length);
   aggiornaBadgeFiltro('fltBadgeSpedito',  allSpedito.length);
 
-  // Mappa prodotto_id → immagini dal catalogo (le prenotazioni non hanno imgFile)
+  // Mappa prodotto_id → immagini dal catalogo (le prenotazioni non hanno imgs)
   const imgMap = {};
   for(const c of S.catalogo){
-    imgMap[String(c.id)] = { f1: c.imgFile||'', f2: c.imgFile2||'', f3: c.imgFile3||'' };
+    // Supporta sia nuovo formato (imgs[]+imgBase) che vecchio (imgFile) per retrocompatibilità
+    const imgList = (c.imgs && c.imgs.length)
+      ? c.imgs.map(f => `${c.imgBase}/${f}`)
+      : [c.imgFile, c.imgFile2, c.imgFile3].filter(Boolean);
+    imgMap[String(c.id)] = { f1: imgList[0]||'', f2: imgList[1]||'', f3: imgList[2]||'' };
   }
 
   // Nascondi gruppi vuoti, mostra quelli con ordini
@@ -2510,9 +2516,10 @@ let _lbName = '';   // nome prodotto
 function apriLightbox(prodId) {
   const prod = S.catalogo.find(p => String(p.id) === String(prodId));
   if (!prod) return;
-  _lbImgs = [prod.imgFile, prod.imgFile2, prod.imgFile3]
-    .filter(Boolean)
-    .map(f => 'img_catalogo/' + f);
+  // Supporta nuovo formato (imgs[]+imgBase) e vecchio (imgFile) per retrocompatibilità
+  _lbImgs = (prod.imgs && prod.imgs.length)
+    ? prod.imgs.map(f => `img_catalogo/${prod.imgBase}/${f}`)
+    : [prod.imgFile, prod.imgFile2, prod.imgFile3].filter(Boolean).map(f => 'img_catalogo/' + f);
   if (!_lbImgs.length) return;
   _lbIdx  = 0;
   _lbName = prod.name;
