@@ -419,12 +419,17 @@ function getCatalogo(mese, tierSocio) {
   return all
     .filter(r => {
       if (String(r.mese || '').trim() !== mese) return false;
-      if (!toBool(r.attivo))     return false; // override globale
-      if (!toBool(r.attivo_vip)) return false; // non attivo per VIP
+      if (!toBool(r.attivo))     return false; // override globale — FALSE esclude sempre
+
+      // attivo_vip: se la colonna non esiste o è vuota/null, usa attivo come fallback.
+      // Questo garantisce retrocompatibilità con fogli che non hanno ancora attivo_vip.
+      const vipFieldPresente = r.attivo_vip !== null && r.attivo_vip !== undefined && String(r.attivo_vip).trim() !== '';
+      if (vipFieldPresente && !toBool(r.attivo_vip)) return false;
+
       // cross-tier: il socio vede il suo tier e i tier inferiori
-      const tierProd = String(r.tier || '').trim().toLowerCase();
-      const rankProd = TIER_RANK[tierProd] || 0;
-      const rankSocio= TIER_RANK[tierSocio] || 0;
+      const tierProd  = String(r.tier || '').trim().toLowerCase();
+      const rankProd  = TIER_RANK[tierProd]  || 0;
+      const rankSocio = TIER_RANK[tierSocio] || 0;
       return rankSocio >= rankProd;
     })
     .map(r => {
