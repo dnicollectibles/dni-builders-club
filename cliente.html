@@ -171,15 +171,15 @@ input{font-family:inherit}
 .prod-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;background:transparent;border:none}
 
 /* card split: foto sinistra + info destra */
-.prod-card{background:var(--bg2);display:flex;flex-direction:row;position:relative;overflow:hidden;transition:background .15s,box-shadow .15s;min-height:380px;border:1px solid var(--line2);border-radius:var(--r)}
+.prod-card{background:var(--bg2);display:flex;flex-direction:row;position:relative;overflow:hidden;transition:background .15s,box-shadow .15s;border:1px solid var(--line2);border-radius:var(--r)}
 .prod-card:hover{background:var(--bg3);box-shadow:0 4px 20px rgba(0,0,0,.35)}
 .prod-card.sel-dep{background:#050e1a;border-color:var(--blue);box-shadow:0 0 0 1px var(--blue),0 4px 24px rgba(77,166,255,.15)}
 .prod-card.sel-fp{background:#050d00;border-color:var(--neon);box-shadow:0 0 0 1px var(--neon),0 4px 24px rgba(180,255,0,.12)}
 .prod-card-empty{opacity:.35;pointer-events:none}
 
 /* metà sinistra: foto */
-.prod-photo-half{width:50%;flex-shrink:0;background:linear-gradient(135deg,var(--bg3) 0%,var(--bg4) 100%);display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden}
-.prod-photo-half img{width:100%;height:100%;object-fit:cover;position:absolute;inset:0}
+.prod-photo-half{width:50%;flex-shrink:0;background:linear-gradient(135deg,var(--bg3) 0%,var(--bg4) 100%);display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;aspect-ratio:2/3;min-height:280px}
+.prod-photo-half img{width:100%;height:100%;object-fit:cover;object-position:center top;position:absolute;inset:0}
 .prod-photo-ph{display:flex;flex-direction:column;align-items:center;gap:6px;opacity:.15}
 .prod-photo-ph svg{width:32px;height:32px}
 .prod-photo-ph span{font-family:var(--f-mono);font-size:8px;letter-spacing:2px;text-transform:uppercase}
@@ -912,9 +912,71 @@ white-space:nowrap;}
 .tb-rinnovo-val.urgent{color:var(--red);animation:pulse-urgent 1.5s ease-in-out infinite}
 @keyframes pulse-urgent{0%,100%{opacity:1}50%{opacity:.5}}
 @media (max-width:768px){.tb-rinnovo{display:none!important}}
+
+/* ═══════════════════════════════════════════════════════════════════
+   GAMING THEME — GLOW TIER + PARTICLE BURST
+═══════════════════════════════════════════════════════════════════ */
+
+/* ── GLOW TIER sulle card prodotto ────────────────────────────────── */
+/* Glow subtile sulla barra vtag per tier */
+.tier-vtag.scout  { box-shadow: 0 0 12px rgba(90,180,255,.35), inset 0 0 8px rgba(90,180,255,.2); }
+.tier-vtag.veteran{ box-shadow: 0 0 12px rgba(0,212,160,.35), inset 0 0 8px rgba(0,212,160,.2); }
+.tier-vtag.elite  { box-shadow: 0 0 12px rgba(247,201,72,.35), inset 0 0 8px rgba(247,201,72,.2); }
+
+/* Glow sul bordo card quando selezionata — potenziato */
+.prod-card.sel-dep {
+  box-shadow: 0 0 0 1px var(--scout),
+              0 0 16px rgba(90,180,255,.25),
+              0 0 40px rgba(90,180,255,.1);
+}
+.prod-card.sel-fp {
+  box-shadow: 0 0 0 1px var(--neon),
+              0 0 16px rgba(180,255,0,.22),
+              0 0 40px rgba(180,255,0,.08);
+}
+
+/* Glow hover sulle tier section */
+.tier-section:has(.tier-vtag.scout):hover   .tier-vtag.scout   { box-shadow: 0 0 20px rgba(90,180,255,.5),  inset 0 0 10px rgba(90,180,255,.3); }
+.tier-section:has(.tier-vtag.veteran):hover .tier-vtag.veteran { box-shadow: 0 0 20px rgba(0,212,160,.5),  inset 0 0 10px rgba(0,212,160,.3); }
+.tier-section:has(.tier-vtag.elite):hover   .tier-vtag.elite   { box-shadow: 0 0 20px rgba(247,201,72,.5), inset 0 0 10px rgba(247,201,72,.3); }
+
+/* Glow sui badge tier nella topbar */
+.tb-tier.scout   { text-shadow: 0 0 8px rgba(90,180,255,.6); }
+.tb-tier.veteran { text-shadow: 0 0 8px rgba(0,212,160,.6); }
+.tb-tier.elite   { text-shadow: 0 0 8px rgba(247,201,72,.6); }
+
+/* Glow sul credito in topbar */
+.tb-cred-val { text-shadow: 0 0 10px rgba(180,255,0,.4); }
+
+/* Glow sui bottoni prodotto attivi */
+.prod-btn.dep-on { box-shadow: 0 0 10px rgba(90,180,255,.15); }
+.prod-btn.fp-on  { box-shadow: 0 0 10px rgba(180,255,0,.15); }
+
+/* Glow sul bottone conferma */
+.btn-conferma:not(:disabled) {
+  box-shadow: 0 0 14px rgba(180,255,0,.2);
+  text-shadow: 0 0 8px rgba(0,0,0,.4);
+}
+.btn-conferma:hover:not(:disabled) {
+  box-shadow: 0 0 28px rgba(180,255,0,.4), 0 0 60px rgba(180,255,0,.12) !important;
+}
+
+/* ── PARTICLE BURST ────────────────────────────────────────────────── */
+#particleCanvas {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 9998;
+  opacity: 0;
+  transition: opacity .1s;
+}
+#particleCanvas.active { opacity: 1; }
 </style>
 </head>
 <body>
+
+<!-- Canvas particle burst — gaming theme -->
+<canvas id="particleCanvas"></canvas>
 
 <!-- ═══ LOADING ═══ -->
 <div id="gLoad">
@@ -1294,7 +1356,7 @@ let filtro = 'tutti';
 let _sessionChannel = null;
 
 /* ─── API LAYER — Google Apps Script backend ─────────────────────────────── */
-const URL_API = 'https://script.google.com/macros/s/AKfycbywskUrf0M5XFMpR5usAOkp3lriue2R8NMgk1N4EkRAldUZP2BTM5cKOHmeOqanUHmf/exec';
+const URL_API = 'https://script.google.com/macros/s/AKfycbwGssg8OS93eHa6DvYlxQBp4wtsD6pZQXFDALNMADpzJJfDARmeowHwDDXdkca50mzB/exec';
 
 const sleep = ms => new Promise(r => setTimeout(r, ms));
 
@@ -2066,6 +2128,7 @@ async function inviaConferma(){
     renderCatalogo();
     rilevaMieiOrdini();
     mostraToast('Ordine inviato con successo ✔','neon');
+    particleBurst(); // 🎉 gaming effect
     setTimeout(()=>switchTab('ord'),1800);
 
   }catch(e){
@@ -2709,5 +2772,95 @@ document.addEventListener('click', function(e) {
 });
 
 // init zoom all'avvio app
+
+/* ─── PARTICLE BURST — gaming effect alla conferma ordine ───────────────── */
+function particleBurst() {
+  const canvas = document.getElementById('particleCanvas');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+
+  // Ridimensiona canvas a schermo intero
+  canvas.width  = window.innerWidth;
+  canvas.height = window.innerHeight;
+  canvas.classList.add('active');
+
+  // Colori tier dell'utente + neon
+  const tierColor = S.utente?.tier === 'elite'   ? '#f7c948'
+                  : S.utente?.tier === 'veteran'  ? '#00d4a0'
+                  : '#5ab4ff';
+  const colors = [tierColor, '#b4ff00', '#ffffff', tierColor, '#b4ff00'];
+
+  // Genera particelle dal centro dello schermo
+  const cx = canvas.width  / 2;
+  const cy = canvas.height / 2;
+  const particles = [];
+  const COUNT = 80;
+
+  for (let i = 0; i < COUNT; i++) {
+    const angle  = (Math.random() * Math.PI * 2);
+    const speed  = 3 + Math.random() * 9;
+    const size   = 2 + Math.random() * 5;
+    const life   = 0.6 + Math.random() * 0.4; // durata relativa 0-1
+    particles.push({
+      x: cx, y: cy,
+      vx: Math.cos(angle) * speed,
+      vy: Math.sin(angle) * speed - Math.random() * 4, // leggera spinta verso l'alto
+      size,
+      color: colors[Math.floor(Math.random() * colors.length)],
+      alpha: 1,
+      decay: 0.018 + Math.random() * 0.022,
+      gravity: 0.12 + Math.random() * 0.08,
+      // forma: cerchio o quadrato piccolo
+      shape: Math.random() > 0.5 ? 'circle' : 'rect',
+    });
+  }
+
+  let frame;
+  function animate() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    let alive = 0;
+    for (const p of particles) {
+      if (p.alpha <= 0) continue;
+      alive++;
+      p.x  += p.vx;
+      p.y  += p.vy;
+      p.vy += p.gravity; // gravità
+      p.vx *= 0.98;      // attrito aria
+      p.alpha -= p.decay;
+
+      ctx.save();
+      ctx.globalAlpha = Math.max(0, p.alpha);
+      ctx.fillStyle   = p.color;
+      ctx.shadowBlur  = 6;
+      ctx.shadowColor = p.color;
+
+      if (p.shape === 'circle') {
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+        ctx.fill();
+      } else {
+        ctx.fillRect(p.x - p.size / 2, p.y - p.size / 2, p.size, p.size);
+      }
+      ctx.restore();
+    }
+
+    if (alive > 0) {
+      frame = requestAnimationFrame(animate);
+    } else {
+      canvas.classList.remove('active');
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+    }
+  }
+
+  animate();
+
+  // Sicurezza: forza pulizia dopo 3 secondi
+  setTimeout(() => {
+    cancelAnimationFrame(frame);
+    canvas.classList.remove('active');
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+  }, 3000);
+}
 
 </script>
