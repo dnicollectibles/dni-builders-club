@@ -39,7 +39,7 @@
  * ─────────────────────────────────────────────────────────────────────────────
  */
 
-const SPREADSHEET_ID = 'INCOLLA_QUI_ID_DEL_FOGLIO_V6.2';  // ← AGGIORNA CON IL TUO ID
+const SPREADSHEET_ID = '12AZl7ufyN9YQM2bORCxsfwHr9PGn2wEnLqZcYBeVH40';
 const ADMIN_EMAIL    = 'dni.infoshop@gmail.com';
 const ADMIN_KEY      = 'Dni2026!Admin@1984_Sup3rVisor';
 
@@ -55,6 +55,13 @@ function corsOutput(data) {
 
 function errOutput(msg, code) {
   return corsOutput({ ok: false, error: msg, errore: msg, code: code || 400 });
+}
+
+// Gestisce preflight OPTIONS (richiesto dai browser per CORS cross-origin)
+function doOptions(e) {
+  return ContentService
+    .createTextOutput('')
+    .setMimeType(ContentService.MimeType.TEXT);
 }
 
 // ═══════════════════════════════════════════════════════════════════════════════
