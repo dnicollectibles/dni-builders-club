@@ -904,11 +904,16 @@ async function apiSalvaExtra(idPren, delta, nuovoTotale) {
    Mantiene retrocompatibilità con il vecchio formato a 3 campi separati.
 ─────────────────────────────────────────────────────────────────────────── */
 function getProdImgs(prod) {
+  // Caso 1: campo "img" esplicito (eventuale future refactor del backend)
   if (prod.img && prod.img.trim()) {
-    // Nuovo formato: colonna L con valori separati da ";"
     return prod.img.split(';').map(s => s.trim()).filter(Boolean);
   }
-  // Retrocompatibilità: vecchio formato con 3 campi separati
+  // Caso 2: il backend mette tutte le foto separate da ";" in imgFile
+  // (es. "MAZINKAISER_TRON_01.jpg;MAZINKAISER_TRON_02.jpg;...")
+  if (prod.imgFile && prod.imgFile.includes(';')) {
+    return prod.imgFile.split(';').map(s => s.trim()).filter(Boolean);
+  }
+  // Caso 3: vecchio formato con 3 campi separati imgFile / imgFile2 / imgFile3
   return [prod.imgFile, prod.imgFile2, prod.imgFile3].filter(Boolean);
 }
 
