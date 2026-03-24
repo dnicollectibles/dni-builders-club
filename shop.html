@@ -3,41 +3,42 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="DNI Builders Club Shop — Acquista i nostri model kit. Scopri quanto risparmi diventando socio VIP.">
 <title>Shop — DNI Builders Club</title>
 <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&family=JetBrains+Mono:wght@400;500;600&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-
-:root {
+:root{
   --bg:#09090d;--bg2:#0e0e14;--bg3:#13131a;--bg4:#18181f;
   --line:#1c1c26;--line2:#232330;
   --text:#eeeef5;--text2:rgba(238,238,245,.65);--text3:rgba(238,238,245,.38);--text4:rgba(238,238,245,.18);
   --gold:#f7c948;--gold2:#ffe070;--gold-d:rgba(247,201,72,.12);--gold-g:rgba(247,201,72,.22);
   --neon:#b4ff00;--neon-d:rgba(180,255,0,.1);
   --scout:#5ab4ff;--veteran:#00d4a0;--elite:#f7c948;
+  --red:#ff5a5a;--red-d:rgba(255,90,90,.12);
   --card-bg:#0e0e14;--nav-bg:rgba(9,9,13,.92);
   --r:6px;--r2:10px;--sh:0 8px 32px rgba(0,0,0,.5);
 }
-[data-theme="light"] {
-  --bg:#f5f4f0;--bg2:#ffffff;--bg3:#f0ede7;--bg4:#e8e4dc;
+[data-theme="light"]{
+  --bg:#f5f4f0;--bg2:#fff;--bg3:#f0ede7;--bg4:#e8e4dc;
   --line:#ddd9d0;--line2:#ccc8be;
   --text:#1a1814;--text2:rgba(26,24,20,.65);--text3:rgba(26,24,20,.42);--text4:rgba(26,24,20,.2);
   --gold:#c4820a;--gold2:#a06808;--gold-d:rgba(196,130,10,.1);--gold-g:rgba(196,130,10,.2);
   --neon:#5a9200;--neon-d:rgba(90,146,0,.1);
   --scout:#1565c0;--veteran:#00796b;--elite:#c4820a;
-  --card-bg:#ffffff;--nav-bg:rgba(245,244,240,.95);
+  --red:#c0392b;--red-d:rgba(192,57,43,.1);
+  --card-bg:#fff;--nav-bg:rgba(245,244,240,.95);
 }
 html{scroll-behavior:smooth}
 body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;font-size:15px;line-height:1.6;-webkit-font-smoothing:antialiased;overflow-x:hidden;transition:background .25s,color .25s}
 a{color:inherit;text-decoration:none}
 button{cursor:pointer;font-family:inherit;border:none;background:none;color:inherit}
+input,select,textarea{font-family:inherit}
 
-/* NAV */
-.nav{position:fixed;top:0;left:0;right:0;z-index:200;height:58px;background:var(--nav-bg);backdrop-filter:blur(16px);border-bottom:1px solid var(--line);display:flex;align-items:center;padding:0 40px;gap:0;transition:background .25s,border-color .25s}
+/* === NAV === */
+.nav{position:fixed;top:0;left:0;right:0;z-index:300;height:58px;background:var(--nav-bg);backdrop-filter:blur(16px);border-bottom:1px solid var(--line);display:flex;align-items:center;padding:0 40px;transition:background .25s}
 .nav-logo{font-family:'Rajdhani',sans-serif;font-size:18px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--gold);margin-right:auto;display:flex;align-items:center;gap:10px}
 .nav-logo span{color:var(--text2);font-weight:500}
-.nav-logo-dot{width:6px;height:6px;border-radius:50%;background:var(--neon);box-shadow:0 0 8px var(--neon);animation:pulse 2s ease-in-out infinite}
+.nav-dot{width:6px;height:6px;border-radius:50%;background:var(--neon);box-shadow:0 0 8px var(--neon);animation:pulse 2s ease-in-out infinite}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
 .nav-links{display:flex;gap:4px;list-style:none;margin-right:16px}
 .nav-links a{font-size:12px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--text3);padding:6px 12px;border-radius:var(--r);transition:color .15s,background .15s}
@@ -46,135 +47,208 @@ button{cursor:pointer;font-family:inherit;border:none;background:none;color:inhe
 .nav-actions{display:flex;align-items:center;gap:8px}
 .btn-theme{width:34px;height:34px;border-radius:var(--r);display:flex;align-items:center;justify-content:center;border:1px solid var(--line2);color:var(--text3);font-size:14px;transition:all .15s}
 .btn-theme:hover{border-color:var(--gold);color:var(--gold);background:var(--gold-d)}
+.btn-cart{height:34px;padding:0 14px;border-radius:var(--r);border:1px solid var(--line2);color:var(--text2);font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:600;letter-spacing:1px;text-transform:uppercase;display:flex;align-items:center;gap:6px;transition:all .15s}
+.btn-cart:hover{border-color:var(--neon);color:var(--neon);background:var(--neon-d)}
+.btn-cart .cart-badge{background:var(--neon);color:#000;border-radius:50%;width:16px;height:16px;font-size:9px;display:flex;align-items:center;justify-content:center;font-weight:700}
 .btn-vip{height:34px;padding:0 16px;border-radius:var(--r);background:var(--gold);color:#000;font-family:'Rajdhani',sans-serif;font-size:12px;font-weight:700;letter-spacing:2px;text-transform:uppercase;transition:all .15s}
 .btn-vip:hover{background:var(--gold2);box-shadow:0 0 16px var(--gold-g)}
 
-/* BANNER GLOBALE */
-#globalBanner{display:none;padding:10px 40px;text-align:center;font-size:13px;font-weight:500;margin-top:58px}
+/* === BANNER GLOBALE === */
+#globalBanner{display:none;padding:10px 40px;text-align:center;font-size:13px;font-weight:500}
 #globalBanner.info{background:rgba(90,180,255,.1);color:var(--scout);border-bottom:1px solid rgba(90,180,255,.2)}
 #globalBanner.warning{background:rgba(255,159,64,.1);color:#ff9f40;border-bottom:1px solid rgba(255,159,64,.2)}
 #globalBanner.success{background:rgba(0,212,160,.1);color:var(--veteran);border-bottom:1px solid rgba(0,212,160,.2)}
-#globalBanner.danger{background:rgba(255,90,90,.1);color:#ff5a5a;border-bottom:1px solid rgba(255,90,90,.2)}
+#globalBanner.danger{background:rgba(255,90,90,.1);color:var(--red);border-bottom:1px solid rgba(255,90,90,.2)}
 
-/* HERO SHOP */
-.shop-hero{margin-top:58px;padding:48px 40px 32px;background:var(--bg2);border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;gap:32px;flex-wrap:wrap}
-.shop-hero-left{}
-.shop-hero-label{font-family:'JetBrains Mono',monospace;font-size:9px;font-weight:600;letter-spacing:3px;text-transform:uppercase;color:var(--neon);margin-bottom:10px;display:block}
-.shop-hero-title{font-family:'Rajdhani',sans-serif;font-size:clamp(32px,5vw,52px);font-weight:700;text-transform:uppercase;letter-spacing:.5px;line-height:1.1;margin-bottom:12px}
-.shop-hero-sub{font-size:15px;color:var(--text2);max-width:480px;line-height:1.7}
-
-/* BANNER VIP RISPARMIO */
-.vip-promo{background:linear-gradient(135deg,rgba(180,255,0,.06) 0%,rgba(247,201,72,.06) 100%);border:1px solid rgba(180,255,0,.2);border-radius:var(--r2);padding:20px 24px;max-width:340px;flex-shrink:0}
-.vip-promo-title{font-family:'Rajdhani',sans-serif;font-size:16px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--neon);margin-bottom:6px}
+/* === HERO === */
+.shop-hero{padding:80px 40px 40px;background:var(--bg2);border-bottom:1px solid var(--line);display:flex;align-items:flex-start;justify-content:space-between;gap:32px;flex-wrap:wrap}
+.hero-label{font-family:'JetBrains Mono',monospace;font-size:9px;font-weight:600;letter-spacing:3px;text-transform:uppercase;color:var(--neon);margin-bottom:10px;display:block}
+.hero-title{font-family:'Rajdhani',sans-serif;font-size:clamp(32px,5vw,52px);font-weight:700;text-transform:uppercase;letter-spacing:.5px;line-height:1.1;margin-bottom:10px}
+.hero-sub{font-size:14px;color:var(--text2);max-width:440px;line-height:1.7}
+.vip-promo{background:linear-gradient(135deg,rgba(180,255,0,.05),rgba(247,201,72,.05));border:1px solid rgba(180,255,0,.18);border-radius:var(--r2);padding:20px 24px;max-width:320px;flex-shrink:0}
+.vip-promo-title{font-family:'Rajdhani',sans-serif;font-size:15px;font-weight:700;text-transform:uppercase;color:var(--neon);margin-bottom:6px}
 .vip-promo-text{font-size:13px;color:var(--text2);line-height:1.6;margin-bottom:14px}
-.vip-promo-btn{display:inline-flex;align-items:center;gap:6px;height:36px;padding:0 18px;background:var(--gold);color:#000;border-radius:var(--r);font-family:'Rajdhani',sans-serif;font-size:12px;font-weight:700;letter-spacing:2px;text-transform:uppercase;transition:all .15s}
-.vip-promo-btn:hover{background:var(--gold2);box-shadow:0 0 14px var(--gold-g)}
+.vip-promo-btn{display:inline-flex;align-items:center;gap:6px;height:34px;padding:0 16px;background:var(--gold);color:#000;border-radius:var(--r);font-family:'Rajdhani',sans-serif;font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;transition:all .15s}
+.vip-promo-btn:hover{background:var(--gold2)}
 
-/* FILTRI */
-.shop-filters{padding:20px 40px;background:var(--bg);border-bottom:1px solid var(--line);display:flex;align-items:center;gap:8px;flex-wrap:wrap;position:sticky;top:58px;z-index:100;backdrop-filter:blur(12px)}
-.flt{font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;padding:6px 14px;border:1px solid var(--line2);color:var(--text3);background:transparent;border-radius:var(--r);transition:all .15s;cursor:pointer}
-.flt:hover{color:var(--text);border-color:var(--line2);background:var(--bg3)}
+/* === FILTRI === */
+.shop-filters{padding:14px 40px;background:var(--bg);border-bottom:1px solid var(--line);display:flex;align-items:center;gap:8px;flex-wrap:wrap;position:sticky;top:58px;z-index:200;backdrop-filter:blur(12px)}
+.flt{font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;padding:5px 14px;border:1px solid var(--line2);color:var(--text3);background:transparent;border-radius:var(--r);transition:all .15s;cursor:pointer}
+.flt:hover{color:var(--text);background:var(--bg3)}
 .flt.active{color:var(--neon);border-color:rgba(180,255,0,.4);background:var(--neon-d)}
-.flt.scout-flt.active{color:var(--scout);border-color:rgba(90,180,255,.4);background:rgba(90,180,255,.08)}
-.flt.veteran-flt.active{color:var(--veteran);border-color:rgba(0,212,160,.4);background:rgba(0,212,160,.08)}
-.flt.elite-flt.active{color:var(--elite);border-color:rgba(247,201,72,.4);background:rgba(247,201,72,.08)}
 .flt-sep{width:1px;height:20px;background:var(--line2)}
+.filter-count{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--text3);margin-left:auto}
 
-/* RISPARMIO BANNER (quando selezionati multipli) */
-#savingsBanner{display:none;margin:0;padding:14px 40px;background:rgba(180,255,0,.06);border-bottom:1px solid rgba(180,255,0,.15);align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap}
-.savings-txt{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--text2);letter-spacing:.5px}
-.savings-txt strong{color:var(--neon);font-size:16px}
-.savings-cta{height:34px;padding:0 18px;background:var(--neon);color:#000;border-radius:var(--r);font-family:'Rajdhani',sans-serif;font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;transition:all .15s;display:flex;align-items:center;gap:6px;flex-shrink:0}
-.savings-cta:hover{background:#ccff44}
+/* === RISPARMIO BANNER === */
+#savingsBanner{display:none;padding:12px 40px;background:rgba(180,255,0,.05);border-bottom:1px solid rgba(180,255,0,.15);align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap}
+.sav-txt{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--text2);letter-spacing:.5px;display:flex;gap:20px;flex-wrap:wrap}
+.sav-item strong{color:var(--neon)}
+.sav-cta{height:32px;padding:0 16px;background:var(--neon);color:#000;border-radius:var(--r);font-family:'Rajdhani',sans-serif;font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;flex-shrink:0;display:flex;align-items:center}
 
-/* GRID */
-.shop-main{max-width:1280px;margin:0 auto;padding:32px 40px 80px}
-.shop-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:16px}
+/* === LAYOUT MAIN === */
+.shop-main{display:flex;gap:0;min-height:60vh;max-width:1400px;margin:0 auto}
 
-/* CARD */
-.shop-card{background:var(--card-bg);border:1px solid var(--line);border-radius:var(--r2);overflow:hidden;transition:transform .2s,border-color .2s,box-shadow .2s;position:relative}
-.shop-card:hover{transform:translateY(-3px);border-color:var(--line2);box-shadow:var(--sh)}
-.shop-card.selected{border-color:var(--neon);box-shadow:0 0 0 1px var(--neon),0 4px 24px rgba(180,255,0,.1)}
-.shop-card.sold-out{opacity:.6}
+/* === GRID === */
+.products-col{flex:1;padding:28px 40px 80px;min-width:0}
+.shop-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:14px}
+
+/* === CARD === */
+.shop-card{background:var(--card-bg);border:1px solid var(--line);border-radius:var(--r2);overflow:hidden;transition:transform .2s,border-color .2s,box-shadow .2s;position:relative;display:flex;flex-direction:column}
+.shop-card:hover{transform:translateY(-2px);border-color:var(--line2);box-shadow:var(--sh)}
+.shop-card.in-cart{border-color:var(--neon);box-shadow:0 0 0 1px var(--neon),0 4px 20px rgba(180,255,0,.08)}
 
 /* Immagine */
-.card-img{width:100%;aspect-ratio:2/3;object-fit:cover;object-position:center top;background:var(--bg3);display:block;cursor:pointer}
-.card-img-ph{width:100%;aspect-ratio:2/3;background:var(--bg3);display:flex;align-items:center;justify-content:center;color:var(--text4);font-size:32px}
+.card-img-wrap{position:relative;overflow:hidden}
+.card-img{width:100%;aspect-ratio:2/3;object-fit:cover;object-position:center top;background:var(--bg3);display:block;cursor:zoom-in;transition:transform .3s}
+.card-img:hover{transform:scale(1.03)}
+.card-img-ph{width:100%;aspect-ratio:2/3;background:var(--bg3);display:flex;align-items:center;justify-content:center;color:var(--text4);font-size:28px}
+.img-count{position:absolute;bottom:8px;right:8px;background:rgba(0,0,0,.7);color:#fff;font-family:'JetBrains Mono',monospace;font-size:8px;padding:3px 7px;border-radius:3px;letter-spacing:1px}
 
-/* Sold out overlay */
-.sold-out-overlay{position:absolute;top:0;left:0;right:0;bottom:0;display:flex;align-items:center;justify-content:center;pointer-events:none;z-index:2}
-.sold-out-tag{font-family:'Rajdhani',sans-serif;font-size:18px;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:#fff;background:rgba(255,60,60,.85);padding:10px 24px;border-top:2px solid rgba(255,60,60,.9);border-bottom:2px solid rgba(255,60,60,.9);transform:rotate(-15deg)}
+/* Sold out */
+.sold-overlay{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;pointer-events:none;z-index:2}
+.sold-tag{font-family:'Rajdhani',sans-serif;font-size:16px;font-weight:700;letter-spacing:4px;color:#fff;background:rgba(220,40,40,.88);padding:8px 20px;transform:rotate(-15deg);border-top:2px solid rgba(255,80,80,.9);border-bottom:2px solid rgba(255,80,80,.9)}
 
-/* Body card */
-.card-body{padding:14px 16px}
-.card-tier{font-family:'JetBrains Mono',monospace;font-size:8px;font-weight:600;letter-spacing:2px;text-transform:uppercase;margin-bottom:6px;display:block}
+/* Arrivo badge */
+.arrivo-badge{position:absolute;top:8px;left:8px;background:rgba(255,159,64,.9);color:#000;font-family:'JetBrains Mono',monospace;font-size:8px;font-weight:600;padding:3px 7px;border-radius:3px;letter-spacing:1px;text-transform:uppercase}
+
+/* Body */
+.card-body{padding:12px 14px;display:flex;flex-direction:column;gap:6px;flex:1}
+.card-tier{font-family:'JetBrains Mono',monospace;font-size:8px;font-weight:600;letter-spacing:2px;text-transform:uppercase}
 .card-tier.scout{color:var(--scout)}.card-tier.veteran{color:var(--veteran)}.card-tier.elite{color:var(--elite)}
-.card-name{font-family:'Rajdhani',sans-serif;font-size:15px;font-weight:700;line-height:1.2;margin-bottom:10px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
-.card-sku{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--text3);margin-bottom:10px;letter-spacing:.5px}
+.card-name{font-family:'Rajdhani',sans-serif;font-size:14px;font-weight:700;line-height:1.25;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.card-sku{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--text3);letter-spacing:.5px}
 
 /* Prezzi */
-.card-prices{display:flex;flex-direction:column;gap:4px;margin-bottom:12px;padding:10px 12px;background:var(--bg3);border-radius:var(--r);border:1px solid var(--line)}
-.price-row{display:flex;justify-content:space-between;align-items:center}
-.price-lbl{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:1.5px;text-transform:uppercase;color:var(--text3)}
-.price-val{font-family:'Rajdhani',sans-serif;font-size:18px;font-weight:700;font-variant-numeric:tabular-nums}
-.price-val.shop-price{color:var(--text)}
-.price-val.vip-price{color:var(--neon)}
-.price-val.tbd{color:var(--gold);font-size:14px}
-.price-divider{height:1px;background:var(--line);margin:4px 0}
-.saving-row{display:flex;justify-content:space-between;align-items:center}
-.saving-lbl{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:1.5px;text-transform:uppercase;color:var(--veteran)}
-.saving-val{font-family:'Rajdhani',sans-serif;font-size:15px;font-weight:700;color:var(--veteran)}
+.card-prices{background:var(--bg3);border:1px solid var(--line);border-radius:var(--r);padding:8px 10px;display:flex;flex-direction:column;gap:3px;margin-top:2px}
+.pr{display:flex;justify-content:space-between;align-items:center}
+.pr-lbl{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:1.5px;text-transform:uppercase;color:var(--text3)}
+.pr-val{font-family:'Rajdhani',sans-serif;font-size:17px;font-weight:700;font-variant-numeric:tabular-nums}
+.pr-val.pub{color:var(--text)}
+.pr-val.vip{color:var(--neon)}
+.pr-val.tbd{color:var(--gold);font-size:13px}
+.pr-div{height:1px;background:var(--line);margin:2px 0}
+.pr-save{display:flex;justify-content:space-between;align-items:center}
+.pr-save-lbl{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:1px;text-transform:uppercase;color:var(--veteran)}
+.pr-save-val{font-family:'Rajdhani',sans-serif;font-size:13px;font-weight:700;color:var(--veteran)}
 
-/* Checkbox selezione */
-.card-select{display:flex;align-items:center;gap:8px;padding:8px 0 2px;cursor:pointer;user-select:none}
-.card-select input{display:none}
-.card-check{width:18px;height:18px;border:1.5px solid var(--line2);border-radius:3px;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .15s;font-size:11px}
-.shop-card.selected .card-check{background:var(--neon);border-color:var(--neon);color:#000}
-.card-select-lbl{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:1.5px;text-transform:uppercase;color:var(--text3);transition:color .15s}
-.shop-card.selected .card-select-lbl{color:var(--neon)}
+/* Bottone aggiungi */
+.btn-add{width:100%;height:36px;background:var(--neon-d);border:1px solid rgba(180,255,0,.25);color:var(--neon);border-radius:var(--r);font-family:'Rajdhani',sans-serif;font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;transition:all .15s;margin-top:auto}
+.btn-add:hover:not(:disabled){background:var(--neon);color:#000}
+.btn-add:disabled{opacity:.3;cursor:not-allowed}
+.btn-add.in-cart{background:var(--neon);color:#000}
+.btn-add.in-cart:hover{background:var(--red-d);color:var(--red);border-color:rgba(255,90,90,.3)}
 
-/* Bottone VIP */
-.btn-join{width:100%;height:36px;background:var(--gold-d);border:1px solid rgba(247,201,72,.25);color:var(--gold);border-radius:var(--r);font-family:'Rajdhani',sans-serif;font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;transition:all .15s;margin-top:4px}
-.btn-join:hover{background:var(--gold);color:#000}
+/* === CARRELLO SIDEBAR === */
+.cart-sidebar{width:360px;flex-shrink:0;border-left:1px solid var(--line);background:var(--bg2);display:flex;flex-direction:column;position:sticky;top:58px;height:calc(100vh - 58px);overflow:hidden;transition:width .25s}
+.cart-sidebar.hidden{width:0;border-left:none;overflow:hidden}
+.cart-hdr{padding:16px 20px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
+.cart-hdr-title{font-family:'Rajdhani',sans-serif;font-size:16px;font-weight:700;text-transform:uppercase;letter-spacing:1px}
+.cart-close{width:28px;height:28px;border:1px solid var(--line2);border-radius:var(--r);display:flex;align-items:center;justify-content:center;color:var(--text3);font-size:14px;transition:all .15s}
+.cart-close:hover{border-color:var(--text);color:var(--text)}
+.cart-items{flex:1;overflow-y:auto;padding:8px 0}
+.cart-empty{flex:1;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:10px;padding:32px;text-align:center;color:var(--text3)}
+.cart-empty-icon{font-size:32px;opacity:.3}
+.cart-empty-txt{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:2px;text-transform:uppercase}
+.cart-item{display:flex;gap:10px;padding:10px 16px;border-bottom:1px solid var(--line);align-items:flex-start}
+.cart-item-img{width:44px;height:56px;flex-shrink:0;border-radius:3px;overflow:hidden;background:var(--bg3)}
+.cart-item-img img{width:100%;height:100%;object-fit:cover;object-position:center top}
+.cart-item-info{flex:1;min-width:0}
+.cart-item-name{font-size:12px;font-weight:600;line-height:1.3;margin-bottom:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.cart-item-sku{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--text3);letter-spacing:.5px}
+.cart-item-price{font-family:'Rajdhani',sans-serif;font-size:16px;font-weight:700;color:var(--text);flex-shrink:0}
+.cart-item-remove{width:24px;height:24px;border:1px solid var(--line2);border-radius:3px;display:flex;align-items:center;justify-content:center;color:var(--text3);font-size:12px;transition:all .15s;flex-shrink:0;margin-top:2px}
+.cart-item-remove:hover{border-color:var(--red);color:var(--red);background:var(--red-d)}
 
-/* Loader / empty */
+/* Totali carrello */
+.cart-totals{padding:14px 16px;border-top:1px solid var(--line);background:var(--bg3);flex-shrink:0}
+.cart-tot-row{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:5px}
+.cart-tot-lbl{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:1.5px;text-transform:uppercase;color:var(--text3)}
+.cart-tot-val{font-family:'Rajdhani',sans-serif;font-size:18px;font-weight:700}
+.cart-tot-save{color:var(--veteran);font-size:14px}
+.cart-tot-main{color:var(--text)}
+
+/* Checkout */
+.cart-checkout{padding:14px 16px;border-top:1px solid var(--line);flex-shrink:0;display:flex;flex-direction:column;gap:8px}
+.checkout-title{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--text3);margin-bottom:4px}
+.btn-checkout{width:100%;height:42px;border-radius:var(--r);font-family:'Rajdhani',sans-serif;font-size:12px;font-weight:700;letter-spacing:2px;text-transform:uppercase;transition:all .15s;display:flex;align-items:center;justify-content:center;gap:8px;border:1px solid transparent}
+.btn-paypal{background:#003087;color:#fff;border-color:#003087}
+.btn-paypal:hover{background:#0040a0}
+.btn-bonifico{background:transparent;color:var(--text2);border-color:var(--line2)}
+.btn-bonifico:hover{border-color:var(--text);color:var(--text);background:var(--bg4)}
+.btn-crediti{background:var(--gold-d);color:var(--gold);border-color:rgba(247,201,72,.25)}
+.btn-crediti:hover{background:var(--gold);color:#000}
+.checkout-note{font-size:11px;color:var(--text3);text-align:center;line-height:1.5}
+
+/* === MODALI === */
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.8);z-index:400;align-items:center;justify-content:center;padding:20px}
+.modal-overlay.open{display:flex}
+.modal{background:var(--bg2);border:1px solid var(--line2);border-radius:var(--r2);width:100%;max-width:480px;max-height:90vh;overflow-y:auto}
+.modal-hdr{padding:18px 22px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between}
+.modal-title{font-family:'Rajdhani',sans-serif;font-size:18px;font-weight:700;text-transform:uppercase;letter-spacing:.5px}
+.modal-close{width:28px;height:28px;border:1px solid var(--line2);border-radius:var(--r);display:flex;align-items:center;justify-content:center;color:var(--text3);font-size:14px;transition:all .15s;cursor:pointer}
+.modal-close:hover{border-color:var(--text);color:var(--text)}
+.modal-body{padding:22px}
+.modal-body p{font-size:13px;color:var(--text2);line-height:1.7;margin-bottom:14px}
+.modal-info-box{background:var(--bg3);border:1px solid var(--line);border-radius:var(--r);padding:14px 16px;margin-bottom:14px}
+.modal-info-box .ib-row{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px}
+.modal-info-box .ib-lbl{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:1.5px;text-transform:uppercase;color:var(--text3)}
+.modal-info-box .ib-val{font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:600;color:var(--text);word-break:break-all}
+.modal-info-box .ib-val.copy{cursor:pointer;color:var(--neon)}
+.modal-info-box .ib-val.copy:hover{text-decoration:underline}
+.form-field{display:flex;flex-direction:column;gap:5px;margin-bottom:12px}
+.form-field label{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--text3)}
+.form-field input{background:var(--bg4);border:1px solid var(--line2);color:var(--text);padding:10px 12px;border-radius:var(--r);font-family:'JetBrains Mono',monospace;font-size:12px;outline:none;transition:border-color .2s}
+.form-field input:focus{border-color:var(--neon);box-shadow:0 0 0 2px var(--neon-d)}
+.btn-modal-ok{width:100%;height:42px;background:var(--neon);color:#000;border-radius:var(--r);font-family:'Rajdhani',sans-serif;font-size:13px;font-weight:700;letter-spacing:2px;text-transform:uppercase;transition:all .15s;margin-top:4px}
+.btn-modal-ok:hover{background:#ccff44}
+.modal-success{text-align:center;padding:24px 0}
+.modal-success-icon{font-size:40px;margin-bottom:12px}
+.modal-success-title{font-family:'Rajdhani',sans-serif;font-size:22px;font-weight:700;text-transform:uppercase;color:var(--neon);margin-bottom:8px}
+.modal-success-sub{font-size:13px;color:var(--text2);line-height:1.7}
+
+/* === LIGHTBOX === */
+.lb-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.92);z-index:500;align-items:center;justify-content:center;flex-direction:column;gap:14px}
+.lb-overlay.open{display:flex}
+.lb-img{max-height:80vh;max-width:88vw;object-fit:contain;border-radius:var(--r)}
+.lb-nav{display:flex;align-items:center;gap:16px}
+.lb-btn{width:40px;height:40px;border:1px solid rgba(255,255,255,.2);border-radius:var(--r);display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,.7);font-size:18px;transition:all .15s;cursor:pointer}
+.lb-btn:hover{border-color:#fff;color:#fff}
+.lb-counter{font-family:'JetBrains Mono',monospace;font-size:11px;color:rgba(255,255,255,.5);letter-spacing:2px;min-width:60px;text-align:center}
+.lb-close{position:absolute;top:16px;right:16px;width:36px;height:36px;border:1px solid rgba(255,255,255,.2);border-radius:var(--r);display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,.7);cursor:pointer;transition:all .15s}
+.lb-close:hover{border-color:#fff;color:#fff}
+.lb-name{font-family:'Rajdhani',sans-serif;font-size:14px;color:rgba(255,255,255,.6);letter-spacing:1px;text-transform:uppercase;max-width:600px;text-align:center}
+
+/* === UTILITY === */
 .loader-row{display:flex;align-items:center;justify-content:center;gap:10px;padding:80px 24px;color:var(--text3);font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:2px;text-transform:uppercase}
 .loader-spin{width:16px;height:16px;border:2px solid var(--line2);border-top-color:var(--gold);border-radius:50%;animation:spin .6s linear infinite}
 @keyframes spin{to{transform:rotate(360deg)}}
 .empty-msg{text-align:center;padding:80px 24px;color:var(--text3);font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:2px;text-transform:uppercase}
 
-/* LIGHTBOX */
-.lb-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.9);z-index:500;align-items:center;justify-content:center;flex-direction:column;gap:12px}
-.lb-overlay.open{display:flex}
-.lb-img{max-height:80vh;max-width:90vw;object-fit:contain;border-radius:var(--r)}
-.lb-nav{display:flex;align-items:center;gap:16px}
-.lb-btn{width:40px;height:40px;border:1px solid var(--line2);border-radius:var(--r);display:flex;align-items:center;justify-content:center;color:var(--text2);font-size:18px;transition:all .15s;cursor:pointer}
-.lb-btn:hover{border-color:var(--gold);color:var(--gold)}
-.lb-counter{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--text3);letter-spacing:2px;min-width:60px;text-align:center}
-.lb-close{position:absolute;top:20px;right:20px;width:36px;height:36px;border:1px solid var(--line2);border-radius:var(--r);display:flex;align-items:center;justify-content:center;color:var(--text2);font-size:18px;transition:all .15s;cursor:pointer}
-.lb-close:hover{border-color:var(--text);color:var(--text)}
-
-/* FOOTER */
-.footer{border-top:1px solid var(--line);background:var(--bg2);padding:32px 40px}
-.footer-inner{max-width:1280px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px}
+/* === FOOTER === */
+.footer{border-top:1px solid var(--line);background:var(--bg2);padding:28px 40px}
+.footer-inner{max-width:1400px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px}
 .footer-logo{font-family:'Rajdhani',sans-serif;font-size:15px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--gold)}
 .footer-logo span{color:var(--text3);font-weight:500}
 .footer-copy{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:1.5px;color:var(--text4);text-transform:uppercase}
 
-/* RESPONSIVE */
+/* === RESPONSIVE === */
+@media(max-width:900px){
+  .cart-sidebar{display:none}
+  .cart-sidebar.mobile-open{display:flex;position:fixed;inset:0;width:100%;z-index:350;top:58px;height:calc(100vh - 58px)}
+}
 @media(max-width:768px){
   .nav{padding:0 20px}
   .nav-links{display:none}
-  .shop-hero{padding:32px 20px 24px;flex-direction:column}
+  .shop-hero{padding:70px 20px 28px;flex-direction:column}
   .vip-promo{max-width:100%}
-  .shop-filters{padding:12px 20px}
-  .shop-main{padding:20px 20px 60px}
-  #savingsBanner{padding:12px 20px}
-  .footer{padding:24px 20px}
+  .shop-filters{padding:10px 20px}
+  .products-col{padding:20px 20px 60px}
+  #savingsBanner{padding:10px 20px}
+  .footer{padding:20px}
 }
 @media(max-width:480px){
   .shop-grid{grid-template-columns:repeat(2,1fr);gap:10px}
-  .card-body{padding:10px 12px}
+  .card-body{padding:8px 10px}
 }
 </style>
 </head>
@@ -184,6 +258,7 @@ button{cursor:pointer;font-family:inherit;border:none;background:none;color:inhe
 <div class="lb-overlay" id="lbOverlay">
   <button class="lb-close" onclick="chiudiLb()">&#x2715;</button>
   <img class="lb-img" id="lbImg" src="" alt="">
+  <div class="lb-name" id="lbName"></div>
   <div class="lb-nav">
     <button class="lb-btn" onclick="lbNav(-1)">&#8592;</button>
     <div class="lb-counter" id="lbCounter">1 / 1</div>
@@ -191,10 +266,79 @@ button{cursor:pointer;font-family:inherit;border:none;background:none;color:inhe
   </div>
 </div>
 
+<!-- MODAL BONIFICO -->
+<div class="modal-overlay" id="modalBonifico">
+  <div class="modal">
+    <div class="modal-hdr">
+      <span class="modal-title">Pagamento via Bonifico</span>
+      <button class="modal-close" onclick="chiudiModal('modalBonifico')">&#x2715;</button>
+    </div>
+    <div class="modal-body">
+      <p>Effettua un bonifico bancario con i seguenti dati. L'ordine verra confermato entro 24-48 ore dalla ricezione del pagamento.</p>
+      <div class="modal-info-box">
+        <div class="ib-row"><span class="ib-lbl">Intestatario</span><span class="ib-val">DNI Collectibles</span></div>
+        <div class="ib-row"><span class="ib-lbl">IBAN</span><span class="ib-val copy" onclick="copia('IT00X0000000000000000000000','IBAN copiato!')">IT00 X000 0000 0000 0000 0000 000</span></div>
+        <div class="ib-row"><span class="ib-lbl">BIC/SWIFT</span><span class="ib-val">XXXXXXXX</span></div>
+        <div class="ib-row" id="bonif-causale-row"><span class="ib-lbl">Causale</span><span class="ib-val copy" id="bonif-causale" onclick="copiaEl('bonif-causale','Causale copiata!')">---</span></div>
+        <div class="ib-row"><span class="ib-lbl">Importo</span><span class="ib-val" id="bonif-importo" style="color:var(--neon);font-size:18px">€0,00</span></div>
+      </div>
+      <p style="font-size:12px;color:var(--text3)">Clicca su IBAN o Causale per copiarli. Inserisci la causale esatta per permetterci di identificare il tuo pagamento.</p>
+      <div class="form-field">
+        <label>La tua email (per conferma)</label>
+        <input type="email" id="bonif-email" placeholder="tuaemail@esempio.com">
+      </div>
+      <button class="btn-modal-ok" onclick="confermaBonifico()">Ho effettuato il bonifico &#10003;</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL CREDITI -->
+<div class="modal-overlay" id="modalCrediti">
+  <div class="modal">
+    <div class="modal-hdr">
+      <span class="modal-title">Paga con Crediti DNI</span>
+      <button class="modal-close" onclick="chiudiModal('modalCrediti')">&#x2715;</button>
+    </div>
+    <div class="modal-body">
+      <p>I crediti DNI sono disponibili per i soci del Builders Club. Accedi al tuo portale per utilizzarli.</p>
+      <div class="modal-info-box">
+        <div class="ib-row"><span class="ib-lbl">Totale ordine</span><span class="ib-val" id="cred-importo" style="color:var(--neon);font-size:18px">€0,00</span></div>
+      </div>
+      <div class="form-field">
+        <label>Il tuo ID socio</label>
+        <input type="text" id="cred-id" placeholder="es. NatCosca">
+      </div>
+      <div class="form-field">
+        <label>PIN</label>
+        <input type="password" id="cred-pin" placeholder="8 caratteri">
+      </div>
+      <button class="btn-modal-ok" onclick="confermaCrediti()">Paga con i miei crediti &#10003;</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL SUCCESSO -->
+<div class="modal-overlay" id="modalSuccess">
+  <div class="modal">
+    <div class="modal-hdr">
+      <span class="modal-title">Ordine ricevuto</span>
+      <button class="modal-close" onclick="chiudiModal('modalSuccess');svuotaCarrello()">&#x2715;</button>
+    </div>
+    <div class="modal-body">
+      <div class="modal-success">
+        <div class="modal-success-icon">&#10003;</div>
+        <div class="modal-success-title">Ordine confermato!</div>
+        <p class="modal-success-sub" id="success-msg">Il tuo ordine e stato ricevuto. Ti contatteremo presto per i dettagli di spedizione.</p>
+      </div>
+      <button class="btn-modal-ok" onclick="chiudiModal('modalSuccess');svuotaCarrello()">Torna allo shop</button>
+    </div>
+  </div>
+</div>
+
 <!-- NAV -->
 <nav class="nav">
   <a href="index.html" class="nav-logo">
-    <div class="nav-logo-dot"></div>
+    <div class="nav-dot"></div>
     DNI <span>Builders</span>
   </a>
   <ul class="nav-links">
@@ -204,7 +348,11 @@ button{cursor:pointer;font-family:inherit;border:none;background:none;color:inhe
   </ul>
   <div class="nav-actions">
     <button class="btn-theme" id="btn-theme" onclick="toggleTheme()">&#9728;</button>
-    <a href="vip.html" class="btn-vip">Diventa socio &#10022;</a>
+    <button class="btn-cart" onclick="toggleCart()">
+      <span>Carrello</span>
+      <span class="cart-badge" id="cartBadge" style="display:none">0</span>
+    </button>
+    <a href="vip.html" class="btn-vip">VIP Club &#10022;</a>
   </div>
 </nav>
 
@@ -212,47 +360,89 @@ button{cursor:pointer;font-family:inherit;border:none;background:none;color:inhe
 <div id="globalBanner"></div>
 
 <!-- HERO -->
-<div class="shop-hero" id="shopHero">
-  <div class="shop-hero-left">
-    <span class="shop-hero-label">&#9672; Catalogo</span>
-    <h1 class="shop-hero-title">Shop<br>DNI Builders</h1>
-    <p class="shop-hero-sub">Acquista i nostri model kit al prezzo pubblico. Seleziona piu prodotti per vedere quanto risparmieresti con l'abbonamento VIP.</p>
+<div class="shop-hero">
+  <div>
+    <span class="hero-label">&#9672; Catalogo</span>
+    <h1 class="hero-title">Shop<br>DNI Builders</h1>
+    <p class="hero-sub">Acquista al prezzo pubblico o scopri quanto risparmieresti come socio VIP.</p>
   </div>
   <div class="vip-promo">
     <div class="vip-promo-title">&#9670; Risparmia con il VIP Club</div>
-    <p class="vip-promo-text">I soci pagano prezzi esclusivi su tutti i kit. Seleziona i prodotti qui sotto per vedere il risparmio totale che avresti con un abbonamento.</p>
+    <p class="vip-promo-text">I soci pagano prezzi esclusivi. Aggiungi prodotti al carrello per vedere il risparmio totale.</p>
     <a href="vip.html" class="vip-promo-btn">Scopri il club &#8594;</a>
   </div>
 </div>
 
 <!-- FILTRI -->
-<div class="shop-filters" id="shopFilters">
-  <button class="flt active" data-filter="tutti" onclick="setFilter('tutti',this)">Tutti</button>
+<div class="shop-filters">
+  <button class="flt active" onclick="setFilter('tutti',this)">Tutti</button>
   <div class="flt-sep"></div>
-  <button class="flt scout-flt"   data-filter="scout"   onclick="setFilter('scout',this)">Scout</button>
-  <button class="flt veteran-flt" data-filter="veteran" onclick="setFilter('veteran',this)">Veteran</button>
-  <button class="flt elite-flt"   data-filter="elite"   onclick="setFilter('elite',this)">Elite</button>
-  <div class="flt-sep"></div>
-  <button class="flt" data-filter="model kit"    onclick="setFilter('model kit',this)">Model Kit</button>
-  <button class="flt" data-filter="action figure" onclick="setFilter('action figure',this)">Action Figure</button>
-  <button class="flt" data-filter="statue"       onclick="setFilter('statue',this)">Statue</button>
+  <button class="flt" onclick="setFilter('model kit',this)">Model Kit</button>
+  <button class="flt" onclick="setFilter('action figure',this)">Action Figure</button>
+  <button class="flt" onclick="setFilter('statue',this)">Statue</button>
+  <button class="flt" onclick="setFilter('accessori',this)">Accessori</button>
+  <span class="filter-count" id="filterCount"></span>
 </div>
 
 <!-- BANNER RISPARMIO -->
 <div id="savingsBanner">
-  <div class="savings-txt">
-    Selezionati <strong id="savCount">0</strong> prodotti &mdash;
-    Prezzo shop: <strong id="savShop">€0</strong> &mdash;
-    Prezzo VIP: <strong id="savVip">€0</strong> &mdash;
-    Risparmio: <strong id="savDelta" style="color:var(--neon)">€0</strong>
+  <div class="sav-txt">
+    <span><strong id="savCount">0</strong> prodotti</span>
+    <span>Totale shop: <strong id="savShop">&#8364;0</strong></span>
+    <span>Prezzo VIP: <strong id="savVip">&#8364;0</strong></span>
+    <span>Risparmio: <strong id="savDelta">&#8364;0</strong></span>
   </div>
-  <a href="vip.html" class="savings-cta">&#9670; Voglio il VIP Club</a>
+  <a href="vip.html" class="sav-cta">&#9670; Voglio il VIP Club</a>
 </div>
 
-<!-- GRID -->
+<!-- MAIN -->
 <div class="shop-main">
-  <div id="shopGrid">
-    <div class="loader-row"><div class="loader-spin"></div><span>Caricamento prodotti</span></div>
+  <!-- Prodotti -->
+  <div class="products-col">
+    <div id="shopGrid">
+      <div class="loader-row"><div class="loader-spin"></div><span>Caricamento</span></div>
+    </div>
+  </div>
+
+  <!-- Carrello sidebar -->
+  <div class="cart-sidebar hidden" id="cartSidebar">
+    <div class="cart-hdr">
+      <span class="cart-hdr-title">Carrello</span>
+      <button class="cart-close" onclick="toggleCart()">&#x2715;</button>
+    </div>
+    <div class="cart-items" id="cartItems">
+      <div class="cart-empty">
+        <div class="cart-empty-icon">&#9634;</div>
+        <div class="cart-empty-txt">Carrello vuoto</div>
+      </div>
+    </div>
+    <div class="cart-totals" id="cartTotals" style="display:none">
+      <div class="cart-tot-row">
+        <span class="cart-tot-lbl">Totale shop</span>
+        <span class="cart-tot-val cart-tot-main" id="cartTotShop">&#8364;0</span>
+      </div>
+      <div class="cart-tot-row">
+        <span class="cart-tot-lbl">Prezzo VIP</span>
+        <span class="cart-tot-val" style="color:var(--neon);font-size:14px" id="cartTotVip">&#8364;0</span>
+      </div>
+      <div class="cart-tot-row">
+        <span class="cart-tot-lbl">Risparmio socio</span>
+        <span class="cart-tot-val cart-tot-save" id="cartTotSave">&#8364;0</span>
+      </div>
+    </div>
+    <div class="cart-checkout" id="cartCheckout" style="display:none">
+      <div class="checkout-title">Scegli come pagare</div>
+      <button class="btn-checkout btn-paypal" onclick="apriPaypal()">
+        <span>PayPal</span>
+      </button>
+      <button class="btn-checkout btn-bonifico" onclick="apriBonifico()">
+        <span>Bonifico Bancario</span>
+      </button>
+      <button class="btn-checkout btn-crediti" onclick="apriCrediti()">
+        <span>&#9670; Crediti DNI</span>
+      </button>
+      <p class="checkout-note">Pagamento sicuro. L'ordine viene confermato dopo la verifica del pagamento.</p>
+    </div>
   </div>
 </div>
 
@@ -269,16 +459,22 @@ button{cursor:pointer;font-family:inherit;border:none;background:none;color:inhe
 // CONFIG
 // ================================================================
 const API_URL = 'https://script.google.com/macros/s/AKfycbxUSd4HYhgyHKShRALTutGsB15nZ0utOTA2-0iCwfIOrmFeujl3lr-rmbNIJg2kNlXE/exec';
+// Dati bonifico -- aggiorna con i tuoi dati reali
+const IBAN        = 'IT00X0000000000000000000000';
+const BIC         = 'XXXXXXXX';
+const INTESTATARIO = 'DNI Collectibles';
+// Email/WhatsApp contatto
+const CONTATTO_EMAIL = 'dni.infoshop@gmail.com';
 
 // ================================================================
 // STATO
 // ================================================================
-let allProducts = [];
-let selected = new Set(); // id prodotti selezionati
+let allProducts = [];      // tutti i prodotti caricati
 let filtroAttivo = 'tutti';
+let carrello = {};         // { id: {prodotto, qta} }
 
 // Lightbox
-let lbImgs = [], lbIdx = 0;
+let lbImgs = [], lbIdx = 0, lbNome = '';
 
 // ================================================================
 // TEMA
@@ -286,11 +482,9 @@ let lbImgs = [], lbIdx = 0;
 (function(){
   const t = localStorage.getItem('dni_theme') || 'dark';
   document.documentElement.setAttribute('data-theme', t);
-  const btn = document.getElementById('btn-theme');
-  if(btn) btn.innerHTML = t === 'dark' ? '&#9728;' : '&#9790;';
+  document.getElementById('btn-theme').innerHTML = t === 'dark' ? '&#9728;' : '&#9790;';
 })();
-
-function toggleTheme() {
+function toggleTheme(){
   const cur = document.documentElement.getAttribute('data-theme') || 'dark';
   const next = cur === 'dark' ? 'light' : 'dark';
   document.documentElement.setAttribute('data-theme', next);
@@ -299,19 +493,15 @@ function toggleTheme() {
 }
 
 // ================================================================
-// LOAD
+// CARICAMENTO
 // ================================================================
 async function loadShop() {
   try {
-    // Carica prodotti e banner in parallelo
     const [prodRes, homeRes] = await Promise.all([
-      fetch(`${API_URL}?action=catalogo_shop`, { redirect: 'follow' }).then(r => r.json()),
-      fetch(`${API_URL}?action=home_pubblica`, { redirect: 'follow' }).then(r => r.json()).catch(() => ({})),
+      fetch(`${API_URL}?action=catalogo_shop`, {redirect:'follow'}).then(r=>r.json()),
+      fetch(`${API_URL}?action=home_pubblica`, {redirect:'follow'}).then(r=>r.json()).catch(()=>({})),
     ]);
-
-    // Banner
-    if(homeRes.banner) renderBanner(homeRes.banner);
-
+    if(homeRes && homeRes.banner) renderBanner(homeRes.banner);
     if(!prodRes.ok) throw new Error(prodRes.error || 'Errore API');
     allProducts = prodRes.prodotti || [];
     renderGrid();
@@ -325,14 +515,11 @@ async function loadShop() {
 // BANNER
 // ================================================================
 function renderBanner(b) {
-  const el = document.getElementById('globalBanner');
   if(!b || !b.testo) return;
+  const el = document.getElementById('globalBanner');
   el.className = b.colore || 'info';
   el.textContent = b.testo;
   el.style.display = 'block';
-  // Aggiusta margin hero
-  document.getElementById('shopHero').style.marginTop = '0';
-  document.getElementById('shopFilters').style.top = '58px';
 }
 
 // ================================================================
@@ -341,211 +528,310 @@ function renderBanner(b) {
 function setFilter(val, btn) {
   filtroAttivo = val;
   document.querySelectorAll('.flt').forEach(b => b.classList.remove('active'));
-  btn.classList.add('active');
+  if(btn) btn.classList.add('active');
   renderGrid();
 }
-
 function prodottiFiltrati() {
   if(filtroAttivo === 'tutti') return allProducts;
-  return allProducts.filter(p => {
-    const tier = (p.tier || '').toLowerCase();
-    const cat  = (p.categoria || '').toLowerCase();
-    if(['scout','veteran','elite'].includes(filtroAttivo)) return tier === filtroAttivo;
-    return cat === filtroAttivo;
-  });
+  return allProducts.filter(p =>
+    (p.categoria || '').toLowerCase() === filtroAttivo
+  );
 }
 
 // ================================================================
-// RENDER GRID
+// RENDER GRIGLIA
 // ================================================================
-function fmt(n) {
-  return Number(n || 0).toFixed(2).replace('.', ',');
-}
+function fmt(n){ return Number(n||0).toFixed(2).replace('.',','); }
 
 function renderGrid() {
   const grid = document.getElementById('shopGrid');
   const prods = prodottiFiltrati();
+  document.getElementById('filterCount').textContent = prods.length + ' prodotti';
 
-  if(!prods.length) {
+  if(!prods.length){
     grid.innerHTML = '<div class="empty-msg">Nessun prodotto disponibile.</div>';
     return;
   }
-
   grid.className = 'shop-grid';
-  grid.innerHTML = prods.map(p => {
-    const tier = (p.tier || '').toLowerCase();
-    const isSel = selected.has(String(p.id));
-    const isSoldOut = p.esaurito;
-    const isTbd = p.isTbd || (!p.prezzo_shop && !p.prezzo_vip);
-
-    // Immagine
-    const imgSrc = (p.imgs && p.imgs.length)
-      ? `img_catalogo/${p.imgBase}/${p.imgs[0]}`
-      : null;
-    const imgEl = imgSrc
-      ? `<img class="card-img" src="${esc(imgSrc)}" alt="${esc(p.nome)}" loading="lazy"
-           onclick="apriLb(${JSON.stringify(p.imgs || [])}, '${esc(p.imgBase || '')}')"
-           onerror="this.parentElement.innerHTML='<div class=card-img-ph>&#9634;</div>'">`
-      : `<div class="card-img-ph">&#9634;</div>`;
-
-    // Prezzi
-    let priceBlock = '';
-    if(isTbd) {
-      priceBlock = `
-        <div class="card-prices">
-          <div class="price-row">
-            <span class="price-lbl">Prezzo</span>
-            <span class="price-val tbd">TBD</span>
-          </div>
-        </div>`;
-    } else {
-      const shopPrice = p.prezzo_shop || 0;
-      const vipPrice  = p.prezzo_vip  || 0;
-      const saving    = shopPrice - vipPrice;
-      const savingPct = shopPrice > 0 ? Math.round((saving / shopPrice) * 100) : 0;
-      priceBlock = `
-        <div class="card-prices">
-          <div class="price-row">
-            <span class="price-lbl">Prezzo shop</span>
-            <span class="price-val shop-price">&#8364;${fmt(shopPrice)}</span>
-          </div>
-          ${vipPrice > 0 ? `
-          <div class="price-divider"></div>
-          <div class="price-row">
-            <span class="price-lbl">Prezzo VIP</span>
-            <span class="price-val vip-price">&#8364;${fmt(vipPrice)}</span>
-          </div>
-          ${saving > 0 ? `
-          <div class="price-divider"></div>
-          <div class="saving-row">
-            <span class="saving-lbl">Risparmio socio</span>
-            <span class="saving-val">-&#8364;${fmt(saving)} (${savingPct}%)</span>
-          </div>` : ''}` : ''}
-        </div>`;
-    }
-
-    // Sold out overlay
-    const soldOverlay = isSoldOut
-      ? `<div class="sold-out-overlay"><div class="sold-out-tag">Sold Out</div></div>`
-      : '';
-
-    // Selezione (solo se non TBD e non sold out)
-    const selectEl = (!isTbd && !isSoldOut) ? `
-      <label class="card-select" onclick="toggleSel('${p.id}')">
-        <input type="checkbox" ${isSel ? 'checked' : ''}>
-        <div class="card-check">${isSel ? '&#10003;' : ''}</div>
-        <span class="card-select-lbl">${isSel ? 'Selezionato' : 'Calcola risparmio'}</span>
-      </label>` : '';
-
-    // Stock in arrivo badge
-    const arrivoBadge = p.stock_in_arrivo
-      ? `<div style="margin-bottom:6px"><span style="font-family:'JetBrains Mono',monospace;font-size:8px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;padding:2px 7px;border-radius:2px;background:rgba(255,159,64,.1);color:#ff9f40">In arrivo</span></div>`
-      : '';
-
-    return `
-      <div class="shop-card${isSel ? ' selected' : ''}${isSoldOut ? ' sold-out' : ''}" id="card-${p.id}">
-        <div style="position:relative">
-          ${imgEl}
-          ${soldOverlay}
-        </div>
-        <div class="card-body">
-          <span class="card-tier ${tier}">${tier.toUpperCase()}</span>
-          <div class="card-name">${esc(p.nome)}</div>
-          ${arrivoBadge}
-          ${priceBlock}
-          ${selectEl}
-          <a href="vip.html" class="btn-join">&#9670; Voglio il prezzo VIP</a>
-        </div>
-      </div>`;
-  }).join('');
-
+  grid.innerHTML = prods.map(p => cardHTML(p)).join('');
   aggiornaRisparmio();
 }
 
-// ================================================================
-// SELEZIONE & RISPARMIO
-// ================================================================
-function toggleSel(id) {
-  if(selected.has(String(id))) {
-    selected.delete(String(id));
+function cardHTML(p) {
+  const tier = (p.tier||'').toLowerCase();
+  const inCart = !!carrello[String(p.id)];
+  const isSoldOut = p.esaurito;
+  const isTbd = p.isTbd || (!p.prezzo_shop && !p.prezzo_vip);
+
+  // Immagine -- usa data-id per richiamare la mappa imgs
+  const imgSrc = (p.imgs && p.imgs.length)
+    ? `img_catalogo/${esc(p.imgBase)}/${esc(p.imgs[0])}` : null;
+  const hasMulti = p.imgs && p.imgs.length > 1;
+
+  const imgEl = imgSrc
+    ? `<img class="card-img" src="${imgSrc}" alt="${esc(p.nome)}" loading="lazy"
+         onclick="apriLbById('${p.id}')"
+         onerror="this.parentElement.innerHTML='<div class=card-img-ph>&#9634;</div>'">`
+    : `<div class="card-img-ph">&#9634;</div>`;
+
+  // Prezzi
+  let priceBlock;
+  if(isTbd){
+    priceBlock = `<div class="card-prices"><div class="pr"><span class="pr-lbl">Prezzo</span><span class="pr-val tbd">TBD</span></div></div>`;
   } else {
-    selected.add(String(id));
-  }
-  // Aggiorna card visivamente
-  const card = document.getElementById(`card-${id}`);
-  if(card) {
-    const isSel = selected.has(String(id));
-    card.classList.toggle('selected', isSel);
-    const chk  = card.querySelector('.card-check');
-    const lbl  = card.querySelector('.card-select-lbl');
-    if(chk) chk.innerHTML = isSel ? '&#10003;' : '';
-    if(lbl) lbl.textContent = isSel ? 'Selezionato' : 'Calcola risparmio';
-  }
-  aggiornaRisparmio();
-}
-
-function aggiornaRisparmio() {
-  const banner = document.getElementById('savingsBanner');
-  if(selected.size === 0) {
-    banner.style.display = 'none';
-    return;
+    const sp = p.prezzo_shop || 0;
+    const vp = p.prezzo_vip  || 0;
+    const sv = sp - vp;
+    const pct = sp > 0 ? Math.round((sv/sp)*100) : 0;
+    priceBlock = `
+      <div class="card-prices">
+        <div class="pr"><span class="pr-lbl">Prezzo</span><span class="pr-val pub">&#8364;${fmt(sp)}</span></div>
+        ${vp > 0 ? `
+        <div class="pr-div"></div>
+        <div class="pr"><span class="pr-lbl">Prezzo VIP</span><span class="pr-val vip">&#8364;${fmt(vp)}</span></div>
+        ${sv > 0 ? `<div class="pr-div"></div><div class="pr-save"><span class="pr-save-lbl">Risparmio</span><span class="pr-save-val">-&#8364;${fmt(sv)} (${pct}%)</span></div>` : ''}` : ''}
+      </div>`;
   }
 
-  let totShop = 0, totVip = 0;
-  for(const id of selected) {
-    const p = allProducts.find(x => String(x.id) === String(id));
-    if(!p || p.isTbd) continue;
-    totShop += p.prezzo_shop || 0;
-    totVip  += p.prezzo_vip  || 0;
-  }
-  const delta = totShop - totVip;
+  const btnTxt = isSoldOut ? 'Esaurito' :
+                 isTbd     ? 'Prezzo TBD' :
+                 inCart    ? '&#10003; Nel carrello' : 'Aggiungi';
+  const btnClass = inCart ? 'btn-add in-cart' : 'btn-add';
+  const btnDisabled = isSoldOut || isTbd ? 'disabled' : '';
 
-  document.getElementById('savCount').textContent = selected.size;
-  document.getElementById('savShop').textContent  = `&#8364;${fmt(totShop)}`;
-  document.getElementById('savVip').textContent   = `&#8364;${fmt(totVip)}`;
-  document.getElementById('savDelta').textContent = delta > 0 ? `&#8364;${fmt(delta)}` : `&#8364;0`;
-
-  banner.style.display = 'flex';
+  return `
+    <div class="shop-card${inCart?' in-cart':''}${isSoldOut?' sold-out':''}" id="sc-${p.id}">
+      <div class="card-img-wrap">
+        ${imgEl}
+        ${isSoldOut ? `<div class="sold-overlay"><div class="sold-tag">Sold Out</div></div>` : ''}
+        ${p.stock_in_arrivo ? `<div class="arrivo-badge">In arrivo</div>` : ''}
+        ${hasMulti ? `<div class="img-count">+${p.imgs.length-1} foto</div>` : ''}
+      </div>
+      <div class="card-body">
+        <span class="card-tier ${tier}">${tier.toUpperCase()}</span>
+        <div class="card-name">${esc(p.nome)}</div>
+        <div class="card-sku">${esc(p.sku||p.vendor_sku||'')}</div>
+        ${priceBlock}
+        <button class="${btnClass}" ${btnDisabled} onclick="toggleCarrello('${p.id}')">${btnTxt}</button>
+      </div>
+    </div>`;
 }
 
 // ================================================================
-// LIGHTBOX
+// LIGHTBOX -- usa mappa per id (fix virgolette JSON)
 // ================================================================
-function apriLb(imgs, imgBase) {
-  lbImgs = imgs.map(f => `img_catalogo/${imgBase}/${f}`);
-  if(!lbImgs.length) return;
-  lbIdx = 0;
+function apriLbById(id) {
+  const p = allProducts.find(x => String(x.id) === String(id));
+  if(!p || !p.imgs || !p.imgs.length) return;
+  lbImgs = p.imgs.map(f => `img_catalogo/${p.imgBase}/${f}`);
+  lbNome = p.nome || '';
+  lbIdx  = 0;
   lbRender();
   document.getElementById('lbOverlay').classList.add('open');
   document.body.style.overflow = 'hidden';
 }
-
-function lbRender() {
-  document.getElementById('lbImg').src = lbImgs[lbIdx] || '';
+function lbRender(){
+  document.getElementById('lbImg').src      = lbImgs[lbIdx] || '';
   document.getElementById('lbCounter').textContent = `${lbIdx+1} / ${lbImgs.length}`;
+  document.getElementById('lbName').textContent    = lbNome;
 }
-
-function lbNav(dir) {
+function lbNav(dir){
   lbIdx = (lbIdx + dir + lbImgs.length) % lbImgs.length;
   lbRender();
 }
-
-function chiudiLb() {
+function chiudiLb(){
   document.getElementById('lbOverlay').classList.remove('open');
   document.body.style.overflow = '';
 }
-
 document.addEventListener('keydown', e => {
+  if(!document.getElementById('lbOverlay').classList.contains('open')) return;
   if(e.key === 'Escape') chiudiLb();
   if(e.key === 'ArrowLeft')  lbNav(-1);
   if(e.key === 'ArrowRight') lbNav(1);
 });
 
 // ================================================================
+// CARRELLO
+// ================================================================
+function toggleCarrello(id) {
+  const p = allProducts.find(x => String(x.id) === String(id));
+  if(!p) return;
+  if(carrello[id]) {
+    delete carrello[id];
+  } else {
+    carrello[id] = { prodotto: p, qta: 1 };
+  }
+  aggiornaCarrello();
+  // Aggiorna card
+  const card = document.getElementById(`sc-${id}`);
+  if(card) card.outerHTML = cardHTML(p);
+}
+
+function svuotaCarrello(){
+  carrello = {};
+  aggiornaCarrello();
+  renderGrid();
+}
+
+function aggiornaCarrello(){
+  const items = Object.values(carrello);
+  const count = items.length;
+
+  // Badge nav
+  const badge = document.getElementById('cartBadge');
+  badge.textContent = count;
+  badge.style.display = count > 0 ? 'flex' : 'none';
+
+  // Mostra/nascondi sidebar
+  const sidebar = document.getElementById('cartSidebar');
+  if(count > 0 && sidebar.classList.contains('hidden')) {
+    sidebar.classList.remove('hidden');
+  }
+
+  // Render items
+  const itemsEl   = document.getElementById('cartItems');
+  const totalsEl  = document.getElementById('cartTotals');
+  const checkoutEl= document.getElementById('cartCheckout');
+
+  if(!count){
+    itemsEl.innerHTML = `<div class="cart-empty"><div class="cart-empty-icon">&#9634;</div><div class="cart-empty-txt">Carrello vuoto</div></div>`;
+    totalsEl.style.display = 'none';
+    checkoutEl.style.display = 'none';
+    sidebar.classList.add('hidden');
+    return;
+  }
+
+  let totShop = 0, totVip = 0;
+  itemsEl.innerHTML = items.map(({prodotto:p}) => {
+    const sp = p.prezzo_shop || 0;
+    totShop += sp;
+    totVip  += p.prezzo_vip || 0;
+    const imgSrc = (p.imgs && p.imgs.length)
+      ? `img_catalogo/${p.imgBase}/${p.imgs[0]}` : null;
+    return `
+      <div class="cart-item">
+        <div class="cart-item-img">${imgSrc ? `<img src="${imgSrc}" alt="" loading="lazy">` : ''}</div>
+        <div class="cart-item-info">
+          <div class="cart-item-name">${esc(p.nome)}</div>
+          <div class="cart-item-sku">${esc(p.vendor_sku||'')}</div>
+        </div>
+        <div class="cart-item-price">&#8364;${fmt(sp)}</div>
+        <button class="cart-item-remove" onclick="toggleCarrello('${p.id}')">&#x2715;</button>
+      </div>`;
+  }).join('');
+
+  const save = totShop - totVip;
+  totalsEl.style.display  = 'block';
+  checkoutEl.style.display = 'flex';
+  document.getElementById('cartTotShop').innerHTML = `&#8364;${fmt(totShop)}`;
+  document.getElementById('cartTotVip').innerHTML  = `&#8364;${fmt(totVip)}`;
+  document.getElementById('cartTotSave').innerHTML = save > 0 ? `-&#8364;${fmt(save)}` : `&#8364;0`;
+
+  aggiornaRisparmio();
+}
+
+function toggleCart(){
+  const sb = document.getElementById('cartSidebar');
+  sb.classList.toggle('hidden');
+}
+
+// ================================================================
+// BANNER RISPARMIO
+// ================================================================
+function aggiornaRisparmio(){
+  const items = Object.values(carrello);
+  const banner = document.getElementById('savingsBanner');
+  if(!items.length){ banner.style.display='none'; return; }
+  let totShop=0, totVip=0;
+  for(const {prodotto:p} of items){
+    totShop += p.prezzo_shop||0;
+    totVip  += p.prezzo_vip ||0;
+  }
+  const delta = totShop - totVip;
+  document.getElementById('savCount').textContent        = items.length;
+  document.getElementById('savShop').innerHTML           = `&#8364;${fmt(totShop)}`;
+  document.getElementById('savVip').innerHTML            = `&#8364;${fmt(totVip)}`;
+  document.getElementById('savDelta').innerHTML          = delta>0 ? `&#8364;${fmt(delta)}` : `&#8364;0`;
+  banner.style.display = 'flex';
+}
+
+// ================================================================
+// CHECKOUT
+// ================================================================
+function totaleCarrello(){
+  return Object.values(carrello).reduce((s,{prodotto:p})=>s+(p.prezzo_shop||0),0);
+}
+function causaleOrdine(){
+  const ids = Object.values(carrello).map(({prodotto:p})=>p.vendor_sku||p.id).join('+');
+  return `DNI-SHOP-${ids}`.slice(0,60);
+}
+
+function apriPaypal(){
+  const tot = totaleCarrello();
+  if(!tot) return;
+  // Costruisce URL PayPal.me o checkout standard
+  const url = `https://www.paypal.com/paypalme/dnicollectibles/${tot.toFixed(2)}EUR`;
+  window.open(url, '_blank');
+  // Mostra success dopo apertura PayPal
+  document.getElementById('success-msg').textContent =
+    `Completa il pagamento di €${fmt(tot)} su PayPal. Riceverai conferma via email entro 24 ore.`;
+  apriModal('modalSuccess');
+}
+
+function apriBonifico(){
+  const tot = totaleCarrello();
+  document.getElementById('bonif-importo').textContent = `€${fmt(tot)}`;
+  const causale = causaleOrdine();
+  document.getElementById('bonif-causale').textContent = causale;
+  apriModal('modalBonifico');
+}
+
+function confermaBonifico(){
+  const email = document.getElementById('bonif-email').value.trim();
+  chiudiModal('modalBonifico');
+  document.getElementById('success-msg').textContent =
+    `Ordine registrato. Effettua il bonifico con la causale indicata. ${email ? 'Riceverai conferma a ' + email + '.' : 'Contattaci a ' + CONTATTO_EMAIL + ' per conferma.'}`;
+  apriModal('modalSuccess');
+}
+
+function apriCrediti(){
+  document.getElementById('cred-importo').textContent = `€${fmt(totaleCarrello())}`;
+  apriModal('modalCrediti');
+}
+
+function confermaCrediti(){
+  const id  = document.getElementById('cred-id').value.trim();
+  const pin = document.getElementById('cred-pin').value.trim();
+  if(!id || !pin){ alert('Inserisci ID socio e PIN'); return; }
+  chiudiModal('modalCrediti');
+  // TODO: chiamata backend per scalare crediti
+  document.getElementById('success-msg').textContent =
+    `Ordine registrato per il socio ${id}. I crediti verranno scalati dopo verifica. Controlla il portale soci per i dettagli.`;
+  apriModal('modalSuccess');
+}
+
+// ================================================================
+// MODALI
+// ================================================================
+function apriModal(id){ document.getElementById(id).classList.add('open'); }
+function chiudiModal(id){ document.getElementById(id).classList.remove('open'); }
+document.querySelectorAll('.modal-overlay').forEach(m => {
+  m.addEventListener('click', e => { if(e.target === m) chiudiModal(m.id); });
+});
+
+// ================================================================
 // UTILITY
 // ================================================================
-function esc(s) {
-  return String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+function esc(s){
+  return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+function fmt(n){ return Number(n||0).toFixed(2).replace('.',','); }
+function copia(testo, msg){
+  navigator.clipboard.writeText(testo).then(()=>{ alert(msg||'Copiato!'); }).catch(()=>{});
+}
+function copiaEl(elId, msg){
+  const el = document.getElementById(elId);
+  if(el) copia(el.textContent, msg);
 }
 
 // ================================================================
