@@ -93,20 +93,134 @@ input,select,textarea{font-family:inherit}
 .shop-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:14px}
 
 /* === CARD === */
-.shop-card{background:var(--card-bg);border:1px solid var(--line);border-radius:var(--r2);overflow:hidden;transition:transform .2s,border-color .2s,box-shadow .2s;position:relative;display:flex;flex-direction:column}
-.shop-card:hover{transform:translateY(-2px);border-color:var(--line2);box-shadow:var(--sh)}
-.shop-card.in-cart{border-color:var(--neon);box-shadow:0 0 0 1px var(--neon),0 4px 20px rgba(180,255,0,.08)}
+:root{ --cut:18px; }
+.shop-card{
+  background:var(--card-bg);
+  position:relative;display:flex;flex-direction:column;
+  cursor:pointer;
+  clip-path:polygon(
+    var(--cut) 0%, 100% 0%,
+    100% calc(100% - var(--cut)),
+    calc(100% - var(--cut)) 100%,
+    0% 100%, 0% var(--cut)
+  );
+  transition:transform .28s ease, box-shadow .28s ease;
+  overflow:visible;
+}
+/* Bordo sempre visibile via pseudo */
+.shop-card::before{
+  content:'';position:absolute;inset:0;z-index:4;pointer-events:none;
+  clip-path:polygon(
+    var(--cut) 0%, 100% 0%,
+    100% calc(100% - var(--cut)),
+    calc(100% - var(--cut)) 100%,
+    0% 100%, 0% var(--cut)
+  );
+  border:1px solid var(--line2);
+  transition:border-color .25s;
+}
+.shop-card:hover::before{ border-color:rgba(180,255,0,.45); }
+.shop-card.in-cart::before{ border-color:rgba(180,255,0,.7); }
+
+/* Linee diagonali angoli tagliati */
+.shop-card .cut-tl,.shop-card .cut-br{
+  position:absolute;z-index:5;pointer-events:none;
+  width:calc(var(--cut) * 1.42);height:1px;
+  background:var(--line2);
+  transition:background .25s, box-shadow .25s;
+}
+.shop-card .cut-tl{
+  top:calc(var(--cut) - 0.5px);left:0;
+  transform-origin:left center;
+  transform:rotate(-45deg) translateX(1px);
+}
+.shop-card .cut-br{
+  bottom:calc(var(--cut) - 0.5px);right:0;
+  transform-origin:right center;
+  transform:rotate(-45deg) translateX(-1px);
+}
+.shop-card:hover .cut-tl,.shop-card:hover .cut-br{
+  background:rgba(180,255,0,.45);
+  box-shadow:0 0 5px rgba(180,255,0,.35);
+}
+.shop-card.in-cart .cut-tl,.shop-card.in-cart .cut-br{
+  background:rgba(180,255,0,.7);
+  box-shadow:0 0 7px rgba(180,255,0,.5);
+}
+
+/* Hover zoom + glow */
+.shop-card:hover{
+  transform:translateY(-5px) scale(1.022);
+  box-shadow:0 12px 36px rgba(0,0,0,.55), 0 0 24px rgba(180,255,0,.06);
+}
+.shop-card.in-cart{
+  box-shadow:0 0 20px rgba(180,255,0,.1);
+}
+
+/* Overlay neon hover */
+.shop-card .card-hover-overlay{
+  position:absolute;inset:0;z-index:3;pointer-events:none;
+  background:linear-gradient(180deg,rgba(180,255,0,.055) 0%,transparent 55%);
+  opacity:0;transition:opacity .25s;
+}
+.shop-card:hover .card-hover-overlay{ opacity:1; }
+
+/* Shimmer click -- lucido diagonale alto-sx -> basso-dx */
+.shop-card .card-shimmer{
+  position:absolute;inset:0;z-index:6;pointer-events:none;overflow:hidden;
+  clip-path:polygon(
+    var(--cut) 0%, 100% 0%,
+    100% calc(100% - var(--cut)),
+    calc(100% - var(--cut)) 100%,
+    0% 100%, 0% var(--cut)
+  );
+}
+.shop-card .card-shimmer::after{
+  content:'';position:absolute;
+  top:-100%;left:-100%;
+  width:60%;height:300%;
+  background:linear-gradient(
+    105deg,
+    transparent 0%,
+    rgba(255,255,255,.03) 40%,
+    rgba(180,255,0,.22) 50%,
+    rgba(255,255,255,.03) 60%,
+    transparent 100%
+  );
+  transform:translateX(-100%) translateY(-100%);
+  transition:none;
+}
+.shop-card.shimmer-active .card-shimmer::after{
+  animation:shimmer-run .55s ease forwards;
+}
+@keyframes shimmer-run{
+  0%  { transform:translateX(-100%) translateY(-100%); }
+  100%{ transform:translateX(300%) translateY(200%); }
+}
 
 /* Immagine */
 .card-img-wrap{position:relative;overflow:hidden}
-.card-img{width:100%;aspect-ratio:2/3;object-fit:cover;object-position:center top;background:var(--bg3);display:block;cursor:zoom-in;transition:transform .3s}
-.card-img:hover{transform:scale(1.03)}
+.card-img{width:100%;aspect-ratio:2/3;object-fit:cover;object-position:center top;background:var(--bg3);display:block;cursor:zoom-in;transition:transform .35s ease}
+.shop-card:hover .card-img{transform:scale(1.04)}
 .card-img-ph{width:100%;aspect-ratio:2/3;background:var(--bg3);display:flex;align-items:center;justify-content:center;color:var(--text4);font-size:28px}
 .img-count{position:absolute;bottom:8px;right:8px;background:rgba(0,0,0,.7);color:#fff;font-family:'JetBrains Mono',monospace;font-size:8px;padding:3px 7px;border-radius:3px;letter-spacing:1px}
 
 /* Sold out */
-.sold-overlay{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;pointer-events:none;z-index:2}
-.sold-tag{font-family:'Rajdhani',sans-serif;font-size:16px;font-weight:700;letter-spacing:4px;color:#fff;background:rgba(220,40,40,.88);padding:8px 20px;transform:rotate(-15deg);border-top:2px solid rgba(255,80,80,.9);border-bottom:2px solid rgba(255,80,80,.9)}
+.sold-overlay{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;pointer-events:none;z-index:7;background:rgba(9,9,13,.4)}
+.sold-sign{
+  position:relative;background:#1a0505;
+  border-top:2px solid #cc2222;border-bottom:2px solid #cc2222;
+  padding:9px 0;width:90%;text-align:center;
+  transform:rotate(-8deg);
+  box-shadow:0 4px 16px rgba(0,0,0,.7),inset 0 1px 0 rgba(255,100,100,.08);
+}
+.sold-sign::before,.sold-sign::after{
+  content:'';position:absolute;width:7px;height:7px;border-radius:50%;
+  background:#0d0505;border:1px solid #cc2222;top:50%;transform:translateY(-50%);
+}
+.sold-sign::before{left:10px}.sold-sign::after{right:10px}
+.sold-sign-txt{font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:#ff4444;text-shadow:0 0 8px rgba(255,50,50,.5)}
+.sold-sign-sub{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:2px;color:rgba(255,100,100,.45);margin-top:2px;text-transform:uppercase}
 
 /* Arrivo badge */
 .arrivo-badge{position:absolute;top:8px;left:8px;background:rgba(255,159,64,.9);color:#000;font-family:'JetBrains Mono',monospace;font-size:8px;font-weight:600;padding:3px 7px;border-radius:3px;letter-spacing:1px;text-transform:uppercase}
@@ -377,7 +491,7 @@ input,select,textarea{font-family:inherit}
   <div>
     <span class="hero-label">&#9672; Catalogo</span>
     <h1 class="hero-title">Shop<br>DNI Builders</h1>
-    <p class="hero-sub">Acquista al prezzo pubblico o scopri quanto risparmieresti come socio VIP.</p>
+    <p class="hero-sub">Acquista al prezzo pubblico o scopri quanto risparmieresti come socio VIP.<br><span style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--neon);letter-spacing:1.5px;text-transform:uppercase">&#9672; Catalogo aggiornato ogni mese</span></p>
   </div>
   <div class="vip-promo">
     <div class="vip-promo-title">&#9670; Risparmia con il VIP Club</div>
@@ -578,6 +692,14 @@ function cardHTML(p) {
     ? `img_catalogo/${esc(p.imgBase)}/${esc(p.imgs[0])}` : null;
   const hasMulti = p.imgs && p.imgs.length > 1;
 
+  const soldOverlay = isSoldOut ? `
+    <div class="sold-overlay">
+      <div class="sold-sign">
+        <div class="sold-sign-txt">Sold Out</div>
+        <div class="sold-sign-sub">Non disponibile</div>
+      </div>
+    </div>` : '';
+
   const imgEl = imgSrc
     ? `<img class="card-img" src="${imgSrc}" alt="${esc(p.nome)}" loading="lazy"
          onclick="apriLbById('${p.id}')"
@@ -610,10 +732,15 @@ function cardHTML(p) {
   const btnDisabled = isSoldOut || isTbd ? 'disabled' : '';
 
   return `
-    <div class="shop-card${inCart?' in-cart':''}${isSoldOut?' sold-out':''}" id="sc-${p.id}">
+    <div class="shop-card${inCart?' in-cart':''}${isSoldOut?' sold-out':''}" id="sc-${p.id}"
+         onclick="onCardClick('${p.id}',event)">
+      <div class="cut-tl"></div>
+      <div class="cut-br"></div>
+      <div class="card-hover-overlay"></div>
+      <div class="card-shimmer"></div>
       <div class="card-img-wrap">
         ${imgEl}
-        ${isSoldOut ? `<div class="sold-overlay"><div class="sold-tag">Sold Out</div></div>` : ''}
+        ${soldOverlay}
         ${p.stock_in_arrivo ? `<div class="arrivo-badge">In arrivo</div>` : ''}
         ${hasMulti ? `<div class="img-count">+${p.imgs.length-1} foto</div>` : ''}
       </div>
@@ -663,6 +790,11 @@ document.addEventListener('keydown', e => {
 // ================================================================
 // CARRELLO
 // ================================================================
+function onCardClick(id, e) {
+  // Ignora click su img (gestito da lightbox) e bottoni
+  if(e && (e.target.closest('.card-img') || e.target.closest('button'))) return;
+}
+
 function toggleCarrello(id) {
   const p = allProducts.find(x => String(x.id) === String(id));
   if(!p) return;
@@ -672,9 +804,24 @@ function toggleCarrello(id) {
     carrello[id] = { prodotto: p, qta: 1 };
   }
   aggiornaCarrello();
-  // Aggiorna card
-  const card = document.getElementById(`sc-${id}`);
-  if(card) card.outerHTML = cardHTML(p);
+  // Aggiorna card con shimmer
+  const oldCard = document.getElementById(`sc-${id}`);
+  if(oldCard) {
+    oldCard.outerHTML = cardHTML(p);
+    // Attiva shimmer sulla nuova card
+    const newCard = document.getElementById(`sc-${id}`);
+    if(newCard && !carrello[id] === false) {
+      // Piccolo delay per assicurare che il DOM sia aggiornato
+      requestAnimationFrame(() => {
+        newCard.classList.add('shimmer-active');
+        newCard.addEventListener('animationend', () => {
+          newCard.classList.remove('shimmer-active');
+        }, { once: true });
+        // Fallback rimozione
+        setTimeout(() => newCard.classList.remove('shimmer-active'), 700);
+      });
+    }
+  }
 }
 
 function svuotaCarrello(){
