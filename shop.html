@@ -254,15 +254,16 @@ input,select,textarea{font-family:inherit}
 
 /* === CARRELLO SIDEBAR === */
 .cart-sidebar{
-  position:fixed;right:0;top:58px;bottom:0;
-  width:360px;
+  position:fixed;right:0;top:108px;bottom:0;
+  width:340px;
   border-left:1px solid var(--line);
+  border-top:1px solid var(--line);
   background:var(--bg2);
   display:flex;flex-direction:column;
   overflow:hidden;
   transition:transform .3s cubic-bezier(.4,0,.2,1), opacity .3s;
-  z-index:250;
-  box-shadow:-4px 0 24px rgba(0,0,0,.3);
+  z-index:150;
+  box-shadow:-4px 0 24px rgba(0,0,0,.25);
 }
 .cart-sidebar.hidden{
   transform:translateX(100%);
@@ -334,17 +335,46 @@ input,select,textarea{font-family:inherit}
 .modal-success-title{font-family:'Rajdhani',sans-serif;font-size:22px;font-weight:700;text-transform:uppercase;color:var(--neon);margin-bottom:8px}
 .modal-success-sub{font-size:13px;color:var(--text2);line-height:1.7}
 
+
+/* Paint flash -- effetto lucido carrozzeria al click prezzo */
+.price-flash{
+  position:relative;overflow:hidden;cursor:pointer;
+}
+.price-flash::after{
+  content:'';position:absolute;
+  top:0;left:-120%;width:60%;height:100%;
+  background:linear-gradient(
+    105deg,
+    transparent 0%,
+    rgba(255,255,255,.04) 30%,
+    rgba(180,255,0,.35) 48%,
+    rgba(255,255,255,.5) 52%,
+    rgba(180,255,0,.35) 56%,
+    rgba(255,255,255,.04) 70%,
+    transparent 100%
+  );
+  transform:skewX(-15deg);
+  transition:none;pointer-events:none;
+}
+.price-flash.flash-active::after{
+  animation:paint-flash .6s ease forwards;
+}
+@keyframes paint-flash{
+  0%  {left:-120%}
+  100%{left:130%}
+}
 /* === LIGHTBOX === */
-.lb-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.92);z-index:500;align-items:center;justify-content:center;flex-direction:column;gap:14px}
+.lb-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.93);z-index:500;align-items:center;justify-content:center;flex-direction:column;gap:14px}
 .lb-overlay.open{display:flex}
-.lb-img{max-height:80vh;max-width:88vw;object-fit:contain;border-radius:var(--r)}
+.lb-topbar{position:absolute;top:0;left:0;right:0;height:52px;display:flex;align-items:center;justify-content:space-between;padding:0 20px;background:rgba(0,0,0,.5);backdrop-filter:blur(8px);border-bottom:1px solid rgba(255,255,255,.08)}
+.lb-topbar-name{font-family:'Rajdhani',sans-serif;font-size:14px;font-weight:600;color:rgba(255,255,255,.7);letter-spacing:1px;text-transform:uppercase;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:70%}
+.lb-close-btn{height:32px;padding:0 14px;border:1px solid rgba(255,255,255,.2);border-radius:4px;background:transparent;color:rgba(255,255,255,.6);font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:600;letter-spacing:2px;text-transform:uppercase;cursor:pointer;transition:all .15s;display:flex;align-items:center;gap:6px}
+.lb-close-btn:hover{border-color:#fff;color:#fff;background:rgba(255,255,255,.08)}
+.lb-img{max-height:78vh;max-width:88vw;object-fit:contain;border-radius:var(--r);margin-top:8px}
 .lb-nav{display:flex;align-items:center;gap:16px}
 .lb-btn{width:40px;height:40px;border:1px solid rgba(255,255,255,.2);border-radius:var(--r);display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,.7);font-size:18px;transition:all .15s;cursor:pointer}
 .lb-btn:hover{border-color:#fff;color:#fff}
 .lb-counter{font-family:'JetBrains Mono',monospace;font-size:11px;color:rgba(255,255,255,.5);letter-spacing:2px;min-width:60px;text-align:center}
-.lb-close{position:absolute;top:16px;right:16px;width:36px;height:36px;border:1px solid rgba(255,255,255,.2);border-radius:var(--r);display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,.7);cursor:pointer;transition:all .15s}
-.lb-close:hover{border-color:#fff;color:#fff}
-.lb-name{font-family:'Rajdhani',sans-serif;font-size:14px;color:rgba(255,255,255,.6);letter-spacing:1px;text-transform:uppercase;max-width:600px;text-align:center}
 
 /* === UTILITY === */
 .loader-row{display:flex;align-items:center;justify-content:center;gap:10px;padding:80px 24px;color:var(--text3);font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:2px;text-transform:uppercase}
@@ -383,9 +413,11 @@ input,select,textarea{font-family:inherit}
 
 <!-- LIGHTBOX -->
 <div class="lb-overlay" id="lbOverlay">
-  <button class="lb-close" onclick="chiudiLb()">&#x2715;</button>
+  <div class="lb-topbar">
+    <span class="lb-topbar-name" id="lbName"></span>
+    <button class="lb-close-btn" onclick="chiudiLb()">&#x2715; Chiudi</button>
+  </div>
   <img class="lb-img" id="lbImg" src="" alt="">
-  <div class="lb-name" id="lbName"></div>
   <div class="lb-nav">
     <button class="lb-btn" onclick="lbNav(-1)">&#8592;</button>
     <div class="lb-counter" id="lbCounter">1 / 1</div>
@@ -720,7 +752,7 @@ function cardHTML(p) {
         <div class="pr"><span class="pr-lbl">Prezzo</span><span class="pr-val pub">&#8364;${fmt(sp)}</span></div>
         ${vp > 0 ? `
         <div class="pr-div"></div>
-        <div class="pr"><span class="pr-lbl">Prezzo VIP</span><span class="pr-val vip">&#8364;${fmt(vp)}</span></div>
+        <div class="pr"><span class="pr-lbl">Prezzo VIP</span><span class="pr-val vip price-flash" onclick="triggerPaintFlash(this,event)">&#8364;${fmt(vp)}</span></div>
         ${sv > 0 ? `<div class="pr-div"></div><div class="pr-save"><span class="pr-save-lbl">Risparmio</span><span class="pr-save-val">-&#8364;${fmt(sv)} (${pct}%)</span></div>` : ''}` : ''}
       </div>`;
   }
@@ -757,6 +789,15 @@ function cardHTML(p) {
 // ================================================================
 // LIGHTBOX -- usa mappa per id (fix virgolette JSON)
 // ================================================================
+function triggerPaintFlash(el, e) {
+  if(e) e.stopPropagation();
+  el.classList.remove('flash-active');
+  void el.offsetWidth; // force reflow
+  el.classList.add('flash-active');
+  el.addEventListener('animationend', () => el.classList.remove('flash-active'), {once:true});
+  setTimeout(() => el.classList.remove('flash-active'), 800);
+}
+
 function apriLbById(id) {
   const p = allProducts.find(x => String(x.id) === String(id));
   if(!p || !p.imgs || !p.imgs.length) return;
