@@ -1846,7 +1846,7 @@ function renderCatalogo(){
       const garInBtn = ottCard&&ottCard.isSp&&ottCard.garanzia>0
         ? `<span class="prod-btn-gar">+ Gar. stock €${ottCard.garanzia}</span>` : '';
       // Estrae vendor_sku dal SKU DNI: "DNI-VENDOR_SKU" -> "VENDOR_SKU"
-      const vendorSku = prod.sku ? prod.sku.replace(/^DNI-/, '') : '';
+      const vendorSku = prod.imgBase || (prod.sku ? prod.sku.replace(/^DNI-/, '') : '');
       // Legge immagini: prima da imgs[] (array già pronto dal backend), poi da img (stringa), poi da imgFile legacy
       const imgList = Array.isArray(prod.imgs) && prod.imgs.length
         ? prod.imgs
@@ -1961,7 +1961,7 @@ function renderSidebar(){
     const div=document.createElement('div');
     div.className=`sel-item ${t==='deposito'?'dep':'fp'}`;
     // Estrae vendor_sku dal SKU per il percorso immagine
-    const vendorSku = p.sku ? p.sku.replace(/^DNI-/, '') : '';
+    const vendorSku = p.imgBase || (p.sku ? p.sku.replace(/^DNI-/, '') : '');
     // Legge prima immagine: prima da imgs[] (array già pronto dal backend), poi da img, poi da imgFile legacy
     const imgList = Array.isArray(p.imgs) && p.imgs.length
       ? p.imgs
@@ -2204,7 +2204,7 @@ function renderOrdini(){
   const imgMap = {};
   for(const c of S.catalogo){
     // Estrae vendor_sku dal SKU DNI per il percorso immagine
-    const vendorSku = c.sku ? c.sku.replace(/^DNI-/, '') : '';
+    const vendorSku = c.imgBase || (c.sku ? c.sku.replace(/^DNI-/, '') : '');
     const basePath = vendorSku ? `img_catalogo/${vendorSku}/` : 'img_catalogo/';
     // Legge immagini: prima da imgs[] (array già pronto dal backend), poi da img, poi da imgFile legacy
     const imgList = Array.isArray(c.imgs) && c.imgs.length
@@ -2547,7 +2547,7 @@ function apriLightbox(prodId) {
   const prod = S.catalogo.find(p => String(p.id) === String(prodId));
   if (!prod) return;
   // Estrae vendor_sku dal SKU per il percorso immagine
-  const vendorSku = prod.sku ? prod.sku.replace(/^DNI-/, '') : '';
+  const vendorSku = prod.imgBase || (prod.sku ? prod.sku.replace(/^DNI-/, '') : '');
   const basePath = vendorSku ? `img_catalogo/${vendorSku}/` : 'img_catalogo/';
   // Legge immagini: prima da imgs[] (array già pronto dal backend), poi da img, poi da imgFile legacy
   const imgList = Array.isArray(prod.imgs) && prod.imgs.length
