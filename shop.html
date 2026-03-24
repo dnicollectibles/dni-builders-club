@@ -86,10 +86,10 @@ input,select,textarea{font-family:inherit}
 .sav-cta{height:32px;padding:0 16px;background:var(--neon);color:#000;border-radius:var(--r);font-family:'Rajdhani',sans-serif;font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;flex-shrink:0;display:flex;align-items:center}
 
 /* === LAYOUT MAIN === */
-.shop-main{display:flex;gap:0;min-height:60vh;max-width:1400px;margin:0 auto}
+.shop-main{min-height:60vh;max-width:1400px;margin:0 auto;position:relative}
 
 /* === GRID === */
-.products-col{flex:1;padding:28px 40px 80px;min-width:0}
+.products-col{padding:28px 40px 80px}
 .shop-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:14px}
 
 /* === CARD === */
@@ -139,8 +139,22 @@ input,select,textarea{font-family:inherit}
 .btn-add.in-cart:hover{background:var(--red-d);color:var(--red);border-color:rgba(255,90,90,.3)}
 
 /* === CARRELLO SIDEBAR === */
-.cart-sidebar{width:360px;flex-shrink:0;border-left:1px solid var(--line);background:var(--bg2);display:flex;flex-direction:column;position:sticky;top:58px;height:calc(100vh - 58px);overflow:hidden;transition:width .25s}
-.cart-sidebar.hidden{width:0;border-left:none;overflow:hidden}
+.cart-sidebar{
+  position:fixed;right:0;top:58px;bottom:0;
+  width:360px;
+  border-left:1px solid var(--line);
+  background:var(--bg2);
+  display:flex;flex-direction:column;
+  overflow:hidden;
+  transition:transform .3s cubic-bezier(.4,0,.2,1), opacity .3s;
+  z-index:250;
+  box-shadow:-4px 0 24px rgba(0,0,0,.3);
+}
+.cart-sidebar.hidden{
+  transform:translateX(100%);
+  opacity:0;
+  pointer-events:none;
+}
 .cart-hdr{padding:16px 20px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
 .cart-hdr-title{font-family:'Rajdhani',sans-serif;font-size:16px;font-weight:700;text-transform:uppercase;letter-spacing:1px}
 .cart-close{width:28px;height:28px;border:1px solid var(--line2);border-radius:var(--r);display:flex;align-items:center;justify-content:center;color:var(--text3);font-size:14px;transition:all .15s}
@@ -232,9 +246,8 @@ input,select,textarea{font-family:inherit}
 .footer-copy{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:1.5px;color:var(--text4);text-transform:uppercase}
 
 /* === RESPONSIVE === */
-@media(max-width:900px){
-  .cart-sidebar{display:none}
-  .cart-sidebar.mobile-open{display:flex;position:fixed;inset:0;width:100%;z-index:350;top:58px;height:calc(100vh - 58px)}
+@media(max-width:768px){
+  .cart-sidebar{width:100%;top:58px;bottom:0}
 }
 @media(max-width:768px){
   .nav{padding:0 20px}
@@ -392,23 +405,23 @@ input,select,textarea{font-family:inherit}
     <span>Prezzo VIP: <strong id="savVip">&#8364;0</strong></span>
     <span>Risparmio: <strong id="savDelta">&#8364;0</strong></span>
   </div>
-  <a href="vip.html" class="sav-cta">&#9670; Voglio il VIP Club</a>
+  <a href="vip.html" class="sav-cta" id="savCtaBtn">&#9670; Risparmia &#8364;0 con il VIP Club</a>
 </div>
 
 <!-- MAIN -->
 <div class="shop-main">
-  <!-- Prodotti -->
-  <div class="products-col">
+  <div class="products-col" id="productsCol">
     <div id="shopGrid">
       <div class="loader-row"><div class="loader-spin"></div><span>Caricamento</span></div>
     </div>
   </div>
+</div>
 
-  <!-- Carrello sidebar -->
-  <div class="cart-sidebar hidden" id="cartSidebar">
+<!-- Carrello sidebar (fixed) -->
+<div class="cart-sidebar hidden" id="cartSidebar">
     <div class="cart-hdr">
       <span class="cart-hdr-title">Carrello</span>
-      <button class="cart-close" onclick="toggleCart()">&#x2715;</button>
+      <button class="cart-close" onclick="toggleCart(true)">&#x2715;</button>
     </div>
     <div class="cart-items" id="cartItems">
       <div class="cart-empty">
@@ -443,9 +456,6 @@ input,select,textarea{font-family:inherit}
       </button>
       <p class="checkout-note">Pagamento sicuro. L'ordine viene confermato dopo la verifica del pagamento.</p>
     </div>
-  </div>
-</div>
-
 <!-- FOOTER -->
 <footer class="footer">
   <div class="footer-inner">
@@ -682,10 +692,10 @@ function aggiornaCarrello(){
   badge.textContent = count;
   badge.style.display = count > 0 ? 'flex' : 'none';
 
-  // Mostra/nascondi sidebar
+  // Apri carrello automaticamente quando si aggiunge un prodotto
   const sidebar = document.getElementById('cartSidebar');
-  if(count > 0 && sidebar.classList.contains('hidden')) {
-    sidebar.classList.remove('hidden');
+  if(count > 0) {
+    sidebar.classList.remove('hidden'); // sempre visibile se ha prodotti
   }
 
   // Render items
@@ -730,9 +740,17 @@ function aggiornaCarrello(){
   aggiornaRisparmio();
 }
 
-function toggleCart(){
+function toggleCart(forceClose){
   const sb = document.getElementById('cartSidebar');
-  sb.classList.toggle('hidden');
+  const items = Object.values(carrello);
+  // Se ci sono prodotti e non forziamo chiusura, apri sempre
+  if(items.length > 0 && !forceClose) {
+    sb.classList.remove('hidden');
+  } else if(forceClose || !items.length) {
+    sb.classList.add('hidden');
+  } else {
+    sb.classList.toggle('hidden');
+  }
 }
 
 // ================================================================
@@ -748,10 +766,17 @@ function aggiornaRisparmio(){
     totVip  += p.prezzo_vip ||0;
   }
   const delta = totShop - totVip;
-  document.getElementById('savCount').textContent        = items.length;
-  document.getElementById('savShop').innerHTML           = `&#8364;${fmt(totShop)}`;
-  document.getElementById('savVip').innerHTML            = `&#8364;${fmt(totVip)}`;
-  document.getElementById('savDelta').innerHTML          = delta>0 ? `&#8364;${fmt(delta)}` : `&#8364;0`;
+  document.getElementById('savCount').textContent = items.length;
+  document.getElementById('savShop').innerHTML    = `&#8364;${fmt(totShop)}`;
+  document.getElementById('savVip').innerHTML     = `&#8364;${fmt(totVip)}`;
+  document.getElementById('savDelta').innerHTML   = delta>0 ? `&#8364;${fmt(delta)}` : `&#8364;0`;
+  // Aggiorna CTA con risparmio reale
+  const ctaBtn = document.getElementById('savCtaBtn');
+  if(ctaBtn) {
+    ctaBtn.innerHTML = delta > 0
+      ? `&#9670; Da socio VIP risparmieresti &#8364;${fmt(delta)} su questo ordine`
+      : `&#9670; Scopri il VIP Club`;
+  }
   banner.style.display = 'flex';
 }
 
