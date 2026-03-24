@@ -1,20 +1,17 @@
 <!DOCTYPE html>
-<!-- saved from url=(0064)https://dnicollectibles.github.io/dni-builders-club/cliente.html -->
-<html lang="it"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-
-<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=5.0, user-scalable=yes">
-<link rel="icon" type="image/png" sizes="32x32" href="https://dnicollectibles.github.io/dni-builders-club/favicon-32.png">
-<link rel="icon" type="image/png" sizes="64x64" href="https://dnicollectibles.github.io/dni-builders-club/favicon.png">
-<link rel="apple-touch-icon" sizes="180x180" href="https://dnicollectibles.github.io/dni-builders-club/apple-touch-icon.png">
-<title>DNI Builders Club -- Portale Soci</title>
-<link href="./cliente.html4_files/css2" rel="stylesheet">
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+<title>DNI Builders Club — Portale Soci</title>
+<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&family=JetBrains+Mono:wght@400;500;600&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,300&display=swap" rel="stylesheet">
 <style>
-/* ===================================================================
+/* ═══════════════════════════════════════════════════════════════════
    RESET & VARIABILI
-=================================================================== */
+═══════════════════════════════════════════════════════════════════ */
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
-  /* Backgrounds -- meno nero puro, più leggibile */
+  /* Backgrounds — meno nero puro, più leggibile */
   --bg:#0b0b0f;--bg2:#111118;--bg3:#16161e;--bg4:#1c1c26;
   /* Bordi più visibili */
   --line:#252530;--line2:#2e2e3a;
@@ -39,15 +36,15 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--f
 button{cursor:pointer;font-family:inherit;border:none;background:none}
 input{font-family:inherit}
 
-/* ===================================================================
+/* ═══════════════════════════════════════════════════════════════════
    SCHERMATE
-=================================================================== */
+═══════════════════════════════════════════════════════════════════ */
 .screen{display:none;min-height:100vh;flex-direction:column}
 .screen.active{display:flex}
 
-/* ===================================================================
+/* ═══════════════════════════════════════════════════════════════════
    LOADING
-=================================================================== */
+═══════════════════════════════════════════════════════════════════ */
 #gLoad{position:fixed;inset:0;background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:20px;z-index:9999;transition:opacity .3s}
 #gLoad.out{opacity:0;pointer-events:none}
 .gl-logo{font-family:var(--f-title);font-size:24px;font-weight:700;text-transform:uppercase;letter-spacing:2px}
@@ -57,9 +54,9 @@ input{font-family:inherit}
 @keyframes bar{0%{width:0;margin-left:0}50%{width:60%;margin-left:20%}100%{width:0;margin-left:100%}}
 .gl-txt{font-family:var(--f-mono);font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--text-mid)}
 
-/* ===================================================================
+/* ═══════════════════════════════════════════════════════════════════
    LOGIN
-=================================================================== */
+═══════════════════════════════════════════════════════════════════ */
 #sLogin{align-items:center;justify-content:center;background:var(--bg);position:relative;overflow:hidden}
 #sLogin::before{content:'';position:absolute;inset:0;background-image:linear-gradient(rgba(180,255,0,.025) 1px,transparent 1px),linear-gradient(90deg,rgba(180,255,0,.025) 1px,transparent 1px);background-size:48px 48px;pointer-events:none}
 #sLogin::after{content:'';position:absolute;width:600px;height:600px;left:50%;top:50%;transform:translate(-50%,-55%);background:radial-gradient(circle,rgba(180,255,0,.05) 0%,transparent 70%);pointer-events:none}
@@ -91,28 +88,25 @@ input{font-family:inherit}
 .loading .spin{display:block}.loading .ltxt{display:none}
 @keyframes sp{to{transform:rotate(360deg)}}
 
-/* ===================================================================
+/* ═══════════════════════════════════════════════════════════════════
    APP LAYOUT
-=================================================================== */
+═══════════════════════════════════════════════════════════════════ */
 #sApp{flex-direction:column;overflow:hidden;height:100vh}
 
 /* topbar */
 .topbar{background:#080810;border-bottom:1px solid var(--line2);padding:0 32px;height:54px;display:flex;align-items:center;gap:16px;flex-shrink:0}
-/* righe mobile topbar: nascoste su desktop */
-.tb-top-row{display:contents} /* su desktop usa il flex del genitore */
-.tb-bottom-row{display:none}  /* visibile solo su mobile via media query */
 .tb-logo{font-family:var(--f-title);font-size:17px;font-weight:700;text-transform:uppercase;letter-spacing:1px;white-space:nowrap}
 .tb-logo span{color:var(--neon)}
 .tb-sep{width:1px;height:20px;background:var(--line2)}
-.tb-user{font-family:var(--f-mono);font-size:13px;color:var(--text-mid);letter-spacing:.5px}
+.tb-user{font-family:var(--f-mono);font-size:11px;color:var(--text-mid);letter-spacing:.5px}
 .tb-user strong{color:var(--text);font-weight:600}
-.tb-tier{font-family:var(--f-mono);font-size:13px;font-weight:600;letter-spacing:3px;text-transform:uppercase;padding:3px 10px;border:1px solid;border-radius:var(--r)}
+.tb-tier{font-family:var(--f-mono);font-size:9px;font-weight:600;letter-spacing:3px;text-transform:uppercase;padding:3px 10px;border:1px solid;border-radius:var(--r)}
 .tb-tier.scout{border-color:var(--scout);color:var(--scout)}.tb-tier.veteran{border-color:var(--veteran);color:var(--veteran)}.tb-tier.elite{border-color:var(--elite);color:var(--elite)}
-.tb-mese{font-family:var(--f-mono);font-size:13px;color:var(--text-mid);letter-spacing:1px}
+.tb-mese{font-family:var(--f-mono);font-size:10px;color:var(--text-mid);letter-spacing:1px}
 .tb-right{margin-left:auto;display:flex;align-items:center;gap:12px}
 .tb-cred{display:flex;align-items:baseline;gap:5px}
-.tb-cred-lbl{font-family:var(--f-mono);font-size:13px;color:var(--text-mid);letter-spacing:1.5px;text-transform:uppercase}
-.tb-cred-val{font-family:var(--f-title);font-size:22px;font-weight:700;color:var(--neon);line-height:1}
+.tb-cred-lbl{font-family:var(--f-mono);font-size:9px;color:var(--text-mid);letter-spacing:1.5px;text-transform:uppercase}
+.tb-cred-val{font-family:var(--f-title);font-size:20px;font-weight:700;color:var(--neon);line-height:1}
 .btn-logout{font-family:var(--f-mono);font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:var(--text-dim);border:1px solid var(--line2);padding:5px 12px;transition:all .2s;border-radius:var(--r)}
 .btn-logout:hover{color:var(--text);background:var(--bg3)}
 
@@ -126,264 +120,155 @@ input{font-family:inherit}
 .nav-tab{padding:0 22px;height:38px;display:flex;align-items:center;gap:8px;font-family:var(--f-mono);font-size:10px;font-weight:500;letter-spacing:2px;text-transform:uppercase;color:var(--text-dim);border-bottom:2px solid transparent;transition:all .15s;white-space:nowrap}
 .nav-tab:hover{color:var(--text-mid)}
 .nav-tab.active{color:var(--neon);border-bottom-color:var(--neon)}
-.tab-badge{background:var(--neon-dim);border:1px solid rgba(180,255,0,.4);color:var(--neon);font-family:var(--f-mono);font-weight:700;font-size:13px;padding:1px 7px;border-radius:10px;font-variant-numeric:tabular-nums}
+.tab-badge{background:var(--neon-dim);border:1px solid rgba(180,255,0,.2);color:var(--neon);font-size:9px;padding:1px 6px;border-radius:10px;font-variant-numeric:tabular-nums}
 
 /* app body */
 .app-body{flex:1;overflow:hidden;display:flex}
 .tab-pane{display:none;flex:1;overflow-y:auto}
 .tab-pane.active{display:flex;flex-direction:column}
 
-/* ===================================================================
+/* ═══════════════════════════════════════════════════════════════════
    TAB CATALOGO
-=================================================================== */
+═══════════════════════════════════════════════════════════════════ */
 .cat-layout{display:flex;flex:1;overflow:hidden;min-height:0;justify-content:center}
-.cat-main{flex:1;overflow-y:auto;padding:28px 40px 60px;display:flex;flex-direction:column;gap:32px;max-width:none;width:100%}
-
-/* -- BANNER GARANZIA STOCK ------------------------------------------- */
-.garanzia-banner{
-  display:flex;align-items:flex-start;gap:12px;
-  padding:12px 16px;
-  background:rgba(180,255,0,.05);
-  border:1px solid rgba(180,255,0,.2);
-  border-radius:var(--r);
-  margin-bottom:-16px; /* si avvicina alla sezione scout */
-}
-.garanzia-banner-icon{
-  color:var(--neon);font-size:16px;flex-shrink:0;line-height:1.4;
-  font-family:var(--f-mono);
-}
-.garanzia-banner-txt{
-  font-family:var(--f-mono);font-size:13px;color:var(--text-dim);
-  letter-spacing:.3px;line-height:1.6;
-}
-.garanzia-banner-txt strong{color:var(--text-mid)}
+.cat-main{flex:1;overflow-y:auto;padding:28px 40px 60px;display:flex;flex-direction:column;gap:32px;max-width:1400px;width:100%}
 
 /* tier section */
-.tier-section{display:flex;flex-direction:row;align-items:stretch;gap:16px;margin-bottom:0}
-/* barra tier verticale */
-.tier-vtag{width:28px;flex-shrink:0;display:flex;align-items:center;justify-content:center;border-radius:var(--r)}
-.tier-vtag span{font-family:var(--f-title);font-size:13px;font-weight:700;letter-spacing:5px;text-transform:uppercase;writing-mode:vertical-rl;text-orientation:mixed;transform:rotate(180deg);color:#000;white-space:nowrap}
-.tier-vtag.scout{background:var(--scout)}.tier-vtag.veteran{background:var(--veteran)}.tier-vtag.elite{background:var(--elite)}
-.tier-body{flex:1}
+.tier-section{display:flex;flex-direction:column}
+.tier-hdr{display:flex;align-items:center;gap:12px;padding:10px 16px;border:1px solid var(--line2);border-bottom:none;background:var(--bg3)}
+.tier-hdr-name{font-family:var(--f-title);font-size:13px;font-weight:700;letter-spacing:4px;text-transform:uppercase}
+.tier-hdr-name.scout{color:var(--scout)}.tier-hdr-name.veteran{color:var(--veteran)}.tier-hdr-name.elite{color:var(--elite)}
+.tier-hdr-quota{font-family:var(--f-mono);font-size:10px;color:var(--text-mid)}
+.tier-hdr-slots{margin-left:auto;font-family:var(--f-mono);font-size:10px;padding:3px 10px;border:1px solid;border-radius:var(--r)}
+.tier-hdr-slots.ok{border-color:rgba(255,255,255,.1);color:var(--text-dim)}.tier-hdr-slots.warn{border-color:rgba(247,201,72,.3);color:var(--warm)}.tier-hdr-slots.full{border-color:rgba(255,77,77,.3);color:var(--red)}
 
 /* product grid */
-/* -- griglia prodotti: sempre 3 colonne fisse -- */
-.prod-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;background:transparent;border:none}
+/* ── griglia prodotti: sempre 3 colonne fisse ── */
+.prod-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;background:transparent;border:none}
 
 /* card split: foto sinistra + info destra */
-.prod-card{background:var(--bg2);display:flex;flex-direction:row;position:relative;overflow:hidden;transition:background .15s,box-shadow .15s;border:1px solid var(--line2);border-radius:var(--r)}
+.prod-card{background:var(--bg2);display:flex;flex-direction:row;position:relative;overflow:hidden;transition:background .15s,box-shadow .15s;min-height:380px;border:1px solid var(--line2);border-radius:var(--r)}
 .prod-card:hover{background:var(--bg3);box-shadow:0 4px 20px rgba(0,0,0,.35)}
 .prod-card.sel-dep{background:#050e1a;border-color:var(--blue);box-shadow:0 0 0 1px var(--blue),0 4px 24px rgba(77,166,255,.15)}
 .prod-card.sel-fp{background:#050d00;border-color:var(--neon);box-shadow:0 0 0 1px var(--neon),0 4px 24px rgba(180,255,0,.12)}
 .prod-card-empty{opacity:.35;pointer-events:none}
 
 /* metà sinistra: foto */
-.prod-photo-half{width:50%;flex-shrink:0;background:linear-gradient(135deg,var(--bg3) 0%,var(--bg4) 100%);display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;aspect-ratio:2/3;min-height:280px}
-.prod-photo-half img{width:100%;height:100%;object-fit:cover;object-position:center top;position:absolute;inset:0}
+.prod-photo-half{width:50%;flex-shrink:0;background:linear-gradient(135deg,var(--bg3) 0%,var(--bg4) 100%);display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden}
+.prod-photo-half img{width:100%;height:100%;object-fit:cover;position:absolute;inset:0}
 .prod-photo-ph{display:flex;flex-direction:column;align-items:center;gap:6px;opacity:.15}
 .prod-photo-ph svg{width:32px;height:32px}
 .prod-photo-ph span{font-family:var(--f-mono);font-size:8px;letter-spacing:2px;text-transform:uppercase}
-.prod-sel-bdg{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;pointer-events:none}
-.prod-sel-bdg-in{font-family:var(--f-title);font-size:16px;font-weight:700;letter-spacing:3px;text-transform:uppercase;padding:21px 0;width:100%;text-align:center;border-top:1px solid;border-bottom:1px solid;backdrop-filter:blur(6px)}
-.prod-sel-bdg-in.dep{border-color:var(--blue);color:var(--blue);background:rgba(10,20,40,.7)}
-.prod-sel-bdg-in.fp{border-color:var(--neon);color:var(--neon);background:rgba(5,20,0,.7)}
+.prod-sel-bdg{position:absolute;bottom:10px;left:8px;right:8px;display:flex;align-items:center;justify-content:center;pointer-events:none}
+.prod-sel-bdg-in{font-family:var(--f-title);font-size:11px;font-weight:700;letter-spacing:3px;text-transform:uppercase;padding:6px 16px;border:1px solid;backdrop-filter:blur(4px)}
+.prod-sel-bdg-in.dep{border-color:var(--blue);color:var(--blue);background:rgba(77,166,255,.15)}
+.prod-sel-bdg-in.fp{border-color:var(--neon);color:var(--neon);background:rgba(180,255,0,.12)}
 .prod-photo-half.has-imgs{cursor:zoom-in}
 .prod-photo-half.has-imgs:hover::before{content:'🔍';position:absolute;top:8px;right:8px;z-index:3;font-size:14px;opacity:.7;pointer-events:none}
 
 /* metà destra: info */
-.prod-info-half{width:50%;display:flex;flex-direction:column;gap:8px;padding:0 14px 14px 14px;overflow:hidden}
+.prod-info-half{width:50%;display:flex;flex-direction:column;gap:8px;padding:14px 14px;overflow:hidden}
 
 /* tier tag nella metà info */
-/* etichetta modello uniforme per tutti i tier */
-.prod-tier-tag{display:block;font-family:var(--f-mono);font-size:13px;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;padding:8px 14px;background:var(--bg4);color:var(--text-mid);border-bottom:1px solid var(--line2);margin:0 -14px 6px -14px;text-align:center}
+.prod-tier-tag{display:inline-block;font-family:var(--f-mono);font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;padding:4px 10px;border:1px solid;background:var(--bg4);flex-shrink:0;align-self:flex-start}
+.prod-tier-tag.scout{color:var(--scout);border-color:var(--scout)}
+.prod-tier-tag.veteran{color:var(--veteran);border-color:var(--veteran)}
+.prod-tier-tag.elite{color:var(--elite);border-color:var(--elite)}
 
 /* card body (alias per compatibilità) */
 .prod-body{padding:14px 16px;display:flex;flex-direction:column;gap:10px;flex:1}
-.prod-name{font-size:15px;font-weight:500;color:var(--text);line-height:1.45}
-.prod-sku{font-family:var(--f-mono);font-size:13px;color:var(--text-dim);letter-spacing:.5px;margin-top:-4px}
-.prod-ordinati{display:inline-flex;align-items:center;gap:5px;font-family:var(--f-mono);font-size:13px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;padding:3px 8px;border-radius:2px;margin-top:2px;align-self:flex-start}
-/* "Hai già ordinato" overlay in fondo all'immagine */
-.prod-ordinati-overlay{position:absolute;bottom:0;left:0;right:0;z-index:4;font-family:var(--f-mono);font-size:11px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;padding:5px 10px;text-align:center;backdrop-filter:blur(4px);}
-.prod-ordinati-overlay.zero{color:var(--text-dim);background:rgba(11,12,14,.65);border-top:1px solid var(--line2)}
-.prod-ordinati-overlay.uno{color:var(--blue);background:rgba(10,20,40,.75);border-top:1px solid rgba(77,166,255,.3)}
-.prod-ordinati-overlay.multi{color:var(--warm);background:rgba(30,20,5,.75);border-top:1px solid rgba(247,201,72,.3)}
-.prod-ordinati.zero{color:var(--text-dim);background:transparent;border:1px solid var(--line2)}
-.prod-ordinati.uno{color:var(--blue);background:var(--blue-dim);border:1px solid rgba(90,180,255,.25)}
-.prod-ordinati.multi{color:var(--warm);background:var(--warm-dim);border:1px solid rgba(247,201,72,.25)}
+.prod-name{font-size:13px;font-weight:500;color:var(--text);line-height:1.45}
+.prod-sku{font-family:var(--f-mono);font-size:9px;color:var(--text-dim);letter-spacing:.5px;margin-top:-4px}
 .prod-price-row{display:flex;align-items:baseline;gap:8px;flex-wrap:wrap}
-.prod-price{font-family:var(--f-title);font-size:26px;font-weight:700;line-height:1;font-variant-numeric:tabular-nums}
-.prod-price.tbd{color:var(--warm);font-size:20px}
-.prod-price-pub{font-size:15px;color:var(--text-dim);text-decoration:none;font-variant-numeric:tabular-nums;position:relative;display:inline-block}
-.prod-price-pub::after{content:'';position:absolute;left:-2px;right:-2px;top:50%;height:1.5px;background:var(--text-dim);transform:rotate(-12deg);transform-origin:center}
-.prod-price-disc{font-family:var(--f-mono);font-size:13px;font-weight:700;color:#000;background:var(--neon);padding:2px 7px;border-radius:var(--r)}
-.prod-disc-bdg{font-family:var(--f-mono);font-size:13px;font-weight:700;color:var(--neon)}
+.prod-price{font-family:var(--f-title);font-size:22px;font-weight:700;line-height:1;font-variant-numeric:tabular-nums}
+.prod-price.tbd{color:var(--warm);font-size:18px}
+.prod-price-pub{font-size:12px;color:var(--text-dim);text-decoration:line-through;font-variant-numeric:tabular-nums}
+.prod-price-disc{font-family:var(--f-mono);font-size:11px;font-weight:700;color:#000;background:var(--neon);padding:2px 7px;border-radius:var(--r)}
+.prod-disc-bdg{font-family:var(--f-mono);font-size:11px;font-weight:700;color:var(--neon)}
 
-/* action buttons -- stile originale progetto */
+/* action buttons — stile originale progetto */
 .prod-actions{display:flex;flex-direction:column;gap:4px;margin-top:auto}
-.prod-btn{display:flex;align-items:center;justify-content:space-between;padding:9px 12px;border:1px solid var(--line2);background:transparent;color:var(--text-mid);font-size:13px;font-weight:500;transition:all .15s;border-radius:var(--r);gap:8px;width:100%;min-width:0;overflow:hidden}
-.prod-btn:hover:not(.blocked):not(.dep-on):not(.fp-on){border-color:var(--blue);color:var(--blue);background:rgba(77,166,255,.05)}
+.prod-btn{display:flex;align-items:center;justify-content:space-between;padding:9px 12px;border:1px solid var(--line2);background:transparent;color:var(--text-mid);font-size:12px;font-weight:500;transition:all .15s;border-radius:var(--r);gap:8px;width:100%}
+.prod-btn:hover:not(.blocked){border-color:var(--line2);color:var(--text-mid);background:var(--bg4)}
 .prod-btn.dep-on{border-color:var(--blue);color:var(--blue);background:var(--blue-dim)}
-.prod-btn.dep-on:hover:not(.blocked){border-color:#7dc8ff;color:#7dc8ff;background:rgba(77,166,255,.15);box-shadow:0 0 0 1px rgba(77,166,255,.3)}
 .prod-btn.fp-on{border-color:var(--neon);color:var(--neon);background:var(--neon-dim)}
-.prod-btn.fp-on:hover:not(.blocked){border-color:#ccff44;color:#ccff44;background:rgba(180,255,0,.15);box-shadow:0 0 0 1px rgba(180,255,0,.3)}
 .prod-btn.blocked{opacity:.2;cursor:not-allowed;pointer-events:none}
-.prod-btn-left{display:flex;flex-direction:column;align-items:flex-start;gap:2px;min-width:0;overflow:hidden}
-.prod-btn-lbl{font-family:var(--f-title);font-size:14px;font-weight:600;letter-spacing:.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.prod-btn-val{font-family:var(--f-mono);font-size:13px;font-weight:600;font-variant-numeric:tabular-nums;white-space:nowrap;flex-shrink:0}
+.prod-btn-left{display:flex;flex-direction:column;align-items:flex-start;gap:2px}
+.prod-btn-lbl{font-family:var(--f-title);font-size:12px;font-weight:600;letter-spacing:.5px}
+.prod-btn-val{font-family:var(--f-mono);font-size:12px;font-weight:600;font-variant-numeric:tabular-nums;white-space:nowrap}
 .prod-dot{width:8px;height:8px;border:1.5px solid currentColor;border-radius:50%;flex-shrink:0;position:relative}
 .prod-dot::after{content:'';position:absolute;inset:2px;border-radius:50%;background:currentColor;opacity:0;transition:opacity .15s}
 .dep-on .prod-dot::after,.fp-on .prod-dot::after{opacity:1}
-.prod-btn-r{display:flex;align-items:center;gap:8px;flex-shrink:0}
+.prod-btn-r{display:flex;align-items:center;gap:8px}
 
-/* -- sidebar -- */
-.cat-sidebar{width:352px;flex-shrink:0;background:var(--bg2);border-left:1px solid var(--line);display:flex;flex-direction:column;overflow:hidden;position:sticky;top:0;max-height:100vh}
-.sidebar-hdr{padding:14px 18px;border-bottom:1px solid var(--line);font-family:var(--f-mono);font-size:13px;font-weight:600;letter-spacing:3px;text-transform:uppercase;color:var(--text-mid);flex-shrink:0}
+/* ── sidebar ── */
+.cat-sidebar{width:272px;flex-shrink:0;background:var(--bg2);border-left:1px solid var(--line);display:flex;flex-direction:column;overflow:hidden;position:sticky;top:0;max-height:100vh}
+.sidebar-hdr{padding:14px 18px;border-bottom:1px solid var(--line);font-family:var(--f-mono);font-size:9px;font-weight:600;letter-spacing:3px;text-transform:uppercase;color:var(--text-mid);flex-shrink:0}
 .sidebar-items{flex:1;overflow-y:auto;display:flex;flex-direction:column}
-.sidebar-empty{flex:1;display:flex;align-items:center;justify-content:center;text-align:center;padding:24px;font-family:var(--f-mono);font-size:13px;letter-spacing:2px;text-transform:uppercase;color:var(--text-mid)}
+.sidebar-empty{flex:1;display:flex;align-items:center;justify-content:center;text-align:center;padding:24px;font-family:var(--f-mono);font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--text-mid)}
 .sel-item{display:flex;align-items:center;gap:10px;padding:11px 16px;border-bottom:1px solid var(--line);transition:background .15s}
 .sel-item:hover{background:var(--bg3)}
 .sel-item.dep{border-left:3px solid var(--blue)}.sel-item.fp{border-left:3px solid var(--neon)}
-.sel-del{flex-shrink:0;width:34px;height:34px;display:flex;align-items:center;justify-content:center;border:1px solid var(--line2);border-radius:var(--r);background:transparent;color:var(--text-dim);font-size:16px;transition:all .15s;cursor:pointer}
-.sel-del:hover{border-color:var(--red);color:var(--red);background:rgba(255,60,60,.08)}
-.sel-del{flex-shrink:0;width:34px;height:34px;display:flex;align-items:center;justify-content:center;border:1px solid var(--line2);border-radius:var(--r);background:transparent;color:var(--text-dim);font-size:16px;line-height:1;transition:all .15s;cursor:pointer}
+.sel-del{flex-shrink:0;width:24px;height:24px;display:flex;align-items:center;justify-content:center;border:1px solid var(--line2);border-radius:var(--r);background:transparent;color:var(--text-dim);font-size:13px;line-height:1;transition:all .15s;cursor:pointer}
 .sel-del:hover{border-color:var(--red);color:var(--red);background:rgba(255,60,60,.08)}
 .sel-thumb{width:38px;height:38px;flex-shrink:0;background:var(--bg4);overflow:hidden;display:flex;align-items:center;justify-content:center;font-size:14px;opacity:.4}
 .sel-thumb img{width:100%;height:100%;object-fit:cover;opacity:1}
 .sel-info{flex:1;min-width:0}
-.sel-name{font-size:13px;font-weight:600;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;text-transform:uppercase;letter-spacing:.5px}
-.sel-type{font-family:var(--f-mono);font-size:11px;letter-spacing:1.5px;margin-top:2px;text-transform:uppercase}
+.sel-name{font-size:11px;font-weight:500;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sel-type{font-family:var(--f-mono);font-size:9px;letter-spacing:1.5px;text-transform:uppercase;margin-top:2px}
 .sel-type.dep{color:var(--blue)}.sel-type.fp{color:var(--neon)}
-.sel-acc{font-family:var(--f-title);font-size:17px;font-weight:700;font-variant-numeric:tabular-nums;white-space:nowrap;flex-shrink:0}
+.sel-acc{font-family:var(--f-title);font-size:15px;font-weight:700;font-variant-numeric:tabular-nums;white-space:nowrap;flex-shrink:0}
 .sel-acc.dep{color:var(--blue)}.sel-acc.fp{color:var(--neon)}
-/* riga garanzia stock sommata -- sopra la lista prodotti */
-.cart-garanzia-row{
-  display:flex;align-items:center;justify-content:space-between;
-  padding:7px 16px;
-  background:rgba(247,201,72,.07);
-  border-bottom:1px solid rgba(247,201,72,.2);
-  flex-shrink:0;
-}
-.cart-garanzia-lbl{
-  font-family:var(--f-mono);font-size:13px;letter-spacing:1px;
-  color:var(--warm);text-transform:uppercase;
-white-space:nowrap;}
-.cart-garanzia-val{
-  font-family:var(--f-mono);font-size:13px;font-weight:700;
-  color:var(--warm);white-space:nowrap;
-}
 
 .sidebar-totals{border-top:1px solid var(--line);padding:12px 18px;display:flex;flex-direction:column;gap:7px;flex-shrink:0}
 .tot-row{display:flex;justify-content:space-between;align-items:baseline}
-.tot-lbl{font-family:var(--f-mono);font-size:13px;letter-spacing:1.5px;text-transform:uppercase;color:var(--text-mid)}
+.tot-lbl{font-family:var(--f-mono);font-size:9px;letter-spacing:1.5px;text-transform:uppercase;color:var(--text-mid)}
 .tot-val{font-family:var(--f-title);font-size:18px;font-weight:700;font-variant-numeric:tabular-nums}
 #sideCredRes{color:var(--neon)}
 #sideCredRes.warn{color:var(--warm)}
 #sideCredRes.danger{color:var(--red)}
 
 .sidebar-cta{padding:12px 18px;border-top:1px solid var(--line);flex-shrink:0}
-/* bottone conferma in cima alla sidebar (desktop) */
-.sidebar-cta-top{padding:12px 18px;border-bottom:1px solid var(--line);flex-shrink:0}
-.btn-conferma-top{margin-bottom:0}
-/* su mobile il bottone top è nascosto (c'è già quello in fondo alla sidebar) */
-@media(max-width:768px){.sidebar-cta-top{display:none!important}}
-.sidebar-cart-badge{display:inline-flex;align-items:center;justify-content:center;min-width:20px;height:20px;padding:0 7px;background:var(--neon-dim);border:1px solid rgba(180,255,0,.4);color:var(--neon);font-family:var(--f-mono);font-weight:700;font-size:13px;border-radius:10px;margin-left:6px;vertical-align:middle;font-variant-numeric:tabular-nums}
 .btn-conferma{width:100%;background:var(--neon);color:#000;padding:11px;font-family:var(--f-title);font-size:13px;font-weight:700;letter-spacing:3px;text-transform:uppercase;transition:all .2s;border-radius:var(--r);display:flex;align-items:center;justify-content:center;gap:8px}
 .btn-conferma:hover:not(:disabled){background:#c8ff2a;box-shadow:0 0 20px var(--neon-glow)}
 .btn-conferma:disabled{opacity:.25;cursor:not-allowed}
 
-/* ===================================================================
+/* ═══════════════════════════════════════════════════════════════════
    TAB ORDINI
-=================================================================== */
+═══════════════════════════════════════════════════════════════════ */
 .orders-wrap{flex:1;padding:28px 40px 60px;display:flex;flex-direction:column;gap:24px;overflow-y:auto;max-width:1200px;width:100%;margin:0 auto}
 .filters{display:flex;gap:6px;flex-wrap:wrap}
 .flt-btn{font-family:var(--f-mono);font-size:10px;font-weight:500;letter-spacing:2px;text-transform:uppercase;padding:5px 14px;border:1px solid var(--line2);color:var(--text-dim);background:transparent;transition:all .15s;border-radius:var(--r)}
 .flt-btn:hover{color:var(--text-mid);background:var(--bg3)}
 .flt-btn.active{background:var(--bg3);border-color:var(--neon);color:var(--neon)}
-/* badge numerico sui filtri -- cerchio giallo centrato */
-.flt-badge{display:inline-flex;align-items:center;justify-content:center;min-width:20px;height:20px;padding:0 7px;background:var(--neon-dim);border:1px solid rgba(180,255,0,.4);color:var(--neon);font-family:var(--f-mono);font-weight:700;font-size:13px;border-radius:10px;margin-left:6px;vertical-align:middle;font-variant-numeric:tabular-nums}
-.btn-rileva{display:flex;align-items:center;gap:7px;font-family:var(--f-mono);font-size:10px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;padding:6px 14px;border:1px solid var(--line2);color:var(--text-mid);background:transparent;transition:all .2s;border-radius:var(--r);white-space:nowrap;cursor:pointer}
-.btn-rileva:hover{border-color:var(--neon);color:var(--neon)}
-.btn-rileva.loading{opacity:.5;pointer-events:none}
-.btn-rileva.loading svg{animation:spin .8s linear infinite}
-@keyframes spin{to{transform:rotate(360deg)}}
-
-.btn-rileva{display:flex;align-items:center;gap:7px;font-family:var(--f-mono);font-size:10px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;padding:6px 14px;border:1px solid var(--line2);color:var(--text-mid);background:transparent;transition:all .2s;border-radius:var(--r);white-space:nowrap}
-.btn-rileva:hover{border-color:var(--neon);color:var(--neon);background:var(--neon-dim)}
-.btn-rileva.loading{opacity:.5;pointer-events:none}
-.btn-rileva.loading svg{animation:spin .8s linear infinite}
-@keyframes spin{to{transform:rotate(360deg)}}
 
 .ord-section{display:flex;flex-direction:column;gap:12px}
 .ord-sec-title{font-family:var(--f-mono);font-size:9px;font-weight:600;letter-spacing:3px;text-transform:uppercase;color:var(--text-mid);padding-bottom:10px;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:10px}
 .sec-cnt{background:var(--bg4);border:1px solid var(--line2);color:var(--text-dim);font-size:9px;padding:1px 7px;border-radius:10px}
 
 /* card ordine */
-/* -- ORDINI DASHBOARD -- */
-.ord-group{display:flex;flex-direction:column;gap:0;margin-bottom:4px;}
-.ord-group-hdr{display:flex;align-items:center;gap:10px;padding:9px 16px;border-radius:var(--r) var(--r) 0 0;border:1px solid;}
-.ord-group-hdr.da_saldare{background:rgba(90,180,255,.06);border-color:rgba(90,180,255,.22);}
-.ord-group-hdr.saldato{background:rgba(180,255,0,.05);border-color:rgba(180,255,0,.18);}
-.ord-group-hdr.spedito{background:rgba(0,212,160,.05);border-color:rgba(0,212,160,.18);}
-.ord-group-hdr.in_conferma{background:var(--bg3);border-color:var(--line2);}
-.grp-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
-.ord-group-hdr.da_saldare .grp-dot{background:var(--blue);}
-.ord-group-hdr.saldato .grp-dot{background:var(--neon);}
-.ord-group-hdr.spedito .grp-dot{background:var(--green);}
-.ord-group-hdr.in_conferma .grp-dot{background:var(--line2);}
-.grp-label{font-family:var(--f-mono);font-size:9px;font-weight:600;letter-spacing:3px;text-transform:uppercase;}
-.ord-group-hdr.da_saldare .grp-label{color:var(--blue);}
-.ord-group-hdr.saldato .grp-label{color:var(--neon);}
-.ord-group-hdr.spedito .grp-label{color:var(--green);}
-.ord-group-hdr.in_conferma .grp-label{color:var(--text-dim);}
-.grp-cnt{font-family:var(--f-mono);font-size:9px;padding:2px 8px;border-radius:10px;border:1px solid;}
-.ord-group-hdr.da_saldare .grp-cnt{border-color:rgba(90,180,255,.3);color:var(--blue);background:rgba(90,180,255,.08);}
-.ord-group-hdr.saldato .grp-cnt{border-color:rgba(180,255,0,.3);color:var(--neon);background:rgba(180,255,0,.08);}
-.ord-group-hdr.spedito .grp-cnt{border-color:rgba(0,212,160,.3);color:var(--green);background:rgba(0,212,160,.08);}
-.ord-group-hdr.in_conferma .grp-cnt{border-color:var(--line2);color:var(--text-dim);}
-/* card */
-.ocard{display:flex;align-items:center;background:var(--bg2);border:1px solid var(--line2);border-top:none;transition:background .12s;position:relative;overflow:hidden;}
-.ocard:last-child{border-radius:0 0 var(--r) var(--r);}
-.ocard:hover{background:var(--bg3);}
-.ocard::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;}
-.ocard.da_saldare::before{background:var(--blue);}
-.ocard.saldato::before{background:var(--neon);}
-.ocard.spedito::before{background:var(--green);}
-.ocard.in_conferma::before{background:var(--line2);}
-/* left block */
-.ocard-left{display:flex;align-items:center;gap:12px;flex:1;min-width:0;padding:12px 16px;}
-.ocard-thumb{width:70px;height:100px;flex-shrink:0;background:var(--bg4);border:1px solid var(--line2);border-radius:2px;overflow:hidden;display:flex;align-items:center;justify-content:center;font-size:18px;opacity:.35;}
-.ocard-thumb img{width:100%;height:100%;object-fit:cover;opacity:1;}
-.ocard-info{flex:1;min-width:0;display:flex;flex-direction:column;gap:5px;}
-.ocard-name{font-size:13px;font-weight:500;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-.ocard-meta{display:flex;align-items:center;gap:6px;flex-wrap:wrap;}
+.ocard{background:var(--bg2);border:1px solid var(--line2);display:flex;flex-direction:column;transition:border-color .15s,background .15s;border-radius:var(--r);overflow:hidden}
+.ocard.da_saldare{border-left:3px solid var(--blue)}.ocard.in_lavorazione{border-left:3px solid var(--warm)}.ocard.spedito{border-left:3px solid var(--neon)}.ocard.saldato{border-left:3px solid rgba(255,255,255,.12)}.ocard.draft{border-left:3px solid var(--line2);border-style:dashed}
+.ocard-top{display:flex;align-items:flex-start;gap:12px;padding:14px 16px}
+.ocard-thumb{width:52px;height:52px;flex-shrink:0;background:var(--bg4);overflow:hidden;display:flex;align-items:center;justify-content:center;font-size:18px;opacity:.3}
+.ocard-thumb img{width:100%;height:100%;object-fit:cover;opacity:1}
+.ocard-info{flex:1;min-width:0}
+.ocard-name{font-size:13px;font-weight:600;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ocard-meta{display:flex;align-items:center;gap:8px;margin-top:4px;flex-wrap:wrap}
 .tier-pill{font-family:var(--f-mono);font-size:8px;font-weight:600;letter-spacing:2px;text-transform:uppercase;padding:2px 7px;border:1px solid;border-radius:var(--r)}
 .tier-pill.scout{border-color:var(--scout);color:var(--scout)}.tier-pill.veteran{border-color:var(--veteran);color:var(--veteran)}.tier-pill.elite{border-color:var(--elite);color:var(--elite)}
 .stato-pill{font-family:var(--f-mono);font-size:8px;font-weight:600;letter-spacing:2px;text-transform:uppercase;padding:2px 7px;border:1px solid;border-radius:var(--r)}
-.stato-pill.da_saldare{border-color:rgba(77,166,255,.35);color:var(--blue)}.stato-pill.in_lavorazione{border-color:rgba(247,201,72,.35);color:var(--warm)}.stato-pill.spedito{border-color:rgba(180,255,0,.35);color:var(--neon)}.stato-pill.saldato{border-color:rgba(255,255,255,.15);color:var(--text-dim)}.stato-pill.in_preparazione{border-color:var(--line2);color:var(--text-dim)}
-.ocard-comment{font-family:var(--f-mono);font-size:9px;color:var(--warm);display:flex;align-items:center;gap:4px;}
-/* separatore verticale */
-.ocard-sep{width:1px;background:var(--line2);align-self:stretch;flex-shrink:0;}
-/* blocco numeri */
-.ocard-nums{display:flex;align-items:center;flex-shrink:0;}
-.onum{display:flex;flex-direction:column;align-items:flex-end;gap:2px;padding:12px 18px;}
-.onum.residuo-block{padding:12px 22px;border-right:1px solid var(--line2);}
-.onum-lbl{font-family:var(--f-mono);font-size:8px;letter-spacing:1.5px;text-transform:uppercase;color:var(--text-dim);}
-.onum-val{font-family:var(--f-mono);font-size:13px;font-weight:600;font-variant-numeric:tabular-nums;}
-.onum-val.big{font-family:var(--f-title);font-size:24px;font-weight:700;line-height:1;}
-.onum-val.acc{color:var(--blue);} .onum-val.res{color:var(--warm);} .onum-val.tot{color:var(--text-mid);} .onum-val.zero{color:var(--text-dim);}
-.onum-val.tipo{font-family:var(--f-mono);font-size:9px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:var(--text-dim);}
-/* azioni */
-.ocard-actions{display:flex;flex-direction:column;gap:6px;padding:10px 14px;flex-shrink:0;min-width:150px;align-items:stretch;}
-.btn-salda-ord{font-family:var(--f-title);font-size:12px;font-weight:700;letter-spacing:2px;text-transform:uppercase;padding:7px 14px;background:var(--neon);color:#000;border:none;border-radius:var(--r);cursor:pointer;transition:all .15s;text-align:center;}
-.btn-salda-ord:hover{background:#c8ff2a;box-shadow:0 0 14px rgba(180,255,0,.3);}
-.btn-acc-ord{font-family:var(--f-title);font-size:12px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;padding:7px 14px;background:transparent;color:var(--blue);border:1px solid rgba(90,180,255,.4);border-radius:var(--r);cursor:pointer;transition:all .15s;text-align:center;}
-.btn-acc-ord:hover{background:var(--blue-dim);}
-.ocard-wait{font-family:var(--f-mono);font-size:9px;color:var(--text-dim);letter-spacing:1px;text-align:center;padding:4px 0;}
-.ocard-tracking{display:flex;align-items:center;gap:6px;font-family:var(--f-mono);font-size:9px;color:var(--green);background:var(--green-dim);border:1px solid rgba(0,212,160,.2);padding:7px 10px;border-radius:var(--r);}
-/* mobile nums */
-.ocard-mobile-nums{display:none;}
+.stato-pill.da_saldare{border-color:rgba(77,166,255,.35);color:var(--blue)}.stato-pill.in_lavorazione{border-color:rgba(247,201,72,.35);color:var(--warm)}.stato-pill.spedito{border-color:rgba(180,255,0,.35);color:var(--neon)}.stato-pill.saldato{border-color:rgba(255,255,255,.15);color:var(--text-dim)}.stato-pill.draft{border-color:var(--line2);color:var(--text-dim)}
+.ocard-comment{font-family:var(--f-mono);font-size:10px;color:var(--warm);margin-top:5px;padding:4px 8px;background:var(--warm-dim);border-left:2px solid var(--warm);display:none}
+.ocard-comment.on{display:block}
+.ocard-nums{display:flex;gap:18px;flex-wrap:wrap;flex-shrink:0}
+.onum{display:flex;flex-direction:column;gap:2px}
+.onum-lbl{font-family:var(--f-mono);font-size:8px;letter-spacing:1.5px;text-transform:uppercase;color:var(--text-mid)}
+.onum-val{font-family:var(--f-mono);font-size:13px;font-weight:600;font-variant-numeric:tabular-nums}
+.onum-val.acc{color:var(--blue)}.onum-val.res{color:var(--warm)}.onum-val.tot{color:var(--text)}.onum-val.zero{color:var(--text-dim)}
 
 /* acconto extra */
+.ocard-extra{border-top:1px solid var(--line);padding:10px 16px;display:flex;align-items:center;gap:10px;background:var(--bg3);flex-wrap:wrap}
 .extra-lbl{font-family:var(--f-mono);font-size:10px;color:var(--text-mid);letter-spacing:1px;flex-shrink:0}
 .extra-input{background:var(--bg4);border:1px solid var(--line2);color:var(--text);padding:7px 10px;font-family:var(--f-mono);font-size:13px;outline:none;width:90px;transition:border-color .2s;border-radius:var(--r);font-variant-numeric:tabular-nums}
 .extra-input:focus{border-color:var(--neon);box-shadow:0 0 0 2px var(--neon-dim)}
@@ -397,50 +282,40 @@ white-space:nowrap;}
 
 .ord-empty{text-align:center;padding:36px 24px;font-family:var(--f-mono);font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--text-mid);border:1px solid var(--line2);border-radius:var(--r)}
 
-/* ===================================================================
+/* ═══════════════════════════════════════════════════════════════════
    MODAL
-=================================================================== */
+═══════════════════════════════════════════════════════════════════ */
 .overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:1000;align-items:center;justify-content:center;backdrop-filter:blur(4px)}
 .overlay.open{display:flex}
-.mbox{background:var(--bg2);border:1px solid var(--line2);width:560px;max-width:96vw;max-height:90vh;overflow-y:auto;display:flex;flex-direction:column;animation:min .2s ease both;border-radius:var(--r)}
+.mbox{background:var(--bg2);border:1px solid var(--line2);width:480px;max-width:94vw;max-height:90vh;overflow-y:auto;display:flex;flex-direction:column;animation:min .2s ease both;border-radius:var(--r)}
 @keyframes min{from{opacity:0;transform:scale(.96) translateY(10px)}to{opacity:1;transform:scale(1) translateY(0)}}
 .mhdr{background:#000;padding:16px 20px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--line);flex-shrink:0}
-.mtitle{font-family:var(--f-title);font-size:20px;font-weight:700;text-transform:uppercase;letter-spacing:2px;color:var(--neon)}
+.mtitle{font-family:var(--f-title);font-size:16px;font-weight:700;text-transform:uppercase;letter-spacing:2px;color:var(--neon)}
 .mclose{color:var(--text-dim);font-size:20px;line-height:1;padding:0 4px;transition:color .2s}
 .mclose:hover{color:var(--text)}
 .mbody{padding:20px;display:flex;flex-direction:column;gap:14px}
-.mintro{font-size:14px;color:var(--text-mid);line-height:1.6}
+.mintro{font-size:13px;color:var(--text-mid);line-height:1.6}
 
 /* recap list */
-.recap-list{display:flex;flex-direction:column;gap:0}
-.recap-item{display:grid;grid-template-columns:1fr auto auto;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid var(--line)}
+.recap-list{display:flex;flex-direction:column}
+.recap-item{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:9px 0;border-bottom:1px solid var(--line)}
 .recap-item:last-child{border-bottom:none}
-.recap-name{font-size:15px;font-weight:500;color:var(--text);min-width:0;overflow:hidden;text-overflow:ellipsis}
-.recap-tipo{font-family:var(--f-mono);font-size:11px;letter-spacing:1.5px;text-transform:uppercase;padding:3px 9px;border:1px solid;border-radius:var(--r);flex-shrink:0;white-space:nowrap}
+.recap-name{font-size:13px;font-weight:500;color:var(--text);flex:1}
+.recap-tipo{font-family:var(--f-mono);font-size:9px;letter-spacing:1.5px;text-transform:uppercase;padding:2px 7px;border:1px solid;border-radius:var(--r)}
 .recap-tipo.dep{border-color:rgba(77,166,255,.35);color:var(--blue)}.recap-tipo.fp{border-color:rgba(180,255,0,.35);color:var(--neon)}
-.recap-acc{font-family:var(--f-mono);font-size:16px;font-weight:700;font-variant-numeric:tabular-nums;white-space:nowrap;text-align:right}
+.recap-acc{font-family:var(--f-mono);font-size:14px;font-weight:600;font-variant-numeric:tabular-nums;white-space:nowrap;flex-shrink:0}
 .recap-acc.dep{color:var(--blue)}.recap-acc.fp{color:var(--neon)}
-.recap-gar{font-size:12px;color:var(--warm);font-weight:500;margin-left:4px}
-/* riga garanzia totale nella modale conferma */
-.recap-garanzia-row{
-  display:flex;justify-content:space-between;align-items:center;
-  padding:7px 10px;margin-bottom:4px;
-  background:rgba(247,201,72,.08);border:1px solid rgba(247,201,72,.25);
-  border-radius:var(--r);
-  font-family:var(--f-mono);font-size:9px;letter-spacing:.5px;
-  color:var(--warm);
-}
 
 .total-row{display:flex;justify-content:space-between;align-items:baseline;padding:12px 14px;background:var(--bg3);border:1px solid var(--line2);border-radius:var(--r)}
-.total-lbl{font-family:var(--f-mono);font-size:12px;letter-spacing:2px;text-transform:uppercase;color:var(--text-dim)}
-.total-val{font-family:var(--f-title);font-size:32px;font-weight:700;color:var(--neon);font-variant-numeric:tabular-nums}
+.total-lbl{font-family:var(--f-mono);font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--text-dim)}
+.total-val{font-family:var(--f-title);font-size:26px;font-weight:700;color:var(--neon);font-variant-numeric:tabular-nums}
 
-.mwarn{font-family:var(--f-mono);font-size:13px;color:var(--warm);background:var(--warm-dim);border:1px solid rgba(247,201,72,.2);padding:12px 14px;border-radius:var(--r);line-height:1.5}
+.mwarn{font-family:var(--f-mono);font-size:11px;color:var(--warm);background:var(--warm-dim);border:1px solid rgba(247,201,72,.2);padding:10px 12px;border-radius:var(--r);line-height:1.5}
 
 .mfooter{padding:14px 20px;border-top:1px solid var(--line);display:flex;gap:10px;justify-content:flex-end;flex-shrink:0}
-.btn-cancel{border:1px solid var(--line2);color:var(--text-mid);padding:11px 22px;font-family:var(--f-mono);font-size:13px;letter-spacing:2px;text-transform:uppercase;transition:all .15s;border-radius:var(--r)}
+.btn-cancel{border:1px solid var(--line2);color:var(--text-mid);padding:9px 18px;font-family:var(--f-mono);font-size:11px;letter-spacing:2px;text-transform:uppercase;transition:all .15s;border-radius:var(--r)}
 .btn-cancel:hover{border-color:var(--line2);background:var(--bg3);color:var(--text)}
-.btn-confirm{background:var(--neon);color:#000;padding:11px 26px;font-family:var(--f-title);font-size:15px;font-weight:700;letter-spacing:2px;text-transform:uppercase;transition:all .2s;border-radius:var(--r);display:flex;align-items:center;gap:8px}
+.btn-confirm{background:var(--neon);color:#000;padding:9px 22px;font-family:var(--f-title);font-size:13px;font-weight:700;letter-spacing:2px;text-transform:uppercase;transition:all .2s;border-radius:var(--r);display:flex;align-items:center;gap:8px}
 .btn-confirm:hover{background:#c8ff2a;box-shadow:0 0 16px var(--neon-glow)}
 .btn-confirm:disabled{opacity:.35;cursor:not-allowed}
 
@@ -453,9 +328,9 @@ white-space:nowrap;}
 .saldo-prodname{font-weight:600;color:var(--text)}
 
 
-/* ===================================================================
+/* ═══════════════════════════════════════════════════════════════════
    LIGHTBOX IMMAGINI
-=================================================================== */
+═══════════════════════════════════════════════════════════════════ */
 /* cursore sulla foto per indicare che è cliccabile */
 .prod-photo.has-imgs{cursor:zoom-in}
 .prod-photo.has-imgs:hover::before{
@@ -518,393 +393,115 @@ white-space:nowrap;}
   justify-content:center;cursor:pointer;border-radius:var(--r);
   transition:all .15s;flex-shrink:0}
 .lb-close:hover{background:rgba(255,255,255,.1);color:#fff}
-/* ===================================================================
+/* ═══════════════════════════════════════════════════════════════════
    SCROLLBAR
-=================================================================== */
+═══════════════════════════════════════════════════════════════════ */
 ::-webkit-scrollbar{width:4px}::-webkit-scrollbar-track{background:var(--bg2)}::-webkit-scrollbar-thumb{background:var(--line2);border-radius:2px}
 
-/* ===================================================================
+/* ═══════════════════════════════════════════════════════════════════
    ZOOM CONTROLS
-=================================================================== */
+═══════════════════════════════════════════════════════════════════ */
+.tb-zoom{display:flex;align-items:center;gap:4px;margin-right:4px}
+.btn-zoom{font-family:var(--f-mono);font-size:11px;font-weight:600;color:var(--text-dim);
   border:1px solid var(--line2);padding:3px 8px;border-radius:var(--r);
   transition:all .15s;line-height:1;min-width:24px;text-align:center}
+.btn-zoom:hover{color:var(--text);background:var(--bg3);border-color:var(--line)}
+.btn-zoom:active{transform:scale(.93)}
+.btn-zoom:disabled{opacity:.3;cursor:default}
+.tb-zoom-lbl{font-family:var(--f-mono);font-size:9px;color:var(--text-dim);
   letter-spacing:1px;min-width:32px;text-align:center;user-select:none}
-
-/* -- ICONA CARRELLO TOPBAR MOBILE ----------------------------------- */
-.btn-cart-mob{
-  display:none;
-  position:relative;align-items:center;justify-content:center;
-  width:34px;height:34px;flex-shrink:0;
-  background:transparent;border:1px solid var(--line2);
-  border-radius:var(--r);color:var(--text-mid);
-  cursor:pointer;transition:all .15s;
-}
-.btn-cart-mob:hover{border-color:var(--neon);color:var(--neon)}
-.btn-cart-mob svg{width:16px;height:16px;pointer-events:none}
-.cart-mob-badge{position:absolute;top:-5px;right:-5px;min-width:18px;height:18px;padding:0 5px;background:var(--neon-dim);border:1px solid rgba(180,255,0,.4);color:var(--neon);font-family:var(--f-mono);font-size:11px;font-weight:700;border-radius:10px;display:none;align-items:center;justify-content:center;box-sizing:border-box;font-variant-numeric:tabular-nums}
-
-/* -- DRAWER CARRELLO MOBILE ----------------------------------------- */
-.cart-drawer-backdrop{
-  display:none;position:fixed;inset:0;
-  background:rgba(0,0,0,.6);z-index:300;
-  backdrop-filter:blur(2px);
-}
-.cart-drawer-backdrop.open{display:block}
-.cart-drawer{
-  display:none;position:fixed;top:0;right:0;bottom:0;
-  width:min(320px,90vw);
-  background:var(--bg2);border-left:1px solid var(--neon);
-  z-index:301;flex-direction:column;
-  transform:translateX(100%);
-  transition:transform .3s cubic-bezier(.4,0,.2,1);
-}
-.cart-drawer.open{display:flex;transform:translateX(0)}
-.cart-drawer-hdr{
-  display:flex;align-items:center;justify-content:space-between;
-  padding:14px 16px;border-bottom:1px solid var(--line);flex-shrink:0;
-}
-.cart-drawer-title{
-  font-family:var(--f-mono);font-size:9px;font-weight:600;
-  letter-spacing:3px;text-transform:uppercase;color:var(--text-mid);
-  display:flex;align-items:center;gap:8px;
-}
-.cart-drawer-close{
-  width:28px;height:28px;display:flex;align-items:center;justify-content:center;
-  background:transparent;border:1px solid var(--line2);border-radius:var(--r);
-  color:var(--text-dim);font-size:18px;line-height:1;cursor:pointer;transition:all .15s;
-}
-.cart-drawer-close:hover{border-color:var(--red);color:var(--red)}
-.cart-drawer-body{flex:1;overflow-y:auto}
-.cart-drawer-totals{padding:10px 16px;border-top:1px solid var(--line2);flex-shrink:0}
-.cart-drawer-cta{padding:12px 16px;border-top:1px solid var(--line);flex-shrink:0}
-
-/* -- GARANZIA STOCK SOTTO ACCONTO SULLA CARD (desktop) ------------- */
-.prod-btn-gar{
-  font-family:var(--f-mono);font-size:13px;font-weight:600;
-  color:var(--warm);letter-spacing:.3px;white-space:nowrap;
-  display:block;line-height:1.3;
-}
+.btn-layout-toggle{margin-left:6px;border-left:1px solid var(--line2);padding-left:8px;font-size:13px;opacity:.55}
+.btn-layout-toggle:hover{opacity:1}
+.btn-layout-toggle.active{color:var(--neon);opacity:1}
 /* Vista mobile su desktop: griglia 1 col, card verticale */
 @media(min-width:769px){
+  body.layout-mobile .prod-grid{grid-template-columns:1fr!important}
+  body.layout-mobile .prod-card{flex-direction:column;min-height:unset}
+  body.layout-mobile .prod-photo-half{width:100%;height:220px}
+  body.layout-mobile .prod-info-half{width:100%;padding:12px 14px}
 }
 
 
-/* ===================================================================
-   MOBILE RESPONSIVE  (≤ 768px)  -- redesign completo
-=================================================================== */
+/* ═══════════════════════════════════════════════════════════════════
+   MOBILE RESPONSIVE  (≤ 768px)
+═══════════════════════════════════════════════════════════════════ */
 @media (max-width:768px){
-
-  /* -- TOPBAR -- due righe su mobile -------------------------------- */
-  .topbar{
-    padding:0;height:auto;gap:0;flex-direction:column;
-    border-bottom:1px solid var(--line2);
-  }
-  /* riga 1: logo + tier + logout */
-  .topbar::before{display:none} /* rimuove pseudo-elementi eventuali */
-  .tb-top-row{
-    display:flex;align-items:center;gap:8px;
-    padding:0 14px;height:44px;width:100%;box-sizing:border-box;
-    border-bottom:1px solid var(--line2);
-  }
-  .tb-logo{font-size:13px}
+  /* topbar compatta */
+  .topbar{padding:0 14px;height:48px;gap:10px}
+  .tb-logo{font-size:14px}
+  .tb-user,.tb-mese,.tb-sep,.tb-zoom{display:none}
   .tb-tier{font-size:8px;padding:2px 7px}
-  .tb-user,.tb-mese,.tb-sep{display:none}
-  .tb-right{margin-left:auto;display:flex;align-items:center;gap:8px}
-  .btn-logout{font-size:9px;padding:4px 10px}
+  .tb-cred-val{font-size:16px}
+  .btn-logout{font-size:9px;padding:4px 9px}
 
-  /* riga 2: credito + mese + rinnovo -- sempre visibili */
-  .tb-bottom-row{
-    display:flex;align-items:center;gap:0;
-    padding:0 14px;height:36px;width:100%;box-sizing:border-box;
-    background:var(--bg3);
-  }
-  .tb-mob-credito{
-    display:flex;align-items:center;gap:6px;
-    font-family:var(--f-mono);font-size:11px;
-  }
-  .tb-mob-credito-lbl{color:var(--text-dim);font-size:9px;letter-spacing:1px;text-transform:uppercase}
-  .tb-mob-credito-val{font-weight:700;color:var(--neon);font-size:14px}
-  .tb-mob-sep{width:1px;height:16px;background:var(--line2);margin:0 12px}
-  .tb-mob-mese{font-family:var(--f-mono);font-size:9px;color:var(--text-dim);letter-spacing:1px}
-  .tb-mob-rinnovo{
-    margin-left:auto;font-family:var(--f-mono);font-size:9px;
-    font-weight:600;letter-spacing:1px;
-  }
-  .tb-mob-rinnovo.warn{color:var(--warm)}
-  .tb-mob-rinnovo.urgent{color:var(--red);animation:pulse-urgent 1.5s ease-in-out infinite}
+  /* nav tabs */
+  .nav-tabs{padding:0 8px}
+  .nav-tab{padding:0 12px;font-size:9px;letter-spacing:1px}
 
-  /* nascondi il blocco credito desktop dalla topbar (ora è nella seconda riga) */
-  .tb-cred{display:none}
-  /* nascondi rinnovo desktop */
-  .tb-rinnovo{display:none!important}
+  /* lock banner */
+  .lock-banner{padding:7px 14px}
 
-  /* -- NAV TABS ----------------------------------------------------- */
-  .nav-tabs{padding:0 12px}
-  .nav-tab{padding:0 14px;font-size:9px;letter-spacing:1.5px}
-
-  /* -- LOCK BANNER -------------------------------------------------- */
-  .lock-banner{padding:7px 14px;font-size:11px}
-
-  /* -- CATALOGO ----------------------------------------------------- */
+  /* catalogo layout: colonna singola, no sidebar fissa */
   .cat-layout{flex-direction:column}
-  /* padding-bottom = 44px handle sidebar + margine */
-  .cat-main{padding:12px 12px 60px;gap:10px;max-width:100%}
-  .prod-grid{grid-template-columns:1fr!important;gap:10px}
+  .cat-main{padding:16px 12px 120px;gap:20px;max-width:100%}
 
-  /* -- CARD PRODOTTO: orizzontale compatta -------------------------
-     foto quadrata a sinistra (120px), info + bottoni a destra        */
-  .prod-card{
-    flex-direction:row;
-    min-height:unset;
-    align-items:stretch;
-  }
-  .prod-photo-half{
-    width:120px;min-width:120px;
-    height:auto;min-height:120px;
-    flex-shrink:0;
-    aspect-ratio:unset;
-  }
-  .prod-info-half{
-    flex:1;width:0;
-    padding:8px 10px 10px 10px;
-    gap:5px;overflow:hidden;
-  }
-  .prod-tier-tag{font-size:9px;padding:4px 10px;margin:0 -10px 4px -10px}
-  .prod-name{font-size:12px;line-height:1.3;white-space:normal}
-  .prod-sku{font-size:8px}
-  .prod-price{font-size:17px}
-  .prod-price-pub{font-size:12px}
-  /* bottoni affiancati orizzontalmente, comodi da toccare */
-  .prod-actions{flex-direction:row;gap:5px;margin-top:auto}
-  .prod-btn{flex:1;flex-direction:column;align-items:center;justify-content:center;padding:7px 4px;min-height:48px;gap:1px}
-  .prod-btn-left{align-items:center;gap:1px}
-  .prod-btn-lbl{font-size:8px;letter-spacing:.3px}
-  .prod-btn-val{font-size:11px;font-weight:700}
-  .prod-btn-r{display:flex;align-items:center;gap:3px;margin-top:2px}
-  .prod-dot{display:none} /* nasconde il pallino, non il valore */
+  /* product grid: sempre 1 colonna su mobile */
+  .prod-grid{grid-template-columns:1fr!important}
 
-  /* -- SIDEBAR → BARRA FISSA IN FONDO ------------------------------- */
+  /* card mobile: foto sopra, info sotto (torna verticale) */
+  .prod-card{flex-direction:column;min-height:unset}
+  .prod-photo-half{width:100%;height:160px;aspect-ratio:unset}
+  .prod-info-half{width:100%;padding:10px 12px}
+  .prod-name{font-size:12px}
+  .prod-price{font-size:18px}
+  .prod-actions{gap:5px}
+  .prod-btn{padding:8px 10px}
+  .prod-btn-lbl{font-size:9px}
+  .prod-btn-val{font-size:11px}
+
+  /* sidebar → bottom sheet */
   .cat-sidebar{
     position:fixed;bottom:0;left:0;right:0;
-    width:100%;max-height:70vh;
-    transform:translateY(calc(100% - 44px));
+    width:100%;max-height:50vh;
+    transform:translateY(calc(100% - 48px));
     transition:transform .3s cubic-bezier(.4,0,.2,1);
     border-left:none;border-top:2px solid var(--neon);
-    z-index:200;border-radius:0;
+    z-index:200;border-radius:0
   }
   .cat-sidebar.open{transform:translateY(0)}
   .sidebar-hdr{
     cursor:pointer;user-select:none;
-    height:44px;min-height:44px;
-    display:flex;align-items:center;justify-content:space-between;
-    padding:0 16px;font-size:10px;letter-spacing:2px;
-    -webkit-tap-highlight-color:transparent;
+    display:flex;align-items:center;justify-content:space-between
   }
-  .sidebar-hdr::before{display:none}
-  .sidebar-hdr::after{content:'▲';font-size:10px;color:var(--neon);transition:transform .3s;flex-shrink:0}
+  .sidebar-hdr::after{
+    content:'▲';font-size:10px;color:var(--neon);
+    transition:transform .3s
+  }
   .cat-sidebar.open .sidebar-hdr::after{transform:rotate(180deg)}
-  /* bottone conferma nella sidebar mobile: full-width */
-  .btn-conferma{width:100%;padding:14px;font-size:12px}
-  /* bottone top nascosto su mobile */
-  .sidebar-cta-top{display:none!important}
-  /* sidebar desktop nascosta su mobile -- usiamo il drawer */
-  .cat-sidebar{display:none!important}
-  /* mostra icona carrello in topbar */
-  .btn-cart-mob{display:inline-flex}
-  /* garanzia stock sulla card: nascosta su mobile (lo spazio è poco) */
-  .prod-btn-gar{display:none}
-
-  /* -- FILTRI ORDINI → scroll orizzontale --------------------------- */
-  .filters{
-    flex-wrap:nowrap!important;overflow-x:auto;
-    -webkit-overflow-scrolling:touch;
-    scrollbar-width:none;gap:6px;
-    padding-bottom:6px;
-    /* nasconde la scrollbar visivamente ma mantiene lo scroll */
-  }
-  .filters::-webkit-scrollbar{display:none}
-  .flt-btn{white-space:nowrap;flex-shrink:0;padding:7px 16px;font-size:10px;min-height:36px}
-  /* btn Rileva: icona only su mobile, nessun testo */
-  .btn-rileva{flex-shrink:0;padding:7px 10px;min-height:36px}
-  .btn-rileva span.rileva-txt{display:none}
-
-  /* -- ORDINI: card completamente verticale ------------------------- */
-  .orders-wrap{padding:14px 12px 80px;max-width:100%}
-  .ord-group{margin-bottom:16px}
-
-  /* card ordine: layout verticale pulito */
-  .ocard{flex-direction:column;align-items:stretch;border-radius:var(--r)}
-  .ocard-left{
-    display:grid;
-    grid-template-columns:80px 1fr;
-    gap:0;
-    border-bottom:1px solid var(--line2);
-    padding:0;
-    align-items:stretch;
-  }
-  .ocard-thumb{
-    width:80px;height:80px;
-    border-right:1px solid var(--line2);
-    border-radius:0;border:none;
-    border-right:1px solid var(--line2);
-    flex-shrink:0;
-  }
-  .ocard-info{
-    padding:10px 12px;
-    display:flex;flex-direction:column;gap:6px;justify-content:center;
-  }
-  .ocard-name{
-    font-size:13px;font-weight:500;line-height:1.3;
-    white-space:normal;          /* vai a capo, non troncare */
-    overflow:visible;
-    text-overflow:unset;
-  }
-  .ocard-meta{gap:5px}
-  .ocard-sep{display:none}
-  .ocard-nums{display:none}
-
-  /* numeri mobile: 3 colonne con valori grandi */
-  .ocard-mobile-nums{
-    display:grid;
-    grid-template-columns:repeat(3,1fr);
-    border-bottom:1px solid var(--line2);
-  }
-  .omob-num{
-    flex:unset;display:flex;flex-direction:column;
-    align-items:center;padding:11px 6px;gap:3px;
-  }
-  .omob-num:not(:last-child){border-right:1px solid var(--line2)}
-  .omob-val{
-    font-family:var(--f-mono);font-size:15px;
-    font-weight:700;font-variant-numeric:tabular-nums;
-  }
-  .omob-val.warn{color:var(--warm)}
-  .omob-val.zero{color:var(--text-dim)}
-  .omob-val.blue{color:var(--blue)}
-  .omob-val.dim{color:var(--text-mid)}
-  .omob-lbl{
-    font-family:var(--f-mono);font-size:8px;
-    letter-spacing:1px;text-transform:uppercase;color:var(--text-dim);
+  .sidebar-hdr::before{
+    content:'Piano · ';font-family:var(--f-mono);font-size:9px;
+    color:var(--text-dim);letter-spacing:1px;text-transform:uppercase
   }
 
-  /* azioni ordine: due bottoni full-width, più alti (finger-friendly) */
-  .ocard-actions{
-    display:grid;
-    grid-template-columns:1fr 1fr;
-    gap:0;
-    padding:0;
-    min-width:auto;
-  }
-  .btn-salda-ord{
-    padding:14px 10px;font-size:12px;letter-spacing:1.5px;
-    border-radius:0 0 0 var(--r);
-    border-top:1px solid var(--line2);
-    /* active state per tap feedback */
-  }
-  .btn-salda-ord:active{background:#c8ff2a;transform:scale(.97)}
-  .btn-acc-ord{
-    padding:14px 10px;font-size:11px;letter-spacing:1px;
-    border-radius:0 0 var(--r) 0;
-    border-top:1px solid var(--line2);
-    border-left:1px solid rgba(90,180,255,.3);
-  }
-  .btn-acc-ord:active{background:var(--blue-dim);transform:scale(.97)}
+  /* ordini: stack verticale */
+  .orders-wrap{padding:16px 12px 80px;max-width:100%}
+  .ocard-top{flex-wrap:wrap;gap:8px}
+  .ocard-top>div:last-child{width:100%}
+  .ocard-nums{flex-wrap:wrap;gap:6px}
 
-  /* -- MODALI: full-screen bottom sheet ----------------------------- */
-  .overlay{align-items:flex-end}          /* ancorate in basso */
-  .mbox{
-    width:100%;max-width:100%;
-    max-height:92vh;overflow-y:auto;
-    border-radius:16px 16px 0 0;         /* angoli arrotondati in alto */
-    border:none;border-top:2px solid var(--line2);
-    /* handle visivo */
-    padding-top:12px;
-  }
-  /* drag handle sopra la modale */
-  .mbox::before{
-    content:'';display:block;
-    width:40px;height:4px;
-    background:var(--line2);border-radius:2px;
-    margin:0 auto 12px;
-  }
-  .mbox-saldo{
-    width:100%;max-width:100%;
-    border-radius:16px 16px 0 0;
-    border:none;border-top:2px solid var(--neon);
-    padding-top:12px;
-    max-height:92vh;overflow-y:auto;
-  }
-  .mbox-saldo::before{
-    content:'';display:block;
-    width:40px;height:4px;
-    background:rgba(180,255,0,.3);border-radius:2px;
-    margin:0 auto 12px;
-  }
-  /* header modale più alto per touch */
-  .mhdr{padding:14px 20px;min-height:52px}
-  .mtitle{font-size:15px}
-  /* footer modale: bottoni full width, più alti */
-  .mfooter{
-    flex-direction:column-reverse;gap:8px;
-    padding:14px 16px calc(14px + env(safe-area-inset-bottom));
-  }
-  .btn-confirm,.btn-cancel{
-    width:100%;padding:15px;font-size:12px;justify-content:center;
-  }
-  /* input acconto: più grande per touch e tastiera mobile */
-  .extra-input{
-    font-size:20px!important;
-    padding:14px 16px!important;
-    min-height:56px;
-  }
-  /* body modale acconto/salda: padding ottimizzato */
-  .mbox-saldo-body{padding:16px 18px!important}
-  /* assicura che il modal salga sopra la tastiera */
-  .overlay.open{
-    padding-bottom:env(safe-area-inset-bottom);
-  }
-  /* recap list nella modale conferma */
-  .recap-item{padding:10px 0;gap:8px}
-  .recap-name{font-size:12px}
+  /* modal: full screen */
+  .modal-box{width:95vw;max-height:90vh;overflow-y:auto;padding:20px 16px}
 }
 
-/* tablet e laptop (769-1280px) */
-@media (min-width:769px) and (max-width:1280px){
-  .cat-main{padding:16px 16px 60px;gap:20px}
-  .prod-grid{grid-template-columns:repeat(min(var(--prod-count,3),2),1fr)!important;gap:12px}
-  .cat-sidebar{width:312px;font-size:13px}
-  /* nascondi righe mobile della topbar su tablet/laptop */
-  .tb-bottom-row{display:none}
-  .tb-top-row{display:flex}
-  /* card più compatta */
-  .prod-card{min-height:320px}
-  .prod-name{font-size:13px}
-  .prod-price{font-size:20px}
-  .prod-info-half{padding:0 10px 10px 10px;gap:6px}
-  .prod-btn{padding:7px 8px}
-  .prod-btn-lbl{font-size:10px}
-  .prod-btn-val{font-size:11px}
-  /* sidebar compatta */
-  .sel-name{font-size:10px}
-  .sel-acc{font-size:13px}
-  .sidebar-hdr{padding:10px 14px;font-size:8px}
-  .tot-lbl{font-size:9px}
-  .tot-val{font-size:14px}
-  .btn-conferma{padding:9px;font-size:11px;letter-spacing:2px}
+/* tablet (769–1024px) */
+@media (min-width:769px) and (max-width:1024px){
+  .cat-main{padding:20px 20px 60px;gap:24px}
+  .prod-grid{grid-template-columns:repeat(min(var(--prod-count,3),2),1fr)!important}
+  .cat-sidebar{width:240px}
+  .tb-zoom .tb-zoom-lbl{display:none}
 }
 
-/* su desktop nascondi le righe mobile della topbar */
-@media (min-width:769px){
-  .tb-bottom-row{display:none}
-  .tb-top-row{display:flex}
-}
-
-/* su schermi grandi (>1280px): griglia 3 colonne piena */
-@media (min-width:1281px){
-  .prod-grid{grid-template-columns:repeat(3,1fr)!important}
-}
-
-/* rinnovo in topbar (desktop) */
+/* rinnovo in topbar */
 .tb-rinnovo{display:flex;flex-direction:column;align-items:flex-start;gap:1px;padding:0 10px;border-left:1px solid var(--line2)}
 .tb-rinnovo-lbl{font-family:var(--f-mono);font-size:8px;letter-spacing:2px;text-transform:uppercase;color:var(--text-dim)}
 .tb-rinnovo-val{font-family:var(--f-mono);font-size:12px;font-weight:600;color:var(--text-mid);font-variant-numeric:tabular-nums}
@@ -912,80 +509,18 @@ white-space:nowrap;}
 .tb-rinnovo-val.urgent{color:var(--red);animation:pulse-urgent 1.5s ease-in-out infinite}
 @keyframes pulse-urgent{0%,100%{opacity:1}50%{opacity:.5}}
 @media (max-width:768px){.tb-rinnovo{display:none!important}}
-
-/* ===================================================================
-   GAMING THEME -- GLOW TIER + PARTICLE BURST
-=================================================================== */
-
-/* -- GLOW TIER sulle card prodotto ---------------------------------- */
-/* Glow subtile sulla barra vtag per tier */
-.tier-vtag.scout  { box-shadow: 0 0 12px rgba(90,180,255,.35), inset 0 0 8px rgba(90,180,255,.2); }
-.tier-vtag.veteran{ box-shadow: 0 0 12px rgba(0,212,160,.35), inset 0 0 8px rgba(0,212,160,.2); }
-.tier-vtag.elite  { box-shadow: 0 0 12px rgba(247,201,72,.35), inset 0 0 8px rgba(247,201,72,.2); }
-
-/* Glow sul bordo card quando selezionata -- potenziato */
-.prod-card.sel-dep {
-  box-shadow: 0 0 0 1px var(--scout),
-              0 0 16px rgba(90,180,255,.25),
-              0 0 40px rgba(90,180,255,.1);
-}
-.prod-card.sel-fp {
-  box-shadow: 0 0 0 1px var(--neon),
-              0 0 16px rgba(180,255,0,.22),
-              0 0 40px rgba(180,255,0,.08);
-}
-
-/* Glow hover sulle tier section */
-.tier-section:has(.tier-vtag.scout):hover   .tier-vtag.scout   { box-shadow: 0 0 20px rgba(90,180,255,.5),  inset 0 0 10px rgba(90,180,255,.3); }
-.tier-section:has(.tier-vtag.veteran):hover .tier-vtag.veteran { box-shadow: 0 0 20px rgba(0,212,160,.5),  inset 0 0 10px rgba(0,212,160,.3); }
-.tier-section:has(.tier-vtag.elite):hover   .tier-vtag.elite   { box-shadow: 0 0 20px rgba(247,201,72,.5), inset 0 0 10px rgba(247,201,72,.3); }
-
-/* Glow sui badge tier nella topbar */
-.tb-tier.scout   { text-shadow: 0 0 8px rgba(90,180,255,.6); }
-.tb-tier.veteran { text-shadow: 0 0 8px rgba(0,212,160,.6); }
-.tb-tier.elite   { text-shadow: 0 0 8px rgba(247,201,72,.6); }
-
-/* Glow sul credito in topbar */
-.tb-cred-val { text-shadow: 0 0 10px rgba(180,255,0,.4); }
-
-/* Glow sui bottoni prodotto attivi */
-.prod-btn.dep-on { box-shadow: 0 0 10px rgba(90,180,255,.15); }
-.prod-btn.fp-on  { box-shadow: 0 0 10px rgba(180,255,0,.15); }
-
-/* Glow sul bottone conferma */
-.btn-conferma:not(:disabled) {
-  box-shadow: 0 0 14px rgba(180,255,0,.2);
-  text-shadow: 0 0 8px rgba(0,0,0,.4);
-}
-.btn-conferma:hover:not(:disabled) {
-  box-shadow: 0 0 28px rgba(180,255,0,.4), 0 0 60px rgba(180,255,0,.12) !important;
-}
-
-/* -- PARTICLE BURST -------------------------------------------------- */
-#particleCanvas {
-  position: fixed;
-  inset: 0;
-  pointer-events: none;
-  z-index: 9998;
-  opacity: 0;
-  transition: opacity .1s;
-}
-#particleCanvas.active { opacity: 1; }
 </style>
 </head>
 <body>
 
-<!-- Canvas particle burst -- gaming theme -->
-<canvas id="particleCanvas"></canvas>
-
-<!-- === LOADING === -->
-<div id="gLoad" class="out" style="display: none;">
+<!-- ═══ LOADING ═══ -->
+<div id="gLoad">
   <div class="gl-logo">DNI <span>Builders</span> Club</div>
   <div class="gl-bar"><div class="gl-fill"></div></div>
   <div class="gl-txt" id="glTxt">Inizializzazione…</div>
 </div>
 
-<!-- === LOGIN === -->
+<!-- ═══ LOGIN ═══ -->
 <div class="screen" id="sLogin">
   <div class="lbox">
     <div class="lbrand">
@@ -996,13 +531,17 @@ white-space:nowrap;}
     <div class="lform">
       <div class="lfield">
         <label>ID Socio</label>
-        <input type="text" id="lid" placeholder="es. U0001" autocomplete="username" oninput="document.getElementById(&#39;lerr&#39;).classList.remove(&#39;on&#39;)" onkeydown="if(event.key===&#39;Enter&#39;)doLogin()">
+        <input type="text" id="lid" placeholder="es. U0001" autocomplete="username"
+               oninput="document.getElementById('lerr').classList.remove('on')"
+               onkeydown="if(event.key==='Enter')doLogin()">
       </div>
       <div class="lfield">
         <label>PIN</label>
-        <input type="password" id="lpin" placeholder="••••••••" autocomplete="current-password" oninput="document.getElementById(&#39;lerr&#39;).classList.remove(&#39;on&#39;)" onkeydown="if(event.key===&#39;Enter&#39;)doLogin()">
+        <input type="password" id="lpin" placeholder="••••••••" autocomplete="current-password"
+               oninput="document.getElementById('lerr').classList.remove('on')"
+               onkeydown="if(event.key==='Enter')doLogin()">
       </div>
-      <div class="lerr" id="lerr">Codice non valido</div>
+      <div class="lerr" id="lerr"></div>
       <button class="btn-login" id="btnLogin" onclick="doLogin()">
         <div class="spin"></div>
         <span class="ltxt">Accedi</span>
@@ -1011,61 +550,47 @@ white-space:nowrap;}
   </div>
 </div>
 
-<!-- === APP === -->
-<div class="screen active" id="sApp">
+<!-- ═══ APP ═══ -->
+<div class="screen" id="sApp">
 
   <div class="topbar">
-    <!-- riga 1 desktop / riga superiore mobile -->
-    <div class="tb-top-row" style="display:contents">
-      <div class="tb-logo">DNI <span>Builders</span> Club</div>
-      <div class="tb-sep"></div>
-      <div class="tb-user">Benvenuto, <strong id="tbNome">Admin</strong></div>
-      <div class="tb-tier elite" id="tbTier">Élite</div>
-      <div class="tb-mese" id="tbMese">Mese: 2026-03</div>
-      <div class="tb-rinnovo" id="tbRinnovoWrap" style="display: flex;">
-        <div class="tb-rinnovo-lbl">Rinnovo</div>
-        <div class="tb-rinnovo-val urgent" id="tbRinnovo">01/01/1970 (scaduto)</div>
-      </div>
-      <div class="tb-right">
-        <div class="tb-cred">
-          <div class="tb-cred-lbl">Credito</div>
-          <div class="tb-cred-val" id="tbCred">€1000</div>
-        </div>
-        <button class="btn-logout" onclick="doLogout()">Esci</button>
-      </div>
+    <div class="tb-logo">DNI <span>Builders</span> Club</div>
+    <div class="tb-sep"></div>
+    <div class="tb-user">Benvenuto, <strong id="tbNome">—</strong></div>
+    <div class="tb-tier" id="tbTier">—</div>
+    <div class="tb-mese" id="tbMese">—</div>
+    <div class="tb-rinnovo" id="tbRinnovoWrap" style="display:none">
+      <div class="tb-rinnovo-lbl">Rinnovo</div>
+      <div class="tb-rinnovo-val" id="tbRinnovo">—</div>
     </div>
-    <!-- riga inferiore mobile: credito + mese + rinnovo -->
-    <div class="tb-bottom-row">
-      <div class="tb-mob-credito">
-        <span class="tb-mob-credito-lbl">Credito</span>
-        <span class="tb-mob-credito-val" id="tbCredMob">€1000</span>
+    <div class="tb-right">
+      <div class="tb-zoom">
+        <button class="btn-zoom" id="btnZoomOut" onclick="zoomStep(-1)" title="Riduci testo">A−</button>
+        <span class="tb-zoom-lbl" id="zoomLbl">100%</span>
+        <button class="btn-zoom" id="btnZoomIn" onclick="zoomStep(+1)" title="Ingrandisci testo">A+</button>
+        <button class="btn-zoom btn-layout-toggle" id="btnLayout" onclick="toggleLayout()" title="Vista mobile">⊟</button>
       </div>
-      <div class="tb-mob-sep"></div>
-      <div class="tb-mob-mese" id="tbMeseMob">Mese: 2026-03</div>
-      <div class="tb-mob-rinnovo urgent" id="tbRinnovoMob" style="display: block;">⟳ Scaduto</div>
-      <!-- icona carrello mobile (solo mobile) -->
-      <button class="btn-cart-mob" id="btnCartMob" onclick="apriDrawerCarrello()" title="Il tuo carrello">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle>
-          <path d="M1 1h4l2.68 13.39a2 2 0 001.99 1.61h9.72a2 2 0 001.99-1.61L23 6H6"></path>
-        </svg>
-        <span class="cart-mob-badge" id="cartMobBadge" style="display: none;">0</span>
-      </button>
+      <div class="tb-cred">
+        <div class="tb-cred-lbl">Credito</div>
+        <div class="tb-cred-val" id="tbCred">€0</div>
+      </div>
+      <button class="btn-logout" onclick="doLogout()">Esci</button>
     </div>
   </div>
 
   <div class="lock-banner" id="lockBanner">
     <span>🔒</span>
     <div class="lock-banner-txt">
-      <strong>Portale in modalità attesa.</strong> Alberto sta elaborando manualmente il tuo account.
+      <strong>Ordine inviato.</strong> Selezione bloccata in attesa di elaborazione.
+      Puoi continuare ad assegnare acconti agli ordini attivi.
     </div>
   </div>
 
   <div class="nav-tabs">
-    <button class="nav-tab active" id="btnTabCat" onclick="switchTab(&#39;cat&#39;)">
+    <button class="nav-tab active" id="btnTabCat" onclick="switchTab('cat')">
       Catalogo Mese
     </button>
-    <button class="nav-tab" id="btnTabOrd" onclick="switchTab(&#39;ord&#39;)">
+    <button class="nav-tab" id="btnTabOrd" onclick="switchTab('ord')">
       I Tuoi Ordini
       <span class="tab-badge" id="ordCount">0</span>
     </button>
@@ -1076,61 +601,11 @@ white-space:nowrap;}
     <!-- TAB CATALOGO -->
     <div class="tab-pane active" id="pCat">
       <div class="cat-layout">
-        <div class="cat-main" id="catMain"><div class="tier-section">
-      <div class="tier-vtag scout"><span>Scout</span></div>
-      <div class="tier-body">
-        <div class="prod-grid"><div class="prod-card prod-card-empty">
-          <div class="prod-photo-half"></div>
-          <div class="prod-info-half"></div>
-        </div><div class="prod-card prod-card-empty">
-          <div class="prod-photo-half"></div>
-          <div class="prod-info-half"></div>
-        </div><div class="prod-card prod-card-empty">
-          <div class="prod-photo-half"></div>
-          <div class="prod-info-half"></div>
-        </div></div>
-      </div>
-    </div><div class="tier-section">
-      <div class="tier-vtag veteran"><span>Veteran</span></div>
-      <div class="tier-body">
-        <div class="prod-grid"><div class="prod-card prod-card-empty">
-          <div class="prod-photo-half"></div>
-          <div class="prod-info-half"></div>
-        </div><div class="prod-card prod-card-empty">
-          <div class="prod-photo-half"></div>
-          <div class="prod-info-half"></div>
-        </div><div class="prod-card prod-card-empty">
-          <div class="prod-photo-half"></div>
-          <div class="prod-info-half"></div>
-        </div></div>
-      </div>
-    </div><div class="tier-section">
-      <div class="tier-vtag elite"><span>Élite</span></div>
-      <div class="tier-body">
-        <div class="prod-grid"><div class="prod-card prod-card-empty">
-          <div class="prod-photo-half"></div>
-          <div class="prod-info-half"></div>
-        </div><div class="prod-card prod-card-empty">
-          <div class="prod-photo-half"></div>
-          <div class="prod-info-half"></div>
-        </div><div class="prod-card prod-card-empty">
-          <div class="prod-photo-half"></div>
-          <div class="prod-info-half"></div>
-        </div></div>
-      </div>
-    </div></div>
+        <div class="cat-main" id="catMain"></div>
         <div class="cat-sidebar">
-          <div class="sidebar-hdr" onclick="toggleSidebar()">
-            <span>Il tuo carrello <span class="sidebar-cart-badge" id="sideCartBadge" style="display:none"></span></span>
-          </div>
-          <!-- bottone conferma in cima (desktop): sempre visibile scrollando -->
-          <div class="sidebar-cta-top" id="sideCtaTop" style="display:none">
-            <button class="btn-conferma btn-conferma-top" id="btnConfermaTop" onclick="apriConferma()" disabled="">
-              Conferma Ordine
-            </button>
-          </div>
+          <div class="sidebar-hdr" onclick="toggleSidebar()">Piano corrente</div>
           <div class="sidebar-items" id="sideItems">
-            <div class="sidebar-empty" id="sideEmpty" style="display: flex;">Nessuna selezione</div>
+            <div class="sidebar-empty" id="sideEmpty">Nessuna selezione</div>
           </div>
           <div class="sidebar-totals" id="sideTotals" style="display:none">
             <div class="tot-row">
@@ -1143,7 +618,7 @@ white-space:nowrap;}
             </div>
           </div>
           <div class="sidebar-cta">
-            <button class="btn-conferma" id="btnConferma" onclick="apriConferma()" disabled="">
+            <button class="btn-conferma" id="btnConferma" onclick="apriConferma()" disabled>
               Conferma Ordine
             </button>
           </div>
@@ -1154,54 +629,33 @@ white-space:nowrap;}
     <!-- TAB ORDINI -->
     <div class="tab-pane" id="pOrd">
       <div class="orders-wrap">
-        <div class="filters" style="justify-content:space-between;align-items:center">
-          <div style="display:flex;gap:6px;flex-wrap:wrap">
-            <button class="flt-btn active" onclick="setFiltro(&#39;tutti&#39;,this)">Tutti <span class="flt-badge" id="fltBadgeTutti" style="display:none">0</span></button>
-            <button class="flt-btn" onclick="setFiltro(&#39;in_preparazione&#39;,this)">In conferma <span class="flt-badge" id="fltBadgeConferma" style="display:none">0</span></button>
-            <button class="flt-btn" onclick="setFiltro(&#39;da_saldare&#39;,this)">Da saldare <span class="flt-badge" id="fltBadgeSaldare" style="display:none">0</span></button>
-            <button class="flt-btn" onclick="setFiltro(&#39;saldato&#39;,this)">Saldato <span class="flt-badge" id="fltBadgeSaldato" style="display:none">0</span></button>
-            <button class="flt-btn" onclick="setFiltro(&#39;spedito&#39;,this)">Spedito <span class="flt-badge" id="fltBadgeSpedito" style="display:none">0</span></button>
-          </div>
-          <button class="btn-rileva" id="btnRileva" onclick="rilevaMieiOrdini(this)" title="Ricarica ordini dal server">
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"></polyline><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"></path></svg>
-            <span class="rileva-txt">Rileva i miei ordini</span>
-          </button>
+        <div class="filters">
+          <button class="flt-btn active" onclick="setFiltro('tutti',this)">Tutti</button>
+          <button class="flt-btn" onclick="setFiltro('da_saldare',this)">Da saldare</button>
+          <button class="flt-btn" onclick="setFiltro('in_lavorazione',this)">In lavorazione</button>
+          <button class="flt-btn" onclick="setFiltro('spedito',this)">Spedito</button>
+          <button class="flt-btn" onclick="setFiltro('saldato',this)">Saldato</button>
         </div>
 
-        <div id="grpDaSaldare" class="ord-group" style="display:none">
-          <div class="ord-group-hdr da_saldare">
-            <div class="grp-dot"></div>
-            <span class="grp-label">Da saldare</span>
-            <span class="grp-cnt" id="cntDaSaldare">0</span>
+        <div class="ord-section">
+          <div class="ord-sec-title">
+            Assegna acconti <span class="sec-cnt" id="cntMod">0</span>
           </div>
-          <div id="ordDaSaldare"></div>
+          <div id="ordMod"></div>
         </div>
 
-        <div id="grpSaldato" class="ord-group" style="display:none">
-          <div class="ord-group-hdr saldato">
-            <div class="grp-dot"></div>
-            <span class="grp-label">Saldato</span>
-            <span class="grp-cnt" id="cntSaldato">0</span>
-          </div>
-          <div id="ordSaldato"></div>
-        </div>
-
-        <div id="grpSpedito" class="ord-group" style="display:none">
-          <div class="ord-group-hdr spedito">
-            <div class="grp-dot"></div>
-            <span class="grp-label">Spedito</span>
-            <span class="grp-cnt" id="cntSpedito">0</span>
-          </div>
-          <div id="ordSpedito"></div>
-        </div>
-
-        <div id="grpDraft" class="ord-group" style="display:none">
-          <div class="ord-group-hdr in_conferma">
-            <div class="grp-dot"></div>
-            <span class="grp-label">In conferma</span>
-            <span class="grp-cnt" id="cntDraft">0</span>
+        <div class="ord-section">
+          <div class="ord-sec-title">
+            In attesa di conferma DNI <span class="sec-cnt" id="cntDraft">0</span>
           </div>
           <div id="ordDraft"></div>
+        </div>
+
+        <div class="ord-section">
+          <div class="ord-sec-title">
+            Ordini confermati <span class="sec-cnt" id="cntArch">0</span>
+          </div>
+          <div id="ordArch"></div>
         </div>
       </div>
     </div>
@@ -1209,45 +663,17 @@ white-space:nowrap;}
   </div>
 </div>
 
-<!-- === DRAWER CARRELLO MOBILE === -->
-<div class="cart-drawer-backdrop" id="cartDrawerBackdrop" onclick="chiudiDrawerCarrello()"></div>
-<div class="cart-drawer" id="cartDrawer">
-  <div class="cart-drawer-hdr">
-    <div class="cart-drawer-title">
-      Il tuo carrello
-      <span class="sidebar-cart-badge" id="drawerCartBadge" style="display:none"></span>
-    </div>
-    <button class="cart-drawer-close" onclick="chiudiDrawerCarrello()">×</button>
-  </div>
-  <div style="padding:10px 14px;border-bottom:1px solid var(--line2);flex-shrink:0">
-    <button class="btn-conferma" id="btnConfermaDrawer" onclick="chiudiDrawerCarrello();apriConferma()" disabled="">
-      Conferma Ordine
-    </button>
-  </div>
-  <div class="cart-drawer-body" id="drawerItems">
-    <div class="sidebar-empty" id="drawerEmpty" style="display: flex;">Nessuna selezione</div>
-  </div>
-  <div class="cart-drawer-totals" id="drawerTotals" style="display:none">
-    <div class="tot-row">
-      <span class="tot-lbl">Totale acconti</span>
-      <span class="tot-val" id="drawerTotAcc" style="color:var(--blue)">€0</span>
-    </div>
-    <div class="tot-row">
-      <span class="tot-lbl">Credito residuo</span>
-      <span class="tot-val" id="drawerCredRes">€0</span>
-    </div>
-  </div>
-</div>
-
-<!-- === MODAL CONFERMA === -->
-<div class="overlay" id="mConferma">
+<!-- ═══ MODAL CONFERMA ═══ -->
+<div class="overlay" id="mConferma" onclick="if(event.target===this)chiudiConferma()">
   <div class="mbox">
     <div class="mhdr">
       <div class="mtitle">Conferma Ordine</div>
+      <button class="mclose" onclick="chiudiConferma()">×</button>
     </div>
     <div class="mbody">
       <p class="mintro">
-        Stai per inviare la tua selezione a DNI. Dopo la conferma il credito verrà scalato e potrai continuare a selezionare prodotti con il credito rimanente.
+        Stai per inviare la tua selezione mensile a DNI. Dopo la conferma la pagina sarà
+        bloccata fino all'elaborazione del tuo ordine.
       </p>
       <div class="recap-list" id="recapList"></div>
       <div class="total-row">
@@ -1255,12 +681,9 @@ white-space:nowrap;}
         <span class="total-val" id="recapTot">€0</span>
       </div>
       <div class="mwarn" id="mwarn" style="display:none"></div>
-      <div id="mConfermaWait" style="display:none;font-family:var(--f-mono);font-size:13px;color:var(--warm);background:var(--warm-dim);border:1px solid rgba(247,201,72,.2);padding:10px 12px;border-radius:var(--r);line-height:1.6;text-align:center">
-        ⏳ Invio in corso -- attendere e non aggiornare o chiudere la pagina…
-      </div>
     </div>
-    <div class="mfooter" id="mConfermaFooter">
-      <button class="btn-cancel" id="btnMCancel" onclick="chiudiConferma()">Annulla</button>
+    <div class="mfooter">
+      <button class="btn-cancel" onclick="chiudiConferma()">Annulla</button>
       <button class="btn-confirm" id="btnMConf" onclick="inviaConferma()">
         <div class="spin" style="border-color:rgba(0,0,0,.3);border-top-color:#000"></div>
         <span class="ltxt">Conferma definitiva</span>
@@ -1269,99 +692,29 @@ white-space:nowrap;}
   </div>
 </div>
 
-<!-- === MODAL SALDA ORDINE === -->
-<div class="overlay" id="mSaldaOrd">
-  <div class="mbox-saldo" style="width:440px">
-    <div class="mhdr">
-      <div class="mtitle" style="color:var(--neon)">Salda ordine</div>
-      <button class="mclose" id="mSaldaCloseBtn" onclick="chiudiModalSalda()">×</button>
-    </div>
-    <div class="mbox-saldo-body" style="gap:14px;align-items:stretch;text-align:left">
-      <div id="mSaldaContent">
-        <div style="display:flex;flex-direction:column;gap:14px">
-          <div id="mSaldaNome" style="font-size:13px;font-weight:500;color:var(--text);line-height:1.4">--</div>
-          <div style="display:flex;align-items:center;justify-content:space-between;padding:13px 16px;background:var(--bg4);border:1px solid var(--line2);border-radius:var(--r)">
-            <span style="font-family:var(--f-mono);font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--text-dim)">Importo da scalare</span>
-            <span id="mSaldaImporto" style="font-family:var(--f-title);font-size:26px;font-weight:700;color:var(--neon)">--</span>
-          </div>
-          <div style="border:1px solid var(--line2);border-radius:var(--r);overflow:hidden">
-            <div style="display:flex;justify-content:space-between;padding:9px 14px;font-family:var(--f-mono);font-size:10px;border-bottom:1px solid var(--line2)">
-              <span style="color:var(--text-dim)">Credito disponibile</span>
-              <span id="mSaldaCreditoOra" style="font-weight:600;color:var(--text)">--</span>
-            </div>
-            <div style="display:flex;justify-content:space-between;padding:9px 14px;font-family:var(--f-mono);font-size:10px">
-              <span style="color:var(--text-dim)">Credito dopo operazione</span>
-              <span id="mSaldaCreditoDopo" style="font-weight:600;color:var(--neon)">--</span>
-            </div>
-          </div>
-          <div style="font-family:var(--f-mono);font-size:10px;color:var(--warm);background:var(--warm-dim);border:1px solid rgba(247,201,72,.2);padding:9px 12px;border-radius:var(--r);line-height:1.5">
-            ⚠ Confermando, l'ordine andrà in preparazione spedizione e non sarà più modificabile.
-          </div>
-        </div>
-      </div>
-      <div id="mSaldaFeedback" style="display:none;flex-direction:column;align-items:center;gap:12px;padding:12px 0;text-align:center">
-        <div id="mSaldaFbIcon" style="font-size:32px"></div>
-        <div id="mSaldaFbMsg" style="font-family:var(--f-mono);font-size:12px;line-height:1.6"></div>
+<!-- ═══ MODAL SALDO COMPLETO ═══ -->
+<div class="overlay" id="mSaldo" onclick="if(event.target===this)chiudiSaldo()">
+  <div class="mbox-saldo">
+    <div class="mbox-saldo-body">
+      <div class="saldo-icon">✅</div>
+      <div class="saldo-title">Ordine saldato!</div>
+      <div class="saldo-text">
+        Stai saldando completamente
+        <span class="saldo-prodname" id="saldoProd">—</span>.
+        Dopo la conferma l'ordine sarà bloccato in attesa di spedizione.
       </div>
     </div>
-    <div class="mfooter" id="mSaldaFooter" style="justify-content:flex-end">
-      <button class="btn-cancel" onclick="chiudiModalSalda()">Annulla</button>
-      <button class="btn-confirm" id="mSaldaConfirmBtn" onclick="eseguiSalda()">
-        <div class="spin" style="border-color:rgba(0,0,0,.3);border-top-color:#000"></div>
-        <span class="ltxt">Conferma saldo</span>
-      </button>
+    <div class="mfooter" style="justify-content:center">
+      <button class="btn-cancel" onclick="chiudiSaldo()">Annulla</button>
+      <button class="btn-confirm" onclick="confermaSaldo()">Conferma saldo</button>
     </div>
   </div>
 </div>
 
-<!-- === MODAL IMPOSTA ACCONTO === -->
-<div class="overlay" id="mAccontoOrd">
-  <div class="mbox-saldo" style="width:440px">
-    <div class="mhdr">
-      <div class="mtitle" style="color:var(--blue)">Imposta acconto</div>
-      <button class="mclose" id="mAccCloseBtn" onclick="chiudiModalAcconto()">×</button>
-    </div>
-    <div class="mbox-saldo-body" style="gap:14px;align-items:stretch;text-align:left">
-      <div id="mAccContent">
-        <div style="display:flex;flex-direction:column;gap:14px">
-          <div id="mAccNome" style="font-size:13px;font-weight:500;color:var(--text);line-height:1.4">--</div>
-          <div>
-            <div style="font-family:var(--f-mono);font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--text-mid);margin-bottom:6px">Importo (€)</div>
-            <input type="number" id="mAccInput" class="extra-input" style="width:100%;padding:11px 14px;font-size:15px;font-family:var(--f-mono)" placeholder="es. 10" min="1" oninput="aggiornaPrevAcc()">
-            <div id="mAccHint" style="font-family:var(--f-mono);font-size:9px;color:var(--text-dim);margin-top:5px">Massimo: -- · Credito disponibile: --</div>
-          </div>
-          <div id="mAccPreview" style="border:1px solid var(--line2);border-radius:var(--r);overflow:hidden;opacity:0;transition:opacity .2s">
-            <div style="display:flex;justify-content:space-between;padding:9px 14px;font-family:var(--f-mono);font-size:10px;border-bottom:1px solid var(--line2)">
-              <span style="color:var(--text-dim)">Residuo dopo operazione</span>
-              <span id="mAccResAfter" style="font-weight:600;color:var(--warm)">--</span>
-            </div>
-            <div style="display:flex;justify-content:space-between;padding:9px 14px;font-family:var(--f-mono);font-size:10px">
-              <span style="color:var(--text-dim)">Credito dopo operazione</span>
-              <span id="mAccCreditoDopo" style="font-weight:600;color:var(--neon)">--</span>
-            </div>
-          </div>
-          <div id="mAccErr" style="display:none;font-family:var(--f-mono);font-size:10px;color:var(--red);background:var(--red-dim);border:1px solid rgba(255,90,90,.2);padding:9px 12px;border-radius:var(--r)"></div>
-        </div>
-      </div>
-      <div id="mAccFeedback" style="display:none;flex-direction:column;align-items:center;gap:12px;padding:12px 0;text-align:center">
-        <div id="mAccFbIcon" style="font-size:32px"></div>
-        <div id="mAccFbMsg" style="font-family:var(--f-mono);font-size:12px;line-height:1.6"></div>
-      </div>
-    </div>
-    <div class="mfooter" id="mAccFooter" style="justify-content:flex-end">
-      <button class="btn-cancel" onclick="chiudiModalAcconto()">Annulla</button>
-      <button class="btn-confirm" id="mAccBtn" disabled="" onclick="eseguiAcconto()" style="background:var(--blue)">
-        <div class="spin" style="border-color:rgba(255,255,255,.3);border-top-color:#fff"></div>
-        <span class="ltxt">Conferma acconto</span>
-      </button>
-    </div>
-  </div>
-</div>
-
-<!-- === LIGHTBOX IMMAGINI === -->
+<!-- ═══ LIGHTBOX IMMAGINI ═══ -->
 <div id="mLightbox" onclick="if(event.target===this)chiudiLightbox()">
   <div class="lb-top">
-    <span class="lb-title" id="lbTitle">--</span>
+    <span class="lb-title" id="lbTitle">—</span>
     <div style="display:flex;align-items:center;gap:12px">
       <span class="lb-count" id="lbCount"></span>
       <button class="lb-close" onclick="chiudiLightbox()">×</button>
@@ -1375,25 +728,26 @@ white-space:nowrap;}
   <div class="lb-thumbs" id="lbThumbs"></div>
 </div>
 
-<!-- === JAVASCRIPT === -->
+<!-- ═══ JAVASCRIPT ═══ -->
 <script>
 'use strict';
 
-/* --- COSTANTI ------------------------------------------------------------- */
+/* ─── COSTANTI ───────────────────────────────────────────────────────────── */
 const ACC_BASE   = {scout:5, veteran:8, elite:10};
 const TO         = {scout:0, veteran:1, elite:2};
 const TIER_NAMES = {scout:'Scout', veteran:'Veteran', elite:'Élite'};
 const TIER_QUOTA = {scout:25, veteran:45, elite:65};
-const STATI_LBL  = {in_preparazione:'In preparazione', da_saldare:'Da saldare',
-                    saldato:'Saldato', spedito:'Spedito'};
+const STATI_LBL  = {da_saldare:'Da saldare', in_lavorazione:'In lavorazione',
+                    spedito:'Spedito', saldato:'Saldato', draft:'In attesa'};
 
-/* --- STATO ---------------------------------------------------------------- */
+/* ─── STATO ──────────────────────────────────────────────────────────────── */
 const S = {utente:null, catalogo:[], prenotazioni:[], mese:'', _sessionToken:null};
 const SEL = {};
 let filtro = 'tutti';
+let saldoPendId = null, saldoPendVal = 0;
 let _sessionChannel = null;
 
-/* --- API LAYER -- Google Apps Script backend ------------------------------- */
+/* ─── API LAYER — Google Apps Script backend ─────────────────────────────── */
 const URL_API = 'https://script.google.com/macros/s/AKfycbx-0cRHDiP1V6DrgE4RCkCtwVH-rRPgqfFve1Globz_0nNx4UQD5oIE3dfkbD1FQUn_/exec';
 
 const sleep = ms => new Promise(r => setTimeout(r, ms));
@@ -1453,24 +807,17 @@ async function apiConferma(payload) {
 
 /**
  * SALVA ACCONTO EXTRA
- * POST body: {
- *   action, id_prenotazione, id_utente, codice,
- *   importo           -- delta versato ORA (per log)
- *   acconto_extra_tot -- totale cumulativo da scrivere nel foglio
- *   op_id             -- ID univoco operazione per log e deduplicazione
- * }
+ * POST body: { action:'acconto_extra', id_prenotazione, id_utente, codice, importo }
+ * Risposta attesa: { ok:true }
  */
-async function apiSalvaExtra(idPren, delta, nuovoTotale) {
-  const opId = 'op_' + Date.now() + '_' + Math.random().toString(36).slice(2, 7);
+async function apiSalvaExtra(idPren, importo) {
   try {
     return await _post({
       action: 'acconto_extra',
       id_prenotazione: idPren,
       id_utente: S.utente.id,
       codice: S.utente._codice,
-      importo: delta,
-      acconto_extra_tot: nuovoTotale,
-      op_id: opId,
+      importo,
     });
   } catch(e) {
     return { ok:false, errore:'Errore durante il salvataggio.' };
@@ -1478,7 +825,7 @@ async function apiSalvaExtra(idPren, delta, nuovoTotale) {
 }
 
 
-/* --- FORMULE CORE -- copiate identiche da simulator.js --------------------- */
+/* ─── FORMULE CORE — copiate identiche da simulator.js ───────────────────── */
 function fmt(n){
   if(n===null||n===undefined)return '?';
   const v=Math.round(n*100)/100;
@@ -1501,71 +848,14 @@ function calcDepositoInfo(prod, bkCount) {
   return{crossDir:uO===pO?'same':(uO>pO?'down':'up'), accCT, accConPaypal:accCP, accFinale:accF, isSp, price, isTbd:!!prod.isTbd};
 }
 
-/* --- CALCOLO OTTIMIZZATO ACCONTI --------------------------------------------
-   Per ogni prodotto nel carrello calcoliamo l'acconto assegnando i 2 slot "base"
-   (senza garanzia stock) ai prodotti più costosi -- indipendentemente dall'ordine
-   in cui l'utente li ha selezionati.
-   Funzione pubblica: getAccontoOttimizzato(prodId) -> {accFinale, accBase, garanzia, isSp}
-   -------------------------------------------------------------------------- */
-function buildAccontiOttimizzati(){
-  // Ordini storici aperti (già confermati o in_preparazione, non saldati)
-  const storici = S.prenotazioni.filter(b=>b.stato_ordine!=='saldato').length;
-
-  // Prodotti deposito nel carrello corrente, ordinati per prezzo decrescente
-  const depositi = S.catalogo
-    .filter(p => SEL[String(p.id)]==='deposito')
-    .map(p => {
-      const info = calcDepositoInfo(p, 0); // acconto base senza speciale
-      return { id: String(p.id), price: info.price, accBase: info.accConPaypal, info };
-    })
-    .sort((a,b) => b.price - a.price); // più costosi prima -> ottengono i 2 slot base
-
-  // Assegna: i primi (2 - storici) slot base, il resto paga garanzia stock
-  const slotsBaseLiberi = Math.max(0, 2 - storici);
-  const map = {}; // prodId -> {accFinale, accBase, garanzia, isSp}
-
-  depositi.forEach((d, idx) => {
-    if(idx < slotsBaseLiberi){
-      // slot base: acconto normale
-      map[d.id] = { accFinale: d.accBase, accBase: d.accBase, garanzia: 0, isSp: false };
-    } else {
-      // slot garanzia: acconto speciale
-      const pct = S.utente.accontoSpecialePct[S.utente.tier]/100;
-      const accSp = Math.ceil((d.price - d.accBase) * pct);
-      map[d.id] = { accFinale: accSp, accBase: d.accBase, garanzia: accSp - d.accBase, isSp: true };
-    }
-  });
-
-  return map;
-}
-
-// Cache dell'ottimizzazione -- ricalcolata ad ogni render
-let _accontiOtt = {};
-
-function getAccontoOttimizzato(prodId){
-  return _accontiOtt[String(prodId)] || null;
-}
-
 function countBefore(prodId){
-  // Manteniamo per compatibilità con credSim/libSimPrima -- restituisce il totale
-  // degli ordini aperti storici (non del carrello, che è già gestito dall'ottimizzatore)
-  return S.prenotazioni.filter(b=>b.stato_ordine!=='saldato').length;
-}
-
-function countOrdinatiProd(prodId){
-  // Conta quante volte il socio ha già ordinato questo prodotto
-  // (opzione B: tutti gli ordini non saldati, inclusi in_preparazione)
-  return S.prenotazioni.filter(b =>
-    String(b.prodotto_id) === String(prodId) && b.stato_ordine !== 'saldato'
-  ).length;
+  let c=S.prenotazioni.filter(b=>b.confermata).length;
+  for(const p of S.catalogo){if(String(p.id)===String(prodId))break; if(SEL[String(p.id)]==='deposito')c++;}
+  return c;
 }
 
 function valRes(){
-  // Considera sia gli ordini confermati da Alberto (confermata=TRUE)
-  // sia gli ordini in_preparazione (inviati dal socio ma non ancora elaborati) -- entrambi
-  // hanno già impegnato credito e residuo reale.
-  const prenAperte = S.prenotazioni.filter(b => b.stato_ordine !== 'saldato');
-  let t = prenAperte.reduce((s,b) => s + (b.residuo||0), 0);
+  let t=S.prenotazioni.filter(b=>b.confermata).reduce((s,b)=>s+(b.residuo||0),0);
   for(const p of S.catalogo){
     if(SEL[String(p.id)]!=='deposito')continue;
     const i=calcDepositoInfo(p,countBefore(p.id)); t+=i.price-i.accFinale;
@@ -1580,22 +870,14 @@ function credSim(){
   let s=S.utente.credito;
   for(const p of S.catalogo){
     const t=SEL[String(p.id)]; if(!t)continue;
-    if(t==='deposito'){
-      // usa acconto ottimizzato (include garanzia stock se applicabile)
-      const ott=getAccontoOttimizzato(String(p.id));
-      const i=calcDepositoInfo(p,0);
-      s-=ott?ott.accFinale:i.accConPaypal;
-    } else {
-      const i=calcDepositoInfo(p,0);
-      s-=i.price;
-    }
+    const i=calcDepositoInfo(p,countBefore(p.id));
+    if(t==='deposito')s-=i.accFinale; else if(t==='saldo')s-=i.price;
   }
   return s;
 }
 
 function libSimPrima(excId){
-  // rSim include tutti gli ordini non saldati (in_preparazione + confermati aperti)
-  let s=S.utente.credito, rSim=S.prenotazioni.filter(b=>b.stato_ordine!=='saldato').reduce((x,b)=>x+(b.residuo||0),0);
+  let s=S.utente.credito, rSim=S.prenotazioni.filter(b=>b.confermata).reduce((x,b)=>x+(b.residuo||0),0);
   for(const p of S.catalogo){
     if(String(p.id)===String(excId))continue; const t=SEL[String(p.id)]; if(!t)continue;
     const i=calcDepositoInfo(p,countBefore(p.id));
@@ -1606,8 +888,7 @@ function libSimPrima(excId){
 }
 
 function hasOpenPos(){
-  // Considera aperti sia i confermati che gli in_preparazione non saldati
-  if(S.prenotazioni.some(b=>b.stato_ordine!=='saldato'))return true;
+  if(S.prenotazioni.some(b=>b.confermata))return true;
   return S.catalogo.some(p=>SEL[String(p.id)]==='deposito');
 }
 
@@ -1621,7 +902,7 @@ function credFP(excId){
   return hasOpenPos()?S.utente.credito-a:Math.max(0,S.utente.credito-bloccato())-a;
 }
 
-/* --- NORMALIZZA TIER ------------------------------------------------------ */
+/* ─── NORMALIZZA TIER ────────────────────────────────────────────────────── */
 function normTier(t){
   const s=(t||'').toLowerCase().trim();
   if(s==='élite'||s==='elite')return 'elite';
@@ -1629,7 +910,7 @@ function normTier(t){
   return 'scout';
 }
 
-/* --- LOGIN / LOGOUT ------------------------------------------------------- */
+/* ─── LOGIN / LOGOUT ─────────────────────────────────────────────────────── */
 async function doLogin(){
   const id=document.getElementById('lid').value.trim();
   const pin=document.getElementById('lpin').value.trim();
@@ -1664,7 +945,7 @@ async function doLogin(){
 }
 
 
-/* --- SESSION WATCH -- previene sessioni multiple ---------------------------- */
+/* ─── SESSION WATCH — previene sessioni multiple ──────────────────────────── */
 function avviaSessionWatch(userId) {
   if (!window.BroadcastChannel) return; // browser vecchio, skip
   if (_sessionChannel) _sessionChannel.close();
@@ -1715,98 +996,42 @@ function doLogout(){
     localStorage.removeItem('dni_cache');
   } catch(e) {}
   if (_sessionChannel) { _sessionChannel.close(); _sessionChannel = null; }
-  fermaPolling();
-  fermaAutoLogout();
-  fermaAutoRefresh();
   S.utente=null;S.catalogo=[];S.prenotazioni=[];S.mese='';
   Object.keys(SEL).forEach(k=>delete SEL[k]);
   document.getElementById('lid').value='';document.getElementById('lpin').value='';
   showScreen('sLogin');
 }
 
-/* --- AVVIO APP ------------------------------------------------------------ */
+/* ─── AVVIO APP ──────────────────────────────────────────────────────────── */
 function avviaApp(){
-  avviaAutoRefresh();    // parte il timer 5 min auto-refresh ordini
+  initZoom();
+  initLayout();
   const u=S.utente;
   document.getElementById('tbNome').textContent=u.nome;
   document.getElementById('tbCred').textContent='€'+fmt(u.credito);
-  document.getElementById('tbCredMob').textContent='€'+fmt(u.credito);
   const te=document.getElementById('tbTier');
   te.textContent=TIER_NAMES[u.tier]; te.className='tb-tier '+u.tier;
   document.getElementById('tbMese').textContent=S.mese?'Mese: '+S.mese:'';
-  document.getElementById('tbMeseMob').textContent=S.mese?'Mese: '+S.mese:'';
   // Mostra data prossimo rinnovo (se fornita dal backend)
   const rinEl = document.getElementById('tbRinnovo');
   const rinWrap = document.getElementById('tbRinnovoWrap');
-  const rinMob = document.getElementById('tbRinnovoMob');
   if (u.prossima_data_rinnovo) {
     const rDate = new Date(u.prossima_data_rinnovo);
     const oggi = new Date(); oggi.setHours(0,0,0,0);
     const diff = Math.round((rDate - oggi) / 86400000);
     const fmtDate = rDate.toLocaleDateString('it-IT', {day:'2-digit', month:'2-digit', year:'numeric'});
-    const cls = diff < 0 ? ' urgent' : diff <= 7 ? ' urgent' : diff <= 14 ? ' warn' : '';
     rinEl.textContent = fmtDate + (diff >= 0 ? ' (' + diff + 'gg)' : ' (scaduto)');
-    rinEl.className = 'tb-rinnovo-val' + cls;
+    rinEl.className = 'tb-rinnovo-val' + (diff < 0 ? ' urgent' : diff <= 7 ? ' urgent' : diff <= 14 ? ' warn' : '');
     rinWrap.style.display = 'flex';
-    // versione mobile: mostra solo i giorni rimanenti
-    rinMob.textContent = '⟳ ' + (diff >= 0 ? diff + 'gg' : 'Scaduto');
-    rinMob.className = 'tb-mob-rinnovo' + cls;
-    rinMob.style.display = 'block';
   }
   document.getElementById('lockBanner').classList.toggle('on', u.stato==='attesa');
   renderCatalogo(); renderOrdini();
   document.getElementById('ordCount').textContent=S.prenotazioni.length;
   showScreen('sApp');
-  avviaPolling();
-  avviaAutoLogout();
 }
 
-let _pollTimer = null;
-function avviaPolling() {
-  if (_pollTimer) clearInterval(_pollTimer);
-  _pollTimer = setInterval(() => {
-    // Aggiorna solo se l'app è visibile e l'utente è loggato
-    if (S.utente && document.visibilityState !== 'hidden') {
-      rilevaMieiOrdini();
-    }
-  }, 5 * 60 * 1000); // ogni 5 minuti
-}
-function fermaPolling() {
-  if (_pollTimer) { clearInterval(_pollTimer); _pollTimer = null; }
-}
-
-/* --- AUTO-LOGOUT DOPO 30 MINUTI DI INATTIVITÀ ---------------------------- */
-const AUTO_LOGOUT_MS = 30 * 60 * 1000; // 30 minuti
-let _autoLogoutTimer = null;
-
-function resetAutoLogout() {
-  if (!S.utente) return;           // non loggato, non serve
-  if (_autoLogoutTimer) clearTimeout(_autoLogoutTimer);
-  _autoLogoutTimer = setTimeout(() => {
-    if (S.utente) {
-      mostraToast('Sessione scaduta per inattività -- accedi di nuovo.', 'warm');
-      setTimeout(() => doLogout(), 2000);
-    }
-  }, AUTO_LOGOUT_MS);
-}
-
-function avviaAutoLogout() {
-  // Resetta il timer ad ogni interazione significativa
-  ['click','touchstart','keydown','scroll'].forEach(ev =>
-    document.addEventListener(ev, resetAutoLogout, { passive: true })
-  );
-  resetAutoLogout();
-}
-
-function fermaAutoLogout() {
-  if (_autoLogoutTimer) { clearTimeout(_autoLogoutTimer); _autoLogoutTimer = null; }
-}
-
-/* --- RENDER CATALOGO ------------------------------------------------------ */
+/* ─── RENDER CATALOGO ────────────────────────────────────────────────────── */
 function renderCatalogo(){
-  // Ricalcola la distribuzione ottimizzata degli acconti
-  _accontiOtt = buildAccontiOttimizzati();
-
   const locked=S.utente.stato==='attesa';
   const QUOTA={scout:'€25/mese',veteran:'€45/mese',elite:'€65/mese'};
   const html=['scout','veteran','elite'].map(tier=>{
@@ -1817,18 +1042,6 @@ function renderCatalogo(){
     const sc=left<=0?'full':left===1?'warn':'ok';
     const st=left<=0?'Slot esauriti':left+' slot liberi';
 
-    // Banner garanzia stock -- mostrato solo prima del tier Scout, solo se ci sono prodotti
-    const hasGaranzia = Object.values(_accontiOtt).some(a=>a.isSp);
-    const storiciAperti = S.prenotazioni.filter(b=>b.stato_ordine!=='saldato').length;
-    const banner = tier==='scout' && S.catalogo.length > 0 ? `
-      <div class="garanzia-banner" id="garanziaBanner">
-        <div class="garanzia-banner-icon">ⓘ</div>
-        <div class="garanzia-banner-txt">
-          <strong>Scegli i prodotti nell'ordine che preferisci</strong> -- li ordiniamo automaticamente per minimizzare il costo complessivo degli acconti.
-          ${storiciAperti>=2 ? `Dal 3° prenotazione aperta, l'acconto include una <strong>Garanzia Stock</strong>: una conferma più solida per Alberto di fare lo stock, e per te di averlo riservato. Il dettaglio compare nel carrello.` : `Dalla 3ª prenotazione aperta scatta una <strong>Garanzia Stock</strong> sull'acconto. Il sistema la distribuisce sempre in modo ottimale.`}
-        </div>
-      </div>` : '';
-
     // Sempre 3 slot (prodotto o vuoto)
     const slots=Array.from({length:3},(_,i)=>prods[i]||null);
 
@@ -1837,30 +1050,27 @@ function renderCatalogo(){
       if(!prod){
         return`<div class="prod-card prod-card-empty">
           <div class="prod-photo-half"></div>
-          <div class="prod-info-half"></div>
+          <div class="prod-info-half">
+            <div class="prod-tier-tag ${tier}">${tier.toUpperCase()}</div>
+          </div>
         </div>`;
       }
 
       const sel=SEL[String(prod.id)]||null;
-      // info con bkCount=0 -> acconto base puro (stabile, non cambia mai)
-      const infoBase=calcDepositoInfo(prod, 0);
-      // info con conteggio reale -> usato solo per check credito
       const info=calcDepositoInfo(prod,countBefore(String(prod.id)));
-      const nOrd=countOrdinatiProd(String(prod.id));
-      const ordCls=nOrd===0?'zero':nOrd===1?'uno':'multi';
-      const ordLbl=nOrd===0?'Hai già ordinato: 0':`Hai già ordinato: ${nOrd}`;
       const libP=libSimPrima(String(prod.id));
-      const canD=!locked&&libP>=infoBase.accConPaypal;
-      const depA=sel==='deposito'?(getAccontoOttimizzato(String(prod.id))?.accFinale||infoBase.accConPaypal):0;
+      const canD=!locked&&libP>=info.accFinale;
+      const depA=sel==='deposito'?info.accFinale:0;
       const canFP=!locked&&!info.isTbd&&(credFP(String(prod.id))-depA)>=info.price;
       const isDep=sel==='deposito', isFp=sel==='saldo';
       const cc=isDep?'sel-dep':isFp?'sel-fp':'';
 
-      // Tier tag dalla transcodifica SKU
-      const tierLbl=TIER_NAMES[prod.tier]||prod.tier.toUpperCase();
+      // Tier tag dalla transcodifica SKU (es "202603-LAMORAK_SNAA-DBC" → "LAMORAK SNAA")
+      const tierLbl=prod.sku
+        ?prod.sku.replace(/^\d{6}-/,'').replace(/-DBC$/i,'').replace(/_/g,' ')
+        :tier.toUpperCase();
 
-      // Sconto soci (solo se tier down e nessun ⚡)
-      const disc=(info.crossDir==='down')
+      const disc=info.crossDir==='down'
         ?`<div class="prod-disc-bdg">-${S.utente.tier==='elite'&&prod.tier==='scout'?35:25}% soci</div>`:'';
       const badge=isDep
         ?`<div class="prod-sel-bdg"><div class="prod-sel-bdg-in dep">⊙ Prenotato</div></div>`
@@ -1874,16 +1084,9 @@ function renderCatalogo(){
           return`<div class="prod-price-row"><div class="prod-price">€${fmt(info.price)}</div>${pub}</div>`;
         })();
 
-      // Bottoni: mostrano SEMPRE l'acconto base -- stabile, non cambia con le selezioni
-      const depLbl='Prenota';
-      const fpLbl=info.isTbd?'Full Pay -- N/D':'Acquista ora';
-      // Garanzia stock sotto il bottone Prenota (solo se selezionato e garanzia>0, solo desktop)
-      const ottCard = isDep ? getAccontoOttimizzato(String(prod.id)) : null;
-      const garInBtn = ottCard&&ottCard.isSp&&ottCard.garanzia>0
-        ? `<span class="prod-btn-gar">+ Gar. stock €${ottCard.garanzia}</span>` : '';
-      const imgs = (prod.imgs && prod.imgs.length)
-        ? prod.imgs.map(f => `img_catalogo/${prod.imgBase}/${f}`)
-        : (prod.imgFile ? [`img_catalogo/${prod.imgFile}`] : []); // fallback retrocompat
+      const depLbl=info.isSp?'Prenota ⚡':'Prenota';
+      const fpLbl=info.isTbd?'Full Pay — N/D':'Acquista ora';
+      const imgs=(prod.imgs&&prod.imgs.length)?prod.imgs.map(f=>`img_catalogo/${prod.imgBase}/${f}`):(prod.imgFile?[`img_catalogo/${prod.imgFile}`]:[]);
       const img=imgs[0]||'';
       const hasMulti=imgs.length>1;
 
@@ -1897,7 +1100,6 @@ function renderCatalogo(){
                   <span>Foto</span>
                 </div>`}
           ${badge}
-          <div class="prod-ordinati-overlay ${ordCls}">${ordLbl}</div>
           ${hasMulti?`<div class="photo-dots">${imgs.map((_,i)=>`<div class="photo-dot${i===0?' active':''}"></div>`).join('')}</div>`:''}
         </div>
         <div class="prod-info-half">
@@ -1908,8 +1110,8 @@ function renderCatalogo(){
           <div class="prod-actions">
             <button class="prod-btn${isDep?' dep-on':''}${!canD&&!isDep?' blocked':''}"
               onclick="toggleSel('${prod.id}','deposito')">
-              <div class="prod-btn-left"><span class="prod-btn-lbl">${depLbl}</span>${disc}${garInBtn}</div>
-              <div class="prod-btn-r"><span class="prod-btn-val">€${infoBase.accConPaypal}</span><div class="prod-dot"></div></div>
+              <div class="prod-btn-left"><span class="prod-btn-lbl">${depLbl}</span>${disc}</div>
+              <div class="prod-btn-r"><span class="prod-btn-val">€${info.accFinale}</span><div class="prod-dot"></div></div>
             </button>
             <button class="prod-btn${isFp?' fp-on':''}${!canFP&&!isFp?' blocked':''}"
               onclick="toggleSel('${prod.id}','saldo')">
@@ -1921,11 +1123,13 @@ function renderCatalogo(){
       </div>`;
     }).join('');
 
-    return`${banner}<div class="tier-section">
-      <div class="tier-vtag ${tier}"><span>${TIER_NAMES[tier]}</span></div>
-      <div class="tier-body">
-        <div class="prod-grid">${cards}</div>
+    return`<div class="tier-section">
+      <div class="tier-hdr">
+        <span class="tier-hdr-name ${tier}">${TIER_NAMES[tier]}</span>
+        <span class="tier-hdr-quota">${QUOTA[tier]}</span>
+        <span class="tier-hdr-slots ${sc}">${st}</span>
       </div>
+      <div class="prod-grid">${cards}</div>
     </div>`;
   }).join('');
 
@@ -1933,602 +1137,228 @@ function renderCatalogo(){
   renderSidebar();
 }
 
-/* --- SIDEBAR -------------------------------------------------------------- */
+/* ─── SIDEBAR ────────────────────────────────────────────────────────────── */
 function renderSidebar(){
   const items=document.getElementById('sideItems');
   const empty=document.getElementById('sideEmpty');
   const totals=document.getElementById('sideTotals');
   const btn=document.getElementById('btnConferma');
-  // drawer mobile
-  const dItems  = document.getElementById('drawerItems');
-  const dEmpty  = document.getElementById('drawerEmpty');
-  const dTotals = document.getElementById('drawerTotals');
-  const dBtn    = document.getElementById('btnConfermaDrawer');
-  const dBadge  = document.getElementById('drawerCartBadge');
 
   const sels=[];
-  for(const p of S.catalogo){const t=SEL[String(p.id)];if(!t)continue; const i=calcDepositoInfo(p,0); sels.push({p,t,i});}
+  for(const p of S.catalogo){const t=SEL[String(p.id)];if(!t)continue; const i=calcDepositoInfo(p,countBefore(p.id)); sels.push({p,t,i});}
 
   Array.from(items.children).forEach(c=>{if(c!==empty)c.remove();});
-  if(dItems) Array.from(dItems.children).forEach(c=>{if(c!==dEmpty)c.remove();});
 
-  // badge topbar mobile
-  const mobBadge=document.getElementById('cartMobBadge');
-  if(mobBadge){mobBadge.textContent=sels.length;mobBadge.style.display=sels.length>0?'inline-flex':'none';}
-
-  if(!sels.length){
-    empty.style.display='flex';totals.style.display='none';btn.disabled=true;
-    if(dEmpty)dEmpty.style.display='flex';
-    if(dTotals)dTotals.style.display='none';
-    if(dBtn)dBtn.disabled=true;
-    if(dBadge)dBadge.style.display='none';
-    const badge=document.getElementById('sideCartBadge');
-    if(badge){badge.style.display='none';}
-    return;
-  }
+  if(!sels.length){empty.style.display='flex';totals.style.display='none';btn.disabled=true;return;}
   empty.style.display='none'; totals.style.display='flex'; totals.style.flexDirection='column';
-  if(dEmpty)dEmpty.style.display='none';
-  if(dTotals){dTotals.style.display='flex';dTotals.style.flexDirection='column';}
-  const badge=document.getElementById('sideCartBadge');
-  if(badge){badge.textContent=sels.length;badge.style.display='inline-flex';}
-  if(dBadge){dBadge.textContent=sels.length;dBadge.style.display='inline-flex';}
-
-  // Calcola garanzia totale
-  const totGaranzia = sels.reduce((sum,{p,t})=>{
-    if(t!=='deposito') return sum;
-    const ott=getAccontoOttimizzato(String(p.id));
-    return sum + (ott&&ott.isSp&&ott.garanzia>0 ? ott.garanzia : 0);
-  }, 0);
-
-  // Funzione che crea una riga prodotto (usata per sidebar e drawer)
-  function creaSelItem(p,t,acc){
-    const div=document.createElement('div');
-    div.className=`sel-item ${t==='deposito'?'dep':'fp'}`;
-    const img = (p.imgs && p.imgs.length) ? `img_catalogo/${p.imgBase}/${p.imgs[0]}` : (p.imgFile ? `img_catalogo/${p.imgFile}` : '');
-    div.innerHTML=`
-      <div class="sel-thumb">${img?`<img src="${img}" alt="">`:'🖼'}</div>
-      <div class="sel-info">
-        <div class="sel-name">${(()=>{const s=p.sku?p.sku.replace(/^\d{6}-/,'').replace(/-DBC$/i,'').replace(/_/g,' '):null;return s?s.split(' ').map(w=>w.charAt(0).toUpperCase()+w.slice(1).toLowerCase()).join(' '):p.name;})()}</div>
-        <div class="sel-type ${t==='deposito'?'dep':'fp'}">${t==='deposito'?'Deposito':'Full Payment'}</div>
-      </div>
-      <div class="sel-acc ${t==='deposito'?'dep':'fp'}">€${acc}</div>
-      <button class="sel-del" onclick="rimuoviSel('${p.id}')" title="Rimuovi">
-        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4h6v2"/></svg>
-      </button>`;
-    return div;
-  }
-
-  // Riga garanzia sommata in cima (sidebar desktop e drawer mobile)
-  function creaRigaGaranzia(){
-    const r=document.createElement('div');
-    r.className='cart-garanzia-row';
-    r.innerHTML=`<span class="cart-garanzia-lbl">ⓘ Garanzia stock inclusa</span><span class="cart-garanzia-val">+€${totGaranzia}</span>`;
-    return r;
-  }
-  if(totGaranzia>0){
-    items.insertBefore(creaRigaGaranzia(), empty);
-    if(dItems) dItems.insertBefore(creaRigaGaranzia(), dEmpty);
-  }
 
   let tot=0;
   sels.forEach(({p,t,i})=>{
-    const ott=t==='deposito'?getAccontoOttimizzato(String(p.id)):null;
-    const acc=t==='deposito'?(ott?ott.accFinale:i.accConPaypal):i.price;
-    tot+=acc;
-    items.insertBefore(creaSelItem(p,t,acc), empty);
-    if(dItems) dItems.insertBefore(creaSelItem(p,t,acc), dEmpty);
+    const acc=t==='deposito'?i.accFinale:i.price; tot+=acc;
+    const div=document.createElement('div');
+    div.className=`sel-item ${t==='deposito'?'dep':'fp'}`;
+    const img=(p.imgs&&p.imgs.length)?`img_catalogo/${p.imgBase}/${p.imgs[0]}`:(p.imgFile?`img_catalogo/${p.imgFile}`:'');
+    div.innerHTML=`
+      <div class="sel-thumb">${img?`<img src="${img}" alt="">`:'🖼'}</div>
+      <div class="sel-info">
+        <div class="sel-name">${p.name}</div>
+        <div class="sel-type ${t==='deposito'?'dep':'fp'}">${t==='deposito'?'Deposito':'Full Payment'}</div>
+      </div>
+      <div class="sel-acc ${t==='deposito'?'dep':'fp'}">€${acc}</div>
+      <button class="sel-del" onclick="toggleSel('${p.id}','${t}')" title="Rimuovi selezione">✕</button>`;
+    items.insertBefore(div,empty);
   });
 
-  const totStr='€'+fmt(tot);
-  document.getElementById('sideTotAcc').textContent=totStr;
-  if(document.getElementById('drawerTotAcc')) document.getElementById('drawerTotAcc').textContent=totStr;
-
+  document.getElementById('sideTotAcc').textContent='€'+fmt(tot);
   const cr=credSim();
   const ce=document.getElementById('sideCredRes');
-  ce.textContent='€'+fmt(cr); ce.className='tot-val'+(cr<0?' danger':cr<10?' warn':'');
-  const de=document.getElementById('drawerCredRes');
-  if(de){de.textContent='€'+fmt(cr); de.className='tot-val'+(cr<0?' danger':cr<10?' warn':'');}
-
+  ce.textContent='€'+fmt(cr);
+  ce.className='tot-val'+(cr<0?' danger':cr<10?' warn':'');
   document.getElementById('tbCred').textContent='€'+fmt(S.utente.credito);
-  document.getElementById('tbCredMob').textContent='€'+fmt(S.utente.credito);
-  const disabled = !sels.length || S.utente.stato==='attesa';
-  btn.disabled = disabled;
-  if(dBtn) dBtn.disabled = disabled;
-  const btnTop = document.getElementById('btnConfermaTop');
-  const ctaTop = document.getElementById('sideCtaTop');
-  if(btnTop){ btnTop.disabled = disabled; }
-  if(ctaTop){ ctaTop.style.display = sels.length ? 'block' : 'none'; }
+  btn.disabled=!sels.length||S.utente.stato==='attesa';
 }
 
-/* --- TOGGLE SEL ----------------------------------------------------------- */
+/* ─── TOGGLE SEL ─────────────────────────────────────────────────────────── */
 function toggleSel(prodId, tipo){
   const _pid=String(prodId);
   const prod=S.catalogo.find(p=>String(p.id)===_pid), curr=SEL[_pid];
   if(!prod)return;
   if(curr===tipo){delete SEL[_pid];}
   else{
-    const infoBase=calcDepositoInfo(prod,0);
-    if(tipo==='deposito'){
-      if(libSimPrima(_pid)<infoBase.accConPaypal)return;
-      SEL[_pid]='deposito';
-    } else {
-      const info=calcDepositoInfo(prod,countBefore(_pid));
-      if((credFP(_pid)-(curr==='deposito'?(getAccontoOttimizzato(_pid)?.accFinale||infoBase.accConPaypal):0))<info.price)return;
-      SEL[_pid]='saldo';
-    }
+    const info=calcDepositoInfo(prod,countBefore(_pid));
+    if(tipo==='deposito'){if(libSimPrima(_pid)<info.accFinale)return; SEL[_pid]='deposito';}
+    else{if((credFP(_pid)-(curr==='deposito'?info.accFinale:0))<info.price)return; SEL[_pid]='saldo';}
   }
   renderCatalogo();
 }
 
-/* --- MODAL CONFERMA ------------------------------------------------------- */
+/* ─── MODAL CONFERMA ─────────────────────────────────────────────────────── */
 function apriConferma(){
-  // Reset COMPLETO -- evita che il tasto resti in loading se la modale viene riaperta
-  const btn = document.getElementById('btnMConf');
-  btn.classList.remove('loading'); btn.disabled = false;
-  document.getElementById('btnMCancel').disabled = false;
-  const w = document.getElementById('mwarn');
-  w.style.display='none'; w.style.color=''; w.style.background=''; w.style.borderColor=''; w.textContent='';
-  document.getElementById('mConfermaWait').style.display = 'none';
-
-  let tot=0, totGarMod=0, html='';
+  let tot=0, html='';
   for(const p of S.catalogo){
     const t=SEL[String(p.id)]; if(!t)continue;
-    const iBase=calcDepositoInfo(p,0);
-    const ott=t==='deposito'?getAccontoOttimizzato(String(p.id)):null;
-    const acc=t==='deposito'?(ott?ott.accFinale:iBase.accConPaypal):iBase.price;
-    const gar=ott&&ott.isSp&&ott.garanzia>0?ott.garanzia:0;
-    totGarMod+=gar; tot+=acc;
+    const i=calcDepositoInfo(p,countBefore(p.id));
+    const acc=t==='deposito'?i.accFinale:i.price; tot+=acc;
     html+=`<div class="recap-item">
-      <span class="recap-name">${(()=>{const s=p.sku?p.sku.replace(/^\d{6}-/,'').replace(/-DBC$/i,'').replace(/_/g,' '):null;return s?s.split(' ').map(w=>w.charAt(0).toUpperCase()+w.slice(1).toLowerCase()).join(' '):p.name;})()}</span>
+      <span class="recap-name">${p.name}</span>
       <span class="recap-tipo ${t==='deposito'?'dep':'fp'}">${t==='deposito'?'Deposito':'Full Pay'}</span>
-      <span class="recap-acc ${t==='deposito'?'dep':'fp'}">€${acc}${gar>0?`<span class="recap-gar"> (+€${gar} gar.)</span>`:''}</span>
+      <span class="recap-acc ${t==='deposito'?'dep':'fp'}">€${acc}</span>
     </div>`;
-  }
-  // riga garanzia totale se presente
-  if(totGarMod>0){
-    html=`<div class="recap-garanzia-row">
-      <span>ⓘ Garanzia stock inclusa nel totale</span>
-      <span>+€${totGarMod}</span>
-    </div>`+html;
   }
   document.getElementById('recapList').innerHTML=html;
   document.getElementById('recapTot').textContent='€'+fmt(tot);
-  if(credSim()<0){
-    w.textContent=`⚠ Credito residuo negativo (€${fmt(credSim())}). Verifica con DNI prima di confermare.`;
-    w.style.display='block';
-  }
+  const cr=credSim(), w=document.getElementById('mwarn');
+  if(cr<0){w.textContent=`⚠ Credito residuo negativo (€${fmt(cr)}). Verifica con DNI prima di confermare.`;w.style.display='block';}
+  else w.style.display='none';
   document.getElementById('mConferma').classList.add('open');
 }
-
-function chiudiConferma(){
-  // Non chiudere se l'invio è in corso
-  const btn = document.getElementById('btnMConf');
-  if(btn && btn.classList.contains('loading')) return;
-  document.getElementById('mConferma').classList.remove('open');
-}
+function chiudiConferma(){document.getElementById('mConferma').classList.remove('open');}
 
 async function inviaConferma(){
-  const btn       = document.getElementById('btnMConf');
-  const btnCancel = document.getElementById('btnMCancel');
-  const wWait     = document.getElementById('mConfermaWait');
-  const wErr      = document.getElementById('mwarn');
-
-  // Blocca tutto immediatamente -- evita doppio click
-  if(btn.classList.contains('loading')) return;
-  btn.classList.add('loading'); btn.disabled = true;
-  btnCancel.disabled = true;
-  wErr.style.display = 'none';
-  wWait.style.display = 'block';
-
-  // Timeout 60s -- se GAS non risponde, chiude e ricarica ordini
-  let timedOut = false;
-  const timeoutId = setTimeout(async () => {
-    timedOut = true;
-    document.getElementById('mConferma').classList.remove('open');
-    try { await rilevaMieiOrdini(); } catch(e) {}
-    switchTab('ord');
-    mostraToast('⚠ Operazione lenta -- verifica gli ordini caricati', 'warm');
-  }, 60000);
-
+  const btn=document.getElementById('btnMConf');
+  btn.classList.add('loading'); btn.disabled=true;
   try{
     const sels=[];
     for(const p of S.catalogo){
       const t=SEL[String(p.id)]; if(!t)continue;
-      const iBase=calcDepositoInfo(p,0);
-      const ott=t==='deposito'?getAccontoOttimizzato(String(p.id)):null;
-      const acconto=t==='deposito'?(ott?ott.accFinale:iBase.accConPaypal):iBase.price;
+      const i=calcDepositoInfo(p,countBefore(p.id));
       sels.push({prodotto_id:p.id, nome_prodotto:p.name, sku:p.sku,
                  tier_prodotto:p.tier, tipo:t,
-                 acconto, prezzo_totale:iBase.price,
-                 garanzia_stock: ott?.garanzia||0});
+                 acconto:t==='deposito'?i.accFinale:i.price, prezzo_totale:i.price});
     }
     const res=await apiConferma({id_utente:S.utente.id, codice:S.utente._codice, mese:S.mese, selezioni:sels});
-
-    if(timedOut) return;
-    clearTimeout(timeoutId);
-
-    if(!res.ok){
-      wWait.style.display = 'none';
-      wErr.textContent='❌ Errore: '+(res.errore||'Riprova o contatta DNI.');
-      wErr.style.display='block';
-      wErr.style.color='var(--red)'; wErr.style.background='var(--red-dim)'; wErr.style.borderColor='rgba(255,90,90,.2)';
-      btn.classList.remove('loading'); btn.disabled=false;
-      btnCancel.disabled=false;
-      return;
-    }
-
-    const totAcc=sels.reduce((s,x)=>s+x.acconto,0);
-    S.utente.credito=Math.max(0,S.utente.credito-totAcc);
-    document.getElementById('tbCred').textContent='€'+fmt(S.utente.credito);document.getElementById('tbCredMob').textContent='€'+fmt(S.utente.credito);
+    if(!res.ok){alert('Errore: '+(res.errore||'Riprova.'));return;}
+    S.utente.stato='attesa';
     Object.keys(SEL).forEach(k=>delete SEL[k]);
     aggiornaCache();
-    document.getElementById('mConferma').classList.remove('open');
+    chiudiConferma();
+    document.getElementById('lockBanner').classList.add('on');
+    document.getElementById('btnConferma').disabled=true;
     renderCatalogo();
-    rilevaMieiOrdini();
-    mostraToast('Ordine inviato con successo ✔','neon');
-    particleBurst(); // 🎉 gaming effect
-    setTimeout(()=>switchTab('ord'),1800);
-
-  }catch(e){
-    if(timedOut) return;
-    clearTimeout(timeoutId);
-    wWait.style.display = 'none';
-    wErr.textContent='❌ Errore di connessione. Riprova tra qualche secondo.';
-    wErr.style.display='block';
-    wErr.style.color='var(--red)'; wErr.style.background='var(--red-dim)'; wErr.style.borderColor='rgba(255,90,90,.2)';
-    btn.classList.remove('loading'); btn.disabled=false;
-    btnCancel.disabled=false;
-  }
+  }catch(e){alert('Errore di connessione. Riprova.');}
+  finally{btn.classList.remove('loading');btn.disabled=false;}
 }
 
-/* --- RENDER ORDINI -------------------------------------------------------- */
-// statoUI: determina la categoria visiva basandosi SOLO su stato_ordine + confermata.
-// "modificabile" NON influenza la sezione -- serve solo per mostrare/nascondere il widget acconto extra.
-function statoUI(p){ return !p.confermata ? 'in_preparazione' : (p.stato_ordine || 'in_preparazione'); }
-
+/* ─── RENDER ORDINI ──────────────────────────────────────────────────────── */
 function renderOrdini(){
-  const flt = p => filtro==='tutti' || statoUI(p)===filtro;
+  const flt=p=>{if(filtro==='tutti')return true; const s=!p.confermata?'draft':p.stato_ordine; return s===filtro;};
+  const mod   =S.prenotazioni.filter(p=>p.confermata&&p.modificabile&&p.stato_ordine!=='saldato'&&flt(p));
+  const draft  =S.prenotazioni.filter(p=>!p.confermata&&flt(p));
+  const arch   =S.prenotazioni.filter(p=>p.confermata&&!p.modificabile&&flt(p));
 
-  const inPrep       = S.prenotazioni.filter(p => statoUI(p)==='in_preparazione' && flt(p));
-  const daSaldare    = S.prenotazioni.filter(p => statoUI(p)==='da_saldare'     && flt(p));
-  const saldato      = S.prenotazioni.filter(p => statoUI(p)==='saldato'        && flt(p));
-  const spedito      = S.prenotazioni.filter(p => statoUI(p)==='spedito'        && flt(p));
+  document.getElementById('cntMod').textContent=mod.length;
+  document.getElementById('cntDraft').textContent=draft.length;
+  document.getElementById('cntArch').textContent=arch.length;
 
-  document.getElementById('cntDraft').textContent     = inPrep.length;
-  document.getElementById('cntDaSaldare').textContent = daSaldare.length;
-  document.getElementById('cntSaldato').textContent   = saldato.length;
-  document.getElementById('cntSpedito').textContent   = spedito.length;
-
-  // Badge gialli sui filtri -- contano TUTTI gli ordini (indipendente dal filtro attivo)
-  const allInPrep    = S.prenotazioni.filter(p => statoUI(p)==='in_preparazione');
-  const allDaSaldare = S.prenotazioni.filter(p => statoUI(p)==='da_saldare');
-  const allSaldato   = S.prenotazioni.filter(p => statoUI(p)==='saldato');
-  const allSpedito   = S.prenotazioni.filter(p => statoUI(p)==='spedito');
-  const allTot       = S.prenotazioni.length;
-  function aggiornaBadgeFiltro(id, n){
-    const el = document.getElementById(id); if(!el) return;
-    el.textContent = n; el.style.display = n > 0 ? 'inline-flex' : 'none';
-  }
-  aggiornaBadgeFiltro('fltBadgeTutti',    allTot);
-  aggiornaBadgeFiltro('fltBadgeConferma', allInPrep.length);
-  aggiornaBadgeFiltro('fltBadgeSaldare',  allDaSaldare.length);
-  aggiornaBadgeFiltro('fltBadgeSaldato',  allSaldato.length);
-  aggiornaBadgeFiltro('fltBadgeSpedito',  allSpedito.length);
-
-  // Mappa prodotto_id -> immagini dal catalogo (le prenotazioni non hanno imgs)
-  const imgMap = {};
-  for(const c of S.catalogo){
-    // Supporta sia nuovo formato (imgs[]+imgBase) che vecchio (imgFile) per retrocompatibilità
-    const imgList = (c.imgs && c.imgs.length)
-      ? c.imgs.map(f => `${c.imgBase}/${f}`)
-      : [c.imgFile, c.imgFile2, c.imgFile3].filter(Boolean);
-    imgMap[String(c.id)] = { f1: imgList[0]||'', f2: imgList[1]||'', f3: imgList[2]||'' };
-  }
-
-  // Nascondi gruppi vuoti, mostra quelli con ordini
-  document.getElementById('grpDaSaldare').style.display = daSaldare.length ? 'flex' : 'none';
-  document.getElementById('grpSaldato').style.display   = saldato.length   ? 'flex' : 'none';
-  document.getElementById('grpSpedito').style.display   = spedito.length   ? 'flex' : 'none';
-  document.getElementById('grpDraft').style.display     = inPrep.length    ? 'flex' : 'none';
-
-  renderOrdSection('ordDraft',     inPrep,     imgMap);
-  renderOrdSection('ordDaSaldare', daSaldare,  imgMap);
-  renderOrdSection('ordSaldato',   saldato,    imgMap);
-  renderOrdSection('ordSpedito',   spedito,    imgMap);
+  renderOrdSection('ordMod',  mod,  true);
+  renderOrdSection('ordDraft',draft, false);
+  renderOrdSection('ordArch', arch, false);
 }
 
-function renderOrdSection(elId, prens, imgMap){
+function renderOrdSection(elId, prens, conMod){
   const el=document.getElementById(elId);
-  if(!prens.length){el.innerHTML='';return;}
-  imgMap = imgMap || {};
+  if(!prens.length){el.innerHTML='<div class="ord-empty">Nessun ordine in questa sezione</div>';return;}
   el.innerHTML=prens.map(p=>{
-    const stato=statoUI(p);
+    const stato=!p.confermata?'draft':p.stato_ordine;
     const sl=STATI_LBL[stato]||stato;
     const max=p.residuo||0;
-    const puoModificare = p.confermata && p.residuo > 0 && stato !== 'saldato';
-
-    // Recupera immagine dalla mappa catalogo (le prenotazioni non hanno imgFile)
-    const imgs = imgMap[String(p.prodotto_id)] || {};
-    const imgHtml = imgs.f1
-      ? `<img src="img_catalogo/${imgs.f1}" alt="" loading="lazy">`
-      : '🖼';
-    const comm = p.commento_alberto
-      ? `<span class="ocard-comment">💬 ${p.commento_alberto}</span>` : '';
-
-    // blocco numeri desktop
-    const resCls = max<=0 ? 'zero' : 'res';
-    const nums = `
-      <div class="ocard-sep"></div>
-      <div class="ocard-nums">
-        <div class="onum residuo-block">
-          <div class="onum-val big ${resCls}">€${fmt(max)}</div>
-          <div class="onum-lbl">da saldare</div>
-        </div>
-        <div class="onum" style="border-right:1px solid var(--line2)">
-          <div class="onum-val tot">€${fmt(p.prezzo_totale)}</div>
-          <div class="onum-lbl">prezzo</div>
-        </div>
-        <div class="onum" style="padding-right:16px">
-          <div class="onum-val acc">€${fmt((p.acconto||0)+(p.acconto_extra||0))}</div>
-          <div class="onum-lbl">versato</div>
-        </div>
-      </div>`;
-
-    // blocco numeri mobile
-    const mobileNums = `
-      <div class="ocard-mobile-nums">
-        <div class="omob-num"><span class="omob-val ${resCls==='res'?'warn':'zero'}">€${fmt(max)}</span><span class="omob-lbl">Residuo</span></div>
-        <div class="omob-num"><span class="omob-val dim">€${fmt(p.prezzo_totale)}</span><span class="omob-lbl">Prezzo</span></div>
-        <div class="omob-num"><span class="omob-val blue">€${fmt((p.acconto||0)+(p.acconto_extra||0))}</span><span class="omob-lbl">Versato</span></div>
-      </div>`;
-
-    // blocco azioni
-    let actions = '';
-    if(puoModificare){
-      actions = `<div class="ocard-sep"></div><div class="ocard-actions">
-        <button class="btn-salda-ord" onclick="apriModalSalda('${p.id}')">Salda €${fmt(max)}</button>
-        <button class="btn-acc-ord" onclick="apriModalAcconto('${p.id}')">Imposta acconto</button>
-      </div>`;
-    } else if(stato==='spedito' && p.tracking){
-      actions = `<div class="ocard-sep"></div><div class="ocard-actions">
-        <div class="ocard-tracking">🚚 ${p.tracking}</div>
-      </div>`;
-    } else if(stato==='in_conferma'){
-      actions = `<div class="ocard-sep"></div><div class="ocard-actions">
-        <span class="ocard-wait">In attesa di DNI</span>
-      </div>`;
-    }
-
-    // Click sulla thumbnail apre lightbox se ci sono immagini
-    const lbImgsJson = imgs.f1
-      ? JSON.stringify([imgs.f1, imgs.f2, imgs.f3].filter(Boolean))
-      : 'null';
-    const thumbClick = imgs.f1
-      ? `onclick="apriLightboxFromUrls(${lbImgsJson},'${p.nome_prodotto.replace(/'/g,"\\'")}')"`
-      : '';
-
+    const comm=p.commento_alberto?`<div class="ocard-comment on">💬 ${p.commento_alberto}</div>`:'';
+    const nums=`<div class="ocard-nums">
+      <div class="onum"><div class="onum-lbl">Prezzo</div><div class="onum-val tot">€${fmt(p.prezzo_totale)}</div></div>
+      <div class="onum"><div class="onum-lbl">Acconto</div><div class="onum-val acc">€${fmt(p.acconto)}</div></div>
+      ${p.acconto_extra>0?`<div class="onum"><div class="onum-lbl">Extra</div><div class="onum-val acc">€${fmt(p.acconto_extra)}</div></div>`:''}
+      <div class="onum"><div class="onum-lbl">Da saldare</div><div class="onum-val ${p.residuo<=0?'zero':'res'}">€${fmt(p.residuo)}</div></div>
+    </div>`;
+    const extra=conMod?`<div class="ocard-extra">
+      <span class="extra-lbl">Assegna acconto:</span>
+      <input type="number" class="extra-input" id="ei-${p.id}" placeholder="€" min="1" max="${max}"
+             oninput="onEI('${p.id}',${max})">
+      <span class="extra-max">max €${fmt(max)}</span>
+      <button class="btn-extra" id="be-${p.id}" disabled onclick="salvaExtra('${p.id}',${max})">Salva</button>
+      <span class="extra-fb" id="ef-${p.id}"></span>
+    </div>`:'';
     return`<div class="ocard ${stato}" id="oc-${p.id}">
-      <div class="ocard-left">
-        <div class="ocard-thumb" ${thumbClick} style="${imgs.f1?'cursor:pointer':''}">${imgHtml}</div>
+      <div class="ocard-top">
+        <div class="ocard-thumb">🖼</div>
         <div class="ocard-info">
           <div class="ocard-name">${p.nome_prodotto}</div>
           <div class="ocard-meta">
-            <span class="tier-pill ${p.tier_prodotto}">${TIER_NAMES[p.tier_prodotto]||p.tier_prodotto}</span>
+            <span class="tier-pill ${p.tier_prodotto}">${TIER_NAMES[p.tier_prodotto]}</span>
             <span class="stato-pill ${stato}">${sl}</span>
-            ${comm}
           </div>
+          ${comm}
         </div>
+        <div style="flex-shrink:0">${nums}</div>
       </div>
-      ${mobileNums}
-      ${nums}
-      ${actions}
+      ${extra}
     </div>`;
   }).join('');
 }
 
-// --- MODAL SALDA --------------------------------------------------------------
-let _mSaldaId = null;
-
-function apriModalSalda(id) {
-  const p = S.prenotazioni.find(x => x.id === id);
-  if (!p) return;
-  _mSaldaId = id;
-  const residuo = p.residuo || 0;
-  const creditoDopo = S.utente.credito - residuo;
-  document.getElementById('mSaldaNome').textContent = p.nome_prodotto;
-  document.getElementById('mSaldaImporto').textContent = '€' + fmt(residuo);
-  document.getElementById('mSaldaCreditoOra').textContent = '€' + fmt(S.utente.credito);
-  const dopoEl = document.getElementById('mSaldaCreditoDopo');
-  dopoEl.textContent = '€' + fmt(Math.max(0, creditoDopo));
-  dopoEl.style.color = creditoDopo < 0 ? 'var(--red)' : 'var(--neon)';
-  if (creditoDopo < 0) {
-    // credito insufficiente: mostra errore dentro la modale
-    document.getElementById('mSaldaOrd').classList.add('open');
-    document.getElementById('mSaldaContent').style.display = 'none';
-    document.getElementById('mSaldaFooter').style.display = 'none';
-    const fb = document.getElementById('mSaldaFeedback');
-    document.getElementById('mSaldaFbIcon').textContent = '⚠️';
-    document.getElementById('mSaldaFbMsg').innerHTML = `Credito insufficiente.<br>Hai <strong>€${fmt(S.utente.credito)}</strong> ma servono <strong>€${fmt(residuo)}</strong>.`;
-    document.getElementById('mSaldaFbMsg').style.color = 'var(--warm)';
-    fb.style.display = 'flex';
-    document.getElementById('mSaldaCloseBtn').disabled = false;
-    return;
-  }
-  document.getElementById('mSaldaOrd').classList.add('open');
+function onEI(id,max){
+  const v=parseFloat(document.getElementById(`ei-${id}`).value);
+  document.getElementById(`be-${id}`).disabled=!(v>0&&v<=max);
 }
 
-function chiudiModalSalda() {
-  document.getElementById('mSaldaOrd').classList.remove('open');
-  _mSaldaId = null;
-  // Reset stato per la prossima apertura
-  document.getElementById('mSaldaContent').style.display = '';
-  document.getElementById('mSaldaFooter').style.display = '';
-  document.getElementById('mSaldaFeedback').style.display = 'none';
-  const confirmBtn = document.getElementById('mSaldaConfirmBtn');
-  confirmBtn.classList.remove('loading'); confirmBtn.disabled = false;
-  const closeBtn = document.getElementById('mSaldaCloseBtn');
-  closeBtn.disabled = false;
-  document.querySelector('#mSaldaFooter .btn-cancel').disabled = false;
-}
-
-async function eseguiSalda() {
-  const id = _mSaldaId;
-  const p = S.prenotazioni.find(x => x.id === id);
-  if (!p) return;
-  const delta        = p.residuo || 0;
-  const nuovoTotale  = (p.acconto_extra || 0) + delta;  // totale cumulativo
-
-  const confirmBtn = document.getElementById('mSaldaConfirmBtn');
-  const closeBtn   = document.getElementById('mSaldaCloseBtn');
-  confirmBtn.classList.add('loading'); confirmBtn.disabled = true;
-  closeBtn.disabled = true;
-  document.querySelector('#mSaldaFooter .btn-cancel').disabled = true;
-
-  try {
-    const res = await apiSalvaExtra(id, delta, nuovoTotale);
-    if (!res.ok) {
-      _mostraSaldaFeedback(false, 'Errore salvataggio.<br>Riprova o contatta DNI.');
-      return;
+async function salvaExtra(id,max){
+  const inp=document.getElementById(`ei-${id}`);
+  const btn=document.getElementById(`be-${id}`);
+  const fb=document.getElementById(`ef-${id}`);
+  const val=parseFloat(inp.value);
+  if(!val||val<=0||val>max){fb.textContent='Importo non valido.';fb.className='extra-fb err';return;}
+  if(val>S.utente.credito){fb.textContent=`Credito insufficiente (€${fmt(S.utente.credito)}).`;fb.className='extra-fb err';return;}
+  btn.disabled=true; fb.className='extra-fb';
+  try{
+    const res=await apiSalvaExtra(id,val);
+    if(!res.ok){fb.textContent='Errore salvataggio.';fb.className='extra-fb err';btn.disabled=false;return;}
+    const pren=S.prenotazioni.find(p=>p.id===id);
+    if(pren){
+      const nE=(pren.acconto_extra||0)+val;
+      const nR=Math.max(0,pren.prezzo_totale-pren.acconto-nE);
+      if(nR===0){
+        // mostra modal saldo completo
+        saldoPendId=id; saldoPendVal=val;
+        document.getElementById('saldoProd').textContent=pren.nome_prodotto;
+        document.getElementById('mSaldo').classList.add('open');
+        btn.disabled=false; return;
+      }
+      pren.acconto_extra=nE; pren.residuo=nR;
+      S.utente.credito=Math.max(0,S.utente.credito-val);
+      document.getElementById('tbCred').textContent='€'+fmt(S.utente.credito);
     }
-    p.acconto_extra = nuovoTotale;
-    p.residuo = 0; p.modificabile = false; p.stato_ordine = 'saldato';
-    S.utente.credito = Math.max(0, S.utente.credito - delta);
-    document.getElementById('tbCred').textContent = '€' + fmt(S.utente.credito); document.getElementById('tbCredMob').textContent = '€' + fmt(S.utente.credito);
     aggiornaCache();
+    inp.value=''; btn.disabled=true;
+    fb.textContent='✓ Salvato'; fb.className='extra-fb ok';
+    setTimeout(()=>{fb.className='extra-fb';},3000);
     renderOrdini();
-    chiudiModalSalda();
-    mostraToast('Ordine saldato con successo ✔', 'neon');
-  } catch(e) {
-    _mostraSaldaFeedback(false, 'Errore di connessione.<br>Riprova tra qualche secondo.');
-  }
+  }catch(e){fb.textContent='Errore di connessione.';fb.className='extra-fb err';btn.disabled=false;}
 }
 
-function _mostraSaldaFeedback(ok, msg) {
-  document.getElementById('mSaldaContent').style.display = 'none';
-  document.getElementById('mSaldaFooter').style.display = 'none';
-  const fb = document.getElementById('mSaldaFeedback');
-  document.getElementById('mSaldaFbIcon').textContent = '❌';
-  document.getElementById('mSaldaFbMsg').innerHTML = msg;
-  document.getElementById('mSaldaFbMsg').style.color = 'var(--red)';
-  fb.style.display = 'flex';
-  document.getElementById('mSaldaCloseBtn').disabled = false;
-}
+function chiudiSaldo(){document.getElementById('mSaldo').classList.remove('open');saldoPendId=null;saldoPendVal=0;}
 
-// --- MODAL IMPOSTA ACCONTO -----------------------------------------------------
-let _mAccId = null, _mAccMax = 0;
-
-function apriModalAcconto(id) {
-  const p = S.prenotazioni.find(x => x.id === id);
-  if (!p) return;
-  _mAccId = id; _mAccMax = p.residuo || 0;
-  document.getElementById('mAccNome').textContent = p.nome_prodotto;
-  document.getElementById('mAccHint').textContent = `Massimo: €${fmt(_mAccMax)} · Credito disponibile: €${fmt(S.utente.credito)}`;
-  document.getElementById('mAccInput').value = '';
-  document.getElementById('mAccInput').max = _mAccMax;
-  document.getElementById('mAccPreview').style.opacity = '0';
-  document.getElementById('mAccBtn').disabled = true;
-  document.getElementById('mAccErr').style.display = 'none';
-  document.getElementById('mAccontoOrd').classList.add('open');
-  setTimeout(() => document.getElementById('mAccInput').focus(), 200);
-}
-
-function chiudiModalAcconto() {
-  document.getElementById('mAccontoOrd').classList.remove('open');
-  _mAccId = null; _mAccMax = 0;
-  // Reset stato per la prossima apertura
-  document.getElementById('mAccContent').style.display = '';
-  document.getElementById('mAccFooter').style.display = '';
-  document.getElementById('mAccFeedback').style.display = 'none';
-  const confirmBtn = document.getElementById('mAccBtn');
-  confirmBtn.classList.remove('loading'); confirmBtn.disabled = true;
-  const closeBtn = document.getElementById('mAccCloseBtn');
-  closeBtn.disabled = false;
-  document.querySelector('#mAccFooter .btn-cancel').disabled = false;
-}
-
-function aggiornaPrevAcc() {
-  const v = parseFloat(document.getElementById('mAccInput').value);
-  const preview = document.getElementById('mAccPreview');
-  const btn = document.getElementById('mAccBtn');
-  const errEl = document.getElementById('mAccErr');
-  errEl.style.display = 'none';
-  if (v > 0 && v <= _mAccMax && v <= S.utente.credito) {
-    const newRes = _mAccMax - v;
-    const newCred = S.utente.credito - v;
-    const resEl = document.getElementById('mAccResAfter');
-    resEl.textContent = '€' + fmt(newRes);
-    resEl.style.color = newRes === 0 ? 'var(--neon)' : 'var(--warm)';
-    document.getElementById('mAccCreditoDopo').textContent = '€' + fmt(newCred);
-    preview.style.opacity = '1';
-    btn.disabled = false;
-  } else {
-    preview.style.opacity = '0';
-    btn.disabled = true;
-    if (v > S.utente.credito) {
-      errEl.textContent = `Credito insufficiente. Hai €${fmt(S.utente.credito)}.`;
-      errEl.style.display = 'block';
-    } else if (v > _mAccMax) {
-      errEl.textContent = `Importo superiore al residuo (€${fmt(_mAccMax)}).`;
-      errEl.style.display = 'block';
+async function confermaSaldo(){
+  const id=saldoPendId, val=saldoPendVal; chiudiSaldo();
+  try{
+    const res=await apiSalvaExtra(id,val);
+    if(!res.ok){alert('Errore salvataggio. Riprova.');return;}
+    const pren=S.prenotazioni.find(p=>p.id===id);
+    if(pren){
+      pren.acconto_extra=(pren.acconto_extra||0)+val;
+      pren.residuo=0; pren.modificabile=false; pren.stato_ordine='saldato';
+      S.utente.credito=Math.max(0,S.utente.credito-val);
+      document.getElementById('tbCred').textContent='€'+fmt(S.utente.credito);
     }
-  }
-}
-
-async function eseguiAcconto() {
-  const id    = _mAccId;
-  const delta = parseFloat(document.getElementById('mAccInput').value);
-  const p     = S.prenotazioni.find(x => x.id === id);
-  if (!p || !delta || delta <= 0) return;
-  const nuovoTotale = (p.acconto_extra || 0) + delta;  // totale cumulativo
-
-  const confirmBtn = document.getElementById('mAccBtn');
-  const closeBtn   = document.getElementById('mAccCloseBtn');
-  confirmBtn.classList.add('loading'); confirmBtn.disabled = true;
-  closeBtn.disabled = true;
-  document.querySelector('#mAccFooter .btn-cancel').disabled = true;
-
-  try {
-    const res = await apiSalvaExtra(id, delta, nuovoTotale);
-    if (!res.ok) {
-      _mostraAccFeedback(false, 'Errore salvataggio.<br>Riprova o contatta DNI.');
-      return;
-    }
-    const nR = Math.max(0, p.prezzo_totale - p.acconto - nuovoTotale);
-    p.acconto_extra = nuovoTotale;
-    p.residuo = nR;
-    if (nR === 0) { p.modificabile = false; p.stato_ordine = 'saldato'; }
-    S.utente.credito = Math.max(0, S.utente.credito - delta);
-    document.getElementById('tbCred').textContent = '€' + fmt(S.utente.credito); document.getElementById('tbCredMob').textContent = '€' + fmt(S.utente.credito);
-    aggiornaCache();
     renderOrdini();
-    chiudiModalAcconto();
-    mostraToast('Acconto registrato con successo ✔', 'neon');
-  } catch(e) {
-    _mostraAccFeedback(false, 'Errore di connessione.<br>Riprova tra qualche secondo.');
-  }
+  }catch(e){alert('Errore di connessione.');}
 }
 
-function _mostraAccFeedback(ok, msg) {
-  document.getElementById('mAccContent').style.display = 'none';
-  document.getElementById('mAccFooter').style.display = 'none';
-  const fb = document.getElementById('mAccFeedback');
-  document.getElementById('mAccFbIcon').textContent = '❌';
-  document.getElementById('mAccFbMsg').innerHTML = msg;
-  document.getElementById('mAccFbMsg').style.color = 'var(--red)';
-  fb.style.display = 'flex';
-  document.getElementById('mAccCloseBtn').disabled = false;
-}
-
-// legacy compat
-function chiudiSaldo(){chiudiModalSalda();}
-
-/* --- NAVIGAZIONE ---------------------------------------------------------- */
+/* ─── NAVIGAZIONE ────────────────────────────────────────────────────────── */
 function switchTab(t){
   document.getElementById('pCat').classList.toggle('active',t==='cat');
   document.getElementById('pOrd').classList.toggle('active',t==='ord');
   document.getElementById('btnTabCat').classList.toggle('active',t==='cat');
   document.getElementById('btnTabOrd').classList.toggle('active',t==='ord');
-  if(t==='ord') rilevaMieiOrdini();   // sempre dati freschi dal backend
+  if(t==='ord')renderOrdini();
 }
 
 function setFiltro(f,btn){
@@ -2544,7 +1374,7 @@ function showScreen(id){
 }
 
 
-/* --- LIGHTBOX IMMAGINI ---------------------------------------------------- */
+/* ─── LIGHTBOX IMMAGINI ──────────────────────────────────────────────────── */
 let _lbImgs = [];   // array URL immagini del prodotto corrente
 let _lbIdx  = 0;    // indice immagine attiva
 let _lbName = '';   // nome prodotto
@@ -2552,26 +1382,13 @@ let _lbName = '';   // nome prodotto
 function apriLightbox(prodId) {
   const prod = S.catalogo.find(p => String(p.id) === String(prodId));
   if (!prod) return;
-  // Supporta nuovo formato (imgs[]+imgBase) e vecchio (imgFile) per retrocompatibilità
-  _lbImgs = (prod.imgs && prod.imgs.length)
-    ? prod.imgs.map(f => `img_catalogo/${prod.imgBase}/${f}`)
-    : [prod.imgFile, prod.imgFile2, prod.imgFile3].filter(Boolean).map(f => 'img_catalogo/' + f);
+  _lbImgs = (prod.imgs&&prod.imgs.length)
+    ? prod.imgs.map(f=>'img_catalogo/'+prod.imgBase+'/'+f)
+    : [prod.imgFile,prod.imgFile2,prod.imgFile3].filter(Boolean).map(f=>'img_catalogo/'+f);
   if (!_lbImgs.length) return;
   _lbIdx  = 0;
   _lbName = prod.name;
   document.getElementById('lbTitle').textContent = prod.name;
-  lbRender();
-  document.getElementById('mLightbox').classList.add('open');
-  document.body.style.overflow = 'hidden';
-}
-
-// Apre il lightbox a partire da un array di filename (usato dagli order card)
-function apriLightboxFromUrls(fileNames, nome) {
-  _lbImgs = fileNames.map(f => 'img_catalogo/' + f);
-  if (!_lbImgs.length) return;
-  _lbIdx  = 0;
-  _lbName = nome || '';
-  document.getElementById('lbTitle').textContent = nome || '';
   lbRender();
   document.getElementById('mLightbox').classList.add('open');
   document.body.style.overflow = 'hidden';
@@ -2619,191 +1436,131 @@ function lbGoTo(idx) {
   lbRender();
 }
 
-/* --- TOAST NOTIFICHE ------------------------------------------------------ */
-function mostraToast(msg, tipo) {
-  const colori = {
-    neon: { border:'var(--neon)', text:'var(--neon)', glow:'rgba(180,255,0,.25)' },
-    red:  { border:'var(--red)',  text:'var(--red)',  glow:'rgba(255,90,90,.2)'  },
-    warm: { border:'var(--warm)', text:'var(--warm)', glow:'rgba(247,201,72,.2)' },
-  };
-  const c = colori[tipo] || colori.neon;
-  const old = document.getElementById('_toast');
-  if (old) old.remove();
-  const el = document.createElement('div');
-  el.id = '_toast';
-  el.style.cssText =
-    'position:fixed;top:50%;left:50%;transform:translate(-50%,-50%) scale(.96);' +
-    'z-index:9999;background:#0b0b0f;' +
-    'border:1px solid ' + c.border + ';' +
-    'padding:18px 38px;' +
-    'font-family:var(--f-title);font-size:18px;font-weight:700;' +
-    'letter-spacing:2px;text-transform:uppercase;' +
-    'color:' + c.text + ';' +
-    'box-shadow:0 0 40px ' + c.glow + ';' +
-    'border-radius:3px;pointer-events:none;' +
-    'opacity:0;transition:opacity .2s,transform .2s;';
-  el.textContent = msg;
-  document.body.appendChild(el);
-  requestAnimationFrame(() => {
-    el.style.opacity = '1';
-    el.style.transform = 'translate(-50%,-50%) scale(1)';
-  });
-  setTimeout(() => {
-    el.style.opacity = '0';
-    el.style.transform = 'translate(-50%,-50%) scale(.96)';
-    setTimeout(() => el.remove(), 200);
-  }, 2000);
-}
-
-/* --- INIT ----------------------------------------------------------------- */
+/* ─── INIT ───────────────────────────────────────────────────────────────── */
 window.addEventListener('DOMContentLoaded',()=>{
   const gl=document.getElementById('gLoad');
   setTimeout(()=>{
     gl.classList.add('out');
     setTimeout(()=>gl.style.display='none',300);
-    if(!ripristinaSessione()) showScreen('sLogin');
+    ripristinaSessione().then(ok=>{ if(!ok) showScreen('sLogin'); });
   },700);
 });
 document.addEventListener('keydown',e=>{
-  if(e.key==='Escape'){
-    chiudiDrawerCarrello();
-    // Non chiudere la modale conferma se l'invio è in corso
-    const btn = document.getElementById('btnMConf');
-    if(!btn || !btn.classList.contains('loading')) chiudiConferma();
-    chiudiSaldo();
-    chiudiLightbox();
-  }
+  if(e.key==='Escape'){chiudiConferma();chiudiSaldo();chiudiLightbox();}
 });
 
 
-/* --- CACHE SESSIONE -- ripristino dopo refresh ----------------------------- */
+/* ─── CACHE SESSIONE — ripristino dopo refresh ───────────────────────────── */
 const DNI_CACHE_KEY = 'dni_cache';
-const DNI_CACHE_TTL = 8 * 60 * 60 * 1000; // 8 ore -- ripristino rapido senza schermata nera
 
 function salvaCacheSessione() {
   try {
+    // Salva credenziali + snapshot dati (usato solo come fallback offline)
     localStorage.setItem(DNI_CACHE_KEY, JSON.stringify({
-      utente: S.utente,
-      pin: S.utente._codice,        // salvo esplicitamente per sicurezza
-      catalogo: S.catalogo,
-      prenotazioni: S.prenotazioni,
-      mese: S.mese,
-      token: S._sessionToken,
+      id: S.utente.id, pin: S.utente._codice, token: S._sessionToken,
+      utente: S.utente, catalogo: S.catalogo,
+      prenotazioni: S.prenotazioni, mese: S.mese,
       savedAt: Date.now(),
     }));
   } catch(e) {}
 }
 
-// Carica dalla cache per apertura istantanea (nessuna schermata nera),
-// poi chiama rilevaMieiOrdini() in background per aggiornare i dati dal backend.
-function ripristinaSessione() {
+// async: chiama sempre il backend per dati freschi al reload/restore.
+// Se il backend non risponde usa i dati cached come fallback silenzioso.
+async function ripristinaSessione() {
   try {
     const raw = localStorage.getItem(DNI_CACHE_KEY);
     if (!raw) return false;
     const c = JSON.parse(raw);
-    if (!c.savedAt || Date.now() - c.savedAt > DNI_CACHE_TTL) {
-      localStorage.removeItem(DNI_CACHE_KEY); return false;
-    }
-    if (!c.utente || !c.utente.id) return false;
-    // Ripristina _codice: prima da utente, poi dal campo pin di backup
-    if (!c.utente._codice && c.pin) c.utente._codice = c.pin;
-    if (!c.utente._codice) return false;
-    S.utente = c.utente; S.catalogo = c.catalogo || [];
-    S.prenotazioni = c.prenotazioni || []; S.mese = c.mese || '';
+    if (!c.id || !c.pin) { localStorage.removeItem(DNI_CACHE_KEY); return false; }
     S._sessionToken = c.token || null;
     if (S._sessionToken) {
-      try { localStorage.setItem('dni_session_' + S.utente.id, S._sessionToken); } catch(e) {}
-      avviaSessionWatch(S.utente.id);
+      try { localStorage.setItem('dni_session_' + c.id, S._sessionToken); } catch(e) {}
     }
+    const res = await apiLogin(c.id, c.pin);
+    if (res.ok) {
+      res.utente.tier = normTier(res.utente.tier);
+      S.utente = res.utente; S.utente._codice = c.pin;
+      S.catalogo = res.catalogo || []; S.prenotazioni = res.prenotazioni || []; S.mese = res.mese || '';
+    } else {
+      if (!c.utente) { localStorage.removeItem(DNI_CACHE_KEY); return false; }
+      c.utente.tier = normTier(c.utente.tier);
+      S.utente = c.utente; S.utente._codice = c.pin;
+      S.catalogo = c.catalogo || []; S.prenotazioni = c.prenotazioni || []; S.mese = c.mese || '';
+    }
+    if (!S._sessionToken)
+      S._sessionToken = 'st_' + Date.now() + '_' + Math.random().toString(36).slice(2,8);
+    try { localStorage.setItem('dni_session_' + S.utente.id, S._sessionToken); } catch(e) {}
+    avviaSessionWatch(S.utente.id);
+    salvaCacheSessione();
     avviaApp();
-    // Aggiorna silenziosamente ordini, credito e stato dal backend dopo il ripristino.
-    // L'app è già visibile dalla cache; i dati freschi arrivano in background.
-    setTimeout(() => rilevaMieiOrdini(), 100);
     return true;
   } catch(e) { localStorage.removeItem(DNI_CACHE_KEY); return false; }
 }
 
 function aggiornaCache() { if (S.utente) salvaCacheSessione(); }
 
-/**
- * Rileva ordini: ricarica prenotazioni, credito e stato dal backend.
- * Chiamato dal tasto "Rileva i miei ordini" e automaticamente dopo conferma.
- */
-async function rilevaMieiOrdini(btn) {
-  // Recupera il pin: da S.utente._codice o dalla cache come fallback
-  let pin = S.utente && S.utente._codice;
-  if (!pin) {
-    try {
-      const raw = localStorage.getItem(DNI_CACHE_KEY);
-      if (raw) { const c = JSON.parse(raw); pin = c.pin || (c.utente && c.utente._codice); }
-    } catch(e) {}
-  }
-  if (!pin || !S.utente || !S.utente.id) { renderOrdini(); return; }
+/* ─── ZOOM ENGINE ────────────────────────────────────────────────────────── */
+const ZOOM_LEVELS = [75, 85, 100, 110, 125];
+let zoomIdx = 2; // default: 100%
 
-  const btnRileva = btn || document.getElementById('btnRileva');
-  if (btnRileva) { btnRileva.classList.add('loading'); btnRileva.disabled = true; }
+function applyZoom(idx) {
+  zoomIdx = Math.max(0, Math.min(ZOOM_LEVELS.length - 1, idx));
+  const pct = ZOOM_LEVELS[zoomIdx];
+  // scala il contenuto dell'app senza toccare layout fisso
+  const appEl = document.getElementById('sApp');
+  if (appEl) {
+    if (pct === 100) {
+      appEl.style.transform = '';
+      appEl.style.transformOrigin = '';
+      appEl.style.width = '';
+      appEl.style.height = '';
+    } else {
+      const factor = pct / 100;
+      appEl.style.transformOrigin = 'top left';
+      appEl.style.transform = `scale(${factor})`;
+      appEl.style.width = `${100 / factor}%`;
+      appEl.style.height = `${100 / factor}vh`;
+    }
+  }
+  const lbl = document.getElementById('zoomLbl');
+  if (lbl) lbl.textContent = pct + '%';
+  const out = document.getElementById('btnZoomOut');
+  const inp = document.getElementById('btnZoomIn');
+  if (out) out.disabled = zoomIdx === 0;
+  if (inp) inp.disabled = zoomIdx === ZOOM_LEVELS.length - 1;
+  try { localStorage.setItem('dni_zoom', zoomIdx); } catch(e) {}
+}
+
+function zoomStep(dir) { applyZoom(zoomIdx + dir); }
+
+/* ─── LAYOUT TOGGLE ─────────────────────────────────────────────────────── */
+let _layoutMobile=false;
+function toggleLayout(){
+  _layoutMobile=!_layoutMobile;
+  document.body.classList.toggle('layout-mobile',_layoutMobile);
+  const btn=document.getElementById('btnLayout');
+  if(btn){btn.classList.toggle('active',_layoutMobile);btn.title=_layoutMobile?'Vista desktop':'Vista mobile';btn.textContent=_layoutMobile?'⊞':'⊟';}
+  try{localStorage.setItem('dni_layout',_layoutMobile?'1':'0');}catch(e){}
+}
+function initLayout(){
+  try{if(localStorage.getItem('dni_layout')==='1')toggleLayout();}catch(e){}
+}
+
+function initZoom() {
   try {
-    // Usa action=ordini (leggero) invece di un login completo: ricarica solo
-    // prenotazioni, credito e stato utente senza ricaricare il catalogo.
-    const res = await _get({ action:'ordini', id: S.utente.id, code: pin });
-    if (res.ok) {
-      S.prenotazioni = res.prenotazioni || [];
-      S.utente.credito = res.credito ?? S.utente.credito;
-      S.utente.stato   = res.stato   ?? S.utente.stato;
-      document.getElementById('tbCred').textContent = '€' + fmt(S.utente.credito); document.getElementById('tbCredMob').textContent = '€' + fmt(S.utente.credito);
-      document.getElementById('ordCount').textContent = S.prenotazioni.length;
-      document.getElementById('lockBanner').classList.toggle('on', S.utente.stato === 'attesa');
-      aggiornaCache();
+    const saved = parseInt(localStorage.getItem('dni_zoom'));
+    if (!isNaN(saved) && saved >= 0 && saved < ZOOM_LEVELS.length) {
+      applyZoom(saved); return;
     }
-  } catch(e) { console.error('rilevaMieiOrdini error:', e); }
-  finally {
-    if (btnRileva) { btnRileva.classList.remove('loading'); btnRileva.disabled = false; }
-    renderOrdini();
-  }
+  } catch(e) {}
+  applyZoom(2); // default 100%
 }
 
-/* --- AUTO-REFRESH ogni 5 minuti ------------------------------------------- */
-let _autoRefreshTimer = null;
-function avviaAutoRefresh() {
-  if (_autoRefreshTimer) clearInterval(_autoRefreshTimer);
-  _autoRefreshTimer = setInterval(() => {
-    // Aggiorna solo se la tab ordini è visibile e la pagina è in foreground
-    if (document.getElementById('pOrd').classList.contains('active') &&
-        !document.hidden) {
-      rilevaMieiOrdini();
-    }
-  }, 5 * 60 * 1000); // 5 minuti
-}
-function fermaAutoRefresh() {
-  if (_autoRefreshTimer) { clearInterval(_autoRefreshTimer); _autoRefreshTimer = null; }
-}
-
-
-
-/* --- MOBILE SIDEBAR TOGGLE ------------------------------------------------ */
+/* ─── MOBILE SIDEBAR TOGGLE ──────────────────────────────────────────────── */
 function toggleSidebar() {
   const sb = document.querySelector('.cat-sidebar');
   if (sb) sb.classList.toggle('open');
-}
-
-/* --- RIMUOVI DAL CARRELLO ------------------------------------------------- */
-function rimuoviSel(prodId) {
-  const _pid = String(prodId);
-  if (SEL[_pid]) { delete SEL[_pid]; renderCatalogo(); }
-}
-
-/* --- DRAWER CARRELLO MOBILE ----------------------------------------------- */
-function apriDrawerCarrello() {
-  document.getElementById('cartDrawer').classList.add('open');
-  document.getElementById('cartDrawerBackdrop').classList.add('open');
-  document.body.style.overflow = 'hidden';
-}
-function chiudiDrawerCarrello() {
-  const d = document.getElementById('cartDrawer');
-  const b = document.getElementById('cartDrawerBackdrop');
-  if(d) d.classList.remove('open');
-  if(b) b.classList.remove('open');
-  document.body.style.overflow = '';
 }
 
 // chiudi sidebar mobile cliccando fuori
@@ -2816,94 +1573,4 @@ document.addEventListener('click', function(e) {
 
 // init zoom all'avvio app
 
-/* --- PARTICLE BURST -- gaming effect alla conferma ordine ----------------- */
-function particleBurst() {
-  const canvas = document.getElementById('particleCanvas');
-  if (!canvas) return;
-  const ctx = canvas.getContext('2d');
-
-  // Ridimensiona canvas a schermo intero
-  canvas.width  = window.innerWidth;
-  canvas.height = window.innerHeight;
-  canvas.classList.add('active');
-
-  // Colori tier dell'utente + neon
-  const tierColor = S.utente?.tier === 'elite'   ? '#f7c948'
-                  : S.utente?.tier === 'veteran'  ? '#00d4a0'
-                  : '#5ab4ff';
-  const colors = [tierColor, '#b4ff00', '#ffffff', tierColor, '#b4ff00'];
-
-  // Genera particelle dal centro dello schermo
-  const cx = canvas.width  / 2;
-  const cy = canvas.height / 2;
-  const particles = [];
-  const COUNT = 80;
-
-  for (let i = 0; i < COUNT; i++) {
-    const angle  = (Math.random() * Math.PI * 2);
-    const speed  = 3 + Math.random() * 9;
-    const size   = 2 + Math.random() * 5;
-    const life   = 0.6 + Math.random() * 0.4; // durata relativa 0-1
-    particles.push({
-      x: cx, y: cy,
-      vx: Math.cos(angle) * speed,
-      vy: Math.sin(angle) * speed - Math.random() * 4, // leggera spinta verso l'alto
-      size,
-      color: colors[Math.floor(Math.random() * colors.length)],
-      alpha: 1,
-      decay: 0.018 + Math.random() * 0.022,
-      gravity: 0.12 + Math.random() * 0.08,
-      // forma: cerchio o quadrato piccolo
-      shape: Math.random() > 0.5 ? 'circle' : 'rect',
-    });
-  }
-
-  let frame;
-  function animate() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-    let alive = 0;
-    for (const p of particles) {
-      if (p.alpha <= 0) continue;
-      alive++;
-      p.x  += p.vx;
-      p.y  += p.vy;
-      p.vy += p.gravity; // gravità
-      p.vx *= 0.98;      // attrito aria
-      p.alpha -= p.decay;
-
-      ctx.save();
-      ctx.globalAlpha = Math.max(0, p.alpha);
-      ctx.fillStyle   = p.color;
-      ctx.shadowBlur  = 6;
-      ctx.shadowColor = p.color;
-
-      if (p.shape === 'circle') {
-        ctx.beginPath();
-        ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
-        ctx.fill();
-      } else {
-        ctx.fillRect(p.x - p.size / 2, p.y - p.size / 2, p.size, p.size);
-      }
-      ctx.restore();
-    }
-
-    if (alive > 0) {
-      frame = requestAnimationFrame(animate);
-    } else {
-      canvas.classList.remove('active');
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-    }
-  }
-
-  animate();
-
-  // Sicurezza: forza pulizia dopo 3 secondi
-  setTimeout(() => {
-    cancelAnimationFrame(frame);
-    canvas.classList.remove('active');
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-  }, 3000);
-}
-
-</script></body></html>
+</script>
