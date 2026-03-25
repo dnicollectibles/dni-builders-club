@@ -1,13 +1,13 @@
 <!DOCTYPE html>
-<html lang="it">
-<head>
-<meta charset="UTF-8">
+<!-- saved from url=(0051)file:///C:/Users/crial/Downloads/cliente%20(8).html -->
+<html lang="it"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
 <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=5.0, user-scalable=yes">
-<link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
-<link rel="icon" type="image/png" sizes="64x64" href="favicon.png">
-<link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="file:///C:/Users/crial/Downloads/favicon-32.png">
+<link rel="icon" type="image/png" sizes="64x64" href="file:///C:/Users/crial/Downloads/favicon.png">
+<link rel="apple-touch-icon" sizes="180x180" href="file:///C:/Users/crial/Downloads/apple-touch-icon.png">
 <title>DNI Builders Club — Portale Soci</title>
-<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&family=JetBrains+Mono:wght@400;500;600&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,300&display=swap" rel="stylesheet">
+<link href="./cliente._files/css2" rel="stylesheet">
 <style>
 /* ═══════════════════════════════════════════════════════════════════
    RESET & VARIABILI
@@ -979,7 +979,7 @@ white-space:nowrap;}
 <canvas id="particleCanvas"></canvas>
 
 <!-- ═══ LOADING ═══ -->
-<div id="gLoad">
+<div id="gLoad" class="out" style="display: none;">
   <div class="gl-logo">DNI <span>Builders</span> Club</div>
   <div class="gl-bar"><div class="gl-fill"></div></div>
   <div class="gl-txt" id="glTxt">Inizializzazione…</div>
@@ -996,15 +996,11 @@ white-space:nowrap;}
     <div class="lform">
       <div class="lfield">
         <label>ID Socio</label>
-        <input type="text" id="lid" placeholder="es. U0001" autocomplete="username"
-               oninput="document.getElementById('lerr').classList.remove('on')"
-               onkeydown="if(event.key==='Enter')doLogin()">
+        <input type="text" id="lid" placeholder="es. U0001" autocomplete="username" oninput="document.getElementById(&#39;lerr&#39;).classList.remove(&#39;on&#39;)" onkeydown="if(event.key===&#39;Enter&#39;)doLogin()">
       </div>
       <div class="lfield">
         <label>PIN</label>
-        <input type="password" id="lpin" placeholder="••••••••" autocomplete="current-password"
-               oninput="document.getElementById('lerr').classList.remove('on')"
-               onkeydown="if(event.key==='Enter')doLogin()">
+        <input type="password" id="lpin" placeholder="••••••••" autocomplete="current-password" oninput="document.getElementById(&#39;lerr&#39;).classList.remove(&#39;on&#39;)" onkeydown="if(event.key===&#39;Enter&#39;)doLogin()">
       </div>
       <div class="lerr" id="lerr"></div>
       <button class="btn-login" id="btnLogin" onclick="doLogin()">
@@ -1016,24 +1012,24 @@ white-space:nowrap;}
 </div>
 
 <!-- ═══ APP ═══ -->
-<div class="screen" id="sApp">
+<div class="screen active" id="sApp">
 
   <div class="topbar">
     <!-- riga 1 desktop / riga superiore mobile -->
     <div class="tb-top-row" style="display:contents">
       <div class="tb-logo">DNI <span>Builders</span> Club</div>
       <div class="tb-sep"></div>
-      <div class="tb-user">Benvenuto, <strong id="tbNome">—</strong></div>
-      <div class="tb-tier" id="tbTier">—</div>
-      <div class="tb-mese" id="tbMese">—</div>
-      <div class="tb-rinnovo" id="tbRinnovoWrap" style="display:none">
+      <div class="tb-user">Benvenuto, <strong id="tbNome">Admin</strong></div>
+      <div class="tb-tier elite" id="tbTier">Élite</div>
+      <div class="tb-mese" id="tbMese">Mese: 2026-03</div>
+      <div class="tb-rinnovo" id="tbRinnovoWrap" style="display: flex;">
         <div class="tb-rinnovo-lbl">Rinnovo</div>
-        <div class="tb-rinnovo-val" id="tbRinnovo">—</div>
+        <div class="tb-rinnovo-val urgent" id="tbRinnovo">01/01/1970 (scaduto)</div>
       </div>
       <div class="tb-right">
         <div class="tb-cred">
           <div class="tb-cred-lbl">Credito</div>
-          <div class="tb-cred-val" id="tbCred">€0</div>
+          <div class="tb-cred-val" id="tbCred">€735</div>
         </div>
         <button class="btn-logout" onclick="doLogout()">Esci</button>
       </div>
@@ -1042,18 +1038,18 @@ white-space:nowrap;}
     <div class="tb-bottom-row">
       <div class="tb-mob-credito">
         <span class="tb-mob-credito-lbl">Credito</span>
-        <span class="tb-mob-credito-val" id="tbCredMob">€0</span>
+        <span class="tb-mob-credito-val" id="tbCredMob">€735</span>
       </div>
       <div class="tb-mob-sep"></div>
-      <div class="tb-mob-mese" id="tbMeseMob">—</div>
-      <div class="tb-mob-rinnovo" id="tbRinnovoMob" style="display:none">—</div>
+      <div class="tb-mob-mese" id="tbMeseMob">Mese: 2026-03</div>
+      <div class="tb-mob-rinnovo urgent" id="tbRinnovoMob" style="display: block;">⟳ Scaduto</div>
       <!-- icona carrello mobile (solo mobile) -->
       <button class="btn-cart-mob" id="btnCartMob" onclick="apriDrawerCarrello()" title="Il tuo carrello">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/>
-          <path d="M1 1h4l2.68 13.39a2 2 0 001.99 1.61h9.72a2 2 0 001.99-1.61L23 6H6"/>
+          <circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle>
+          <path d="M1 1h4l2.68 13.39a2 2 0 001.99 1.61h9.72a2 2 0 001.99-1.61L23 6H6"></path>
         </svg>
-        <span class="cart-mob-badge" id="cartMobBadge">0</span>
+        <span class="cart-mob-badge" id="cartMobBadge" style="display: none;">0</span>
       </button>
     </div>
   </div>
@@ -1066,12 +1062,12 @@ white-space:nowrap;}
   </div>
 
   <div class="nav-tabs">
-    <button class="nav-tab active" id="btnTabCat" onclick="switchTab('cat')">
+    <button class="nav-tab active" id="btnTabCat" onclick="switchTab(&#39;cat&#39;)">
       Catalogo Mese
     </button>
-    <button class="nav-tab" id="btnTabOrd" onclick="switchTab('ord')">
+    <button class="nav-tab" id="btnTabOrd" onclick="switchTab(&#39;ord&#39;)">
       I Tuoi Ordini
-      <span class="tab-badge" id="ordCount">0</span>
+      <span class="tab-badge" id="ordCount">3</span>
     </button>
   </div>
 
@@ -1080,19 +1076,248 @@ white-space:nowrap;}
     <!-- TAB CATALOGO -->
     <div class="tab-pane active" id="pCat">
       <div class="cat-layout">
-        <div class="cat-main" id="catMain"></div>
+        <div class="cat-main" id="catMain">
+      <div class="garanzia-banner" id="garanziaBanner">
+        <div class="garanzia-banner-icon">ⓘ</div>
+        <div class="garanzia-banner-txt">
+          <strong>Scegli i prodotti nell'ordine che preferisci</strong> — li ordiniamo automaticamente per minimizzare il costo complessivo degli acconti.
+          Dalla 3ª prenotazione aperta scatta una <strong>Garanzia Stock</strong> sull'acconto. Il sistema la distribuisce sempre in modo ottimale.
+        </div>
+      </div><div class="tier-section">
+      <div class="tier-vtag scout"><span>Scout</span></div>
+      <div class="tier-body">
+        <div class="prod-grid"><div class="prod-card ">
+        <div class="prod-photo-half">
+          <img src="file:///C:/Users/crial/Downloads/img_catalogo/202603-LAMORAK_SNAA-DBC/LAMORAK_SNAA-01.jpg" alt="SNAA Model 1/144 SC-008 Round Table Knights Soul Spear Lamorak" loading="lazy">
+          
+          <div class="prod-ordinati-overlay zero">Hai già ordinato: 0</div>
+          
+        </div>
+        <div class="prod-info-half">
+          <div class="prod-tier-tag scout">LAMORAK SNAA</div>
+          <div class="prod-name">SNAA Model 1/144 SC-008 Round Table Knights Soul Spear Lamorak</div>
+          <div class="prod-sku">202603-LAMORAK_SNAA-DBC</div>
+          <div class="prod-price-row"><div class="prod-price">€30</div><span class="prod-price-pub">€35</span><span class="prod-price-disc">-14%</span></div>
+          <div class="prod-actions">
+            <button class="prod-btn" onclick="toggleSel(&#39;202603101&#39;,&#39;deposito&#39;)">
+              <div class="prod-btn-left"><span class="prod-btn-lbl">Prenota</span><div class="prod-disc-bdg">-35% soci</div></div>
+              <div class="prod-btn-r"><span class="prod-btn-val">€3</span><div class="prod-dot"></div></div>
+            </button>
+            <button class="prod-btn" onclick="toggleSel(&#39;202603101&#39;,&#39;saldo&#39;)">
+              <div class="prod-btn-left"><span class="prod-btn-lbl">Acquista ora</span></div>
+              <div class="prod-btn-r"><span class="prod-btn-val">€30</span><div class="prod-dot"></div></div>
+            </button>
+          </div>
+        </div>
+      </div><div class="prod-card ">
+        <div class="prod-photo-half">
+          <img src="file:///C:/Users/crial/Downloads/img_catalogo/202603-TRISTAN_SNAA-DBC/TRISTAN_SNAA-01.jpg" alt="SNAA Model 1/144 The Round Table Knights Titan Greatsword Tristan Model Kit" loading="lazy">
+          
+          <div class="prod-ordinati-overlay zero">Hai già ordinato: 0</div>
+          
+        </div>
+        <div class="prod-info-half">
+          <div class="prod-tier-tag scout">TRISTAN SNAA</div>
+          <div class="prod-name">SNAA Model 1/144 The Round Table Knights Titan Greatsword Tristan Model Kit</div>
+          <div class="prod-sku">202603-TRISTAN_SNAA-DBC</div>
+          <div class="prod-price-row"><div class="prod-price">€45</div><span class="prod-price-pub">€50</span><span class="prod-price-disc">-10%</span></div>
+          <div class="prod-actions">
+            <button class="prod-btn" onclick="toggleSel(&#39;202603102&#39;,&#39;deposito&#39;)">
+              <div class="prod-btn-left"><span class="prod-btn-lbl">Prenota</span><div class="prod-disc-bdg">-35% soci</div></div>
+              <div class="prod-btn-r"><span class="prod-btn-val">€3</span><div class="prod-dot"></div></div>
+            </button>
+            <button class="prod-btn" onclick="toggleSel(&#39;202603102&#39;,&#39;saldo&#39;)">
+              <div class="prod-btn-left"><span class="prod-btn-lbl">Acquista ora</span></div>
+              <div class="prod-btn-r"><span class="prod-btn-val">€45</span><div class="prod-dot"></div></div>
+            </button>
+          </div>
+        </div>
+      </div><div class="prod-card ">
+        <div class="prod-photo-half">
+          <img src="file:///C:/Users/crial/Downloads/img_catalogo/202603-SNAA-009-DV-DBC/SNAA-009-DV-01.jpg" alt="SNAA Model 1/144 The Round Table Knights SC-009 Divine Invoker Percival Deluxe Version" loading="lazy">
+          
+          <div class="prod-ordinati-overlay zero">Hai già ordinato: 0</div>
+          
+        </div>
+        <div class="prod-info-half">
+          <div class="prod-tier-tag scout">SNAA-009-DV</div>
+          <div class="prod-name">SNAA Model 1/144 The Round Table Knights SC-009 Divine Invoker Percival Deluxe Version</div>
+          <div class="prod-sku">202603-SNAA-009-DV-DBC</div>
+          <div class="prod-price-row"><div class="prod-price">€55</div><span class="prod-price-pub">€60</span><span class="prod-price-disc">-8%</span></div>
+          <div class="prod-actions">
+            <button class="prod-btn" onclick="toggleSel(&#39;202603103&#39;,&#39;deposito&#39;)">
+              <div class="prod-btn-left"><span class="prod-btn-lbl">Prenota</span><div class="prod-disc-bdg">-35% soci</div></div>
+              <div class="prod-btn-r"><span class="prod-btn-val">€3</span><div class="prod-dot"></div></div>
+            </button>
+            <button class="prod-btn" onclick="toggleSel(&#39;202603103&#39;,&#39;saldo&#39;)">
+              <div class="prod-btn-left"><span class="prod-btn-lbl">Acquista ora</span></div>
+              <div class="prod-btn-r"><span class="prod-btn-val">€55</span><div class="prod-dot"></div></div>
+            </button>
+          </div>
+        </div>
+      </div></div>
+      </div>
+    </div><div class="tier-section">
+      <div class="tier-vtag veteran"><span>Veteran</span></div>
+      <div class="tier-body">
+        <div class="prod-grid"><div class="prod-card ">
+        <div class="prod-photo-half">
+          <img src="file:///C:/Users/crial/Downloads/img_catalogo/202603-GZSS-GUS-DBC/GZSS-GUS_01.jpg;%20GZSS-GUS_02.jpg;%20GZSS-GUS_03.jpg;%20GZSS-GUS_04.jpg;%20GZSS-GUS_05.jpg;%20GZSS-GUS_06.jpg;%20GZSS-GUS_07.jpg;GZSS-GUS_08.jpg;%20GZSS-GUS_09.jpg;%20GZSS-GUS_10.jpg" alt="ZZA Model 1/100 GZSS-OX01 Regus Model Kit" loading="lazy">
+          
+          <div class="prod-ordinati-overlay zero">Hai già ordinato: 0</div>
+          
+        </div>
+        <div class="prod-info-half">
+          <div class="prod-tier-tag veteran">GZSS-GUS</div>
+          <div class="prod-name">ZZA Model 1/100 GZSS-OX01 Regus Model Kit</div>
+          <div class="prod-sku">202603-GZSS-GUS-DBC</div>
+          <div class="prod-price tbd">TBD<span style="font-size:11px;color:var(--text-dim);font-family:var(--f-mono);margin-left:6px">prezzo da definire</span></div>
+          <div class="prod-actions">
+            <button class="prod-btn" onclick="toggleSel(&#39;202603104&#39;,&#39;deposito&#39;)">
+              <div class="prod-btn-left"><span class="prod-btn-lbl">Prenota</span><div class="prod-disc-bdg">-25% soci</div></div>
+              <div class="prod-btn-r"><span class="prod-btn-val">€3</span><div class="prod-dot"></div></div>
+            </button>
+            <button class="prod-btn blocked" onclick="toggleSel(&#39;202603104&#39;,&#39;saldo&#39;)">
+              <div class="prod-btn-left"><span class="prod-btn-lbl">Full Pay — N/D</span></div>
+              <div class="prod-btn-r"><span class="prod-btn-val">-</span><div class="prod-dot"></div></div>
+            </button>
+          </div>
+        </div>
+      </div><div class="prod-card ">
+        <div class="prod-photo-half">
+          <img src="file:///C:/Users/crial/Downloads/img_catalogo/202603-GZSS-OX01-DBC/ZZA-GZSS-OX01_01.jpg;%20ZZA-GZSS-OX01_02.jpg;%20ZZA-GZSS-OX01_03.jpg;%20ZZA-GZSS-OX01_04.jpg;%20ZZA-GZSS-OX01_05.jpg;%20ZZA-GZSS-OX01_06.jpg;%20ZZA-GZSS-OX01_08.jpg;%20ZZA-GZSS-OX01_09.jpg;%20ZZA-GZSS-OX01_10.jpg;%20ZZA-GZSS-OX01_11.jpg;%20ZZA-GZSS-OX01_12.jpg;%20ZZA-GZSS-OX01_13.jpg;%20ZZA-GZSS-OX01_14.jpg;%20ZZA-GZSS-OX01_15.jpg;%20ZZA-GZSS-OX01_16.jpg" alt="ZZA Model 1/100 GZSS-OX GUS Model Kit" loading="lazy">
+          
+          <div class="prod-ordinati-overlay zero">Hai già ordinato: 0</div>
+          
+        </div>
+        <div class="prod-info-half">
+          <div class="prod-tier-tag veteran">GZSS-OX01</div>
+          <div class="prod-name">ZZA Model 1/100 GZSS-OX GUS Model Kit</div>
+          <div class="prod-sku">202603-GZSS-OX01-DBC</div>
+          <div class="prod-price tbd">TBD<span style="font-size:11px;color:var(--text-dim);font-family:var(--f-mono);margin-left:6px">prezzo da definire</span></div>
+          <div class="prod-actions">
+            <button class="prod-btn" onclick="toggleSel(&#39;202603105&#39;,&#39;deposito&#39;)">
+              <div class="prod-btn-left"><span class="prod-btn-lbl">Prenota</span><div class="prod-disc-bdg">-25% soci</div></div>
+              <div class="prod-btn-r"><span class="prod-btn-val">€3</span><div class="prod-dot"></div></div>
+            </button>
+            <button class="prod-btn blocked" onclick="toggleSel(&#39;202603105&#39;,&#39;saldo&#39;)">
+              <div class="prod-btn-left"><span class="prod-btn-lbl">Full Pay — N/D</span></div>
+              <div class="prod-btn-r"><span class="prod-btn-val">-</span><div class="prod-dot"></div></div>
+            </button>
+          </div>
+        </div>
+      </div><div class="prod-card ">
+        <div class="prod-photo-half">
+          <img src="file:///C:/Users/crial/Downloads/img_catalogo/202603-SKYBLAZE-AM-DBC/SKYBLAZE-AM-01.jpg" alt="Infinite Dimension 1/72 Infinite Rank Sky Blaze Model Kit" loading="lazy">
+          
+          <div class="prod-ordinati-overlay zero">Hai già ordinato: 0</div>
+          
+        </div>
+        <div class="prod-info-half">
+          <div class="prod-tier-tag veteran">SKYBLAZE-AM</div>
+          <div class="prod-name">Infinite Dimension 1/72 Infinite Rank Sky Blaze Model Kit</div>
+          <div class="prod-sku">202603-SKYBLAZE-AM-DBC</div>
+          <div class="prod-price tbd">TBD<span style="font-size:11px;color:var(--text-dim);font-family:var(--f-mono);margin-left:6px">prezzo da definire</span></div>
+          <div class="prod-actions">
+            <button class="prod-btn" onclick="toggleSel(&#39;202603106&#39;,&#39;deposito&#39;)">
+              <div class="prod-btn-left"><span class="prod-btn-lbl">Prenota</span><div class="prod-disc-bdg">-25% soci</div></div>
+              <div class="prod-btn-r"><span class="prod-btn-val">€3</span><div class="prod-dot"></div></div>
+            </button>
+            <button class="prod-btn blocked" onclick="toggleSel(&#39;202603106&#39;,&#39;saldo&#39;)">
+              <div class="prod-btn-left"><span class="prod-btn-lbl">Full Pay — N/D</span></div>
+              <div class="prod-btn-r"><span class="prod-btn-val">-</span><div class="prod-dot"></div></div>
+            </button>
+          </div>
+        </div>
+      </div></div>
+      </div>
+    </div><div class="tier-section">
+      <div class="tier-vtag elite"><span>Élite</span></div>
+      <div class="tier-body">
+        <div class="prod-grid"><div class="prod-card ">
+        <div class="prod-photo-half">
+          <img src="file:///C:/Users/crial/Downloads/img_catalogo/202603-MAZINKAISER_TRON-DBC/MAZINKAISER_TRON_01.jpg;%20MAZINKAISER_TRON_02.jpg;%20MAZINKAISER_TRON_03.jpg;%20MAZINKAISER_TRON_04.jpg;%20MAZINKAISER_TRON_05.jpg;%20MAZINKAISER_TRON_06.jpg;%20MAZINKAISER_TRON_07.jpg;%20MAZINKAISER_TRON_08.jpg;%20MAZINKAISER_TRON_09.jpg;%20MAZINKAISER_TRON_10.jpg;%20MAZINKAISER_TRON_11.jpg;%20MAZINKAISER_TRON_12.jpg;%20MAZINKAISER_TRON_13.jpg;%20MAZINKAISER_TRON_14.jpg;%20MAZINKAISER_TRON_15.jpg;%20MAZINKAISER_TRON_16.jpg;%20MAZINKAISER_TRON_17.jpg;%20MAZINKAISER_TRON_18.jpg;%20MAZINKAISER_TRON_19.jpg;%20MAZINKAISER_TRON_20.jpg;%20MAZINKAISER_TRON_21.jpg;%20MAZINKAISER_TRON_22.jpg;%20MAZINKAISER_TRON_23.jpg;%20MAZINKAISER_TRON_24.jpg;%20MAZINKAISER_TRON_25.jpg" alt="Tron Model Mazinkaiser Model Kit" loading="lazy">
+          
+          <div class="prod-ordinati-overlay uno">Hai già ordinato: 1</div>
+          
+        </div>
+        <div class="prod-info-half">
+          <div class="prod-tier-tag elite">MAZINKAISER TRON</div>
+          <div class="prod-name">Tron Model Mazinkaiser Model Kit</div>
+          <div class="prod-sku">202603-MAZINKAISER_TRON-DBC</div>
+          <div class="prod-price-row"><div class="prod-price">€130</div><span class="prod-price-pub">€145</span><span class="prod-price-disc">-10%</span></div>
+          <div class="prod-actions">
+            <button class="prod-btn" onclick="toggleSel(&#39;202603107&#39;,&#39;deposito&#39;)">
+              <div class="prod-btn-left"><span class="prod-btn-lbl">Prenota</span></div>
+              <div class="prod-btn-r"><span class="prod-btn-val">€15</span><div class="prod-dot"></div></div>
+            </button>
+            <button class="prod-btn" onclick="toggleSel(&#39;202603107&#39;,&#39;saldo&#39;)">
+              <div class="prod-btn-left"><span class="prod-btn-lbl">Acquista ora</span></div>
+              <div class="prod-btn-r"><span class="prod-btn-val">€130</span><div class="prod-dot"></div></div>
+            </button>
+          </div>
+        </div>
+      </div><div class="prod-card ">
+        <div class="prod-photo-half">
+          <img src="file:///C:/Users/crial/Downloads/img_catalogo/202603-OSIRIS_AM-DBC/OSIRIS_AM-01.jpg" alt="Axis Model 1/100 Osiris Aerial Dominator Model Kit" loading="lazy">
+          
+          <div class="prod-ordinati-overlay zero">Hai già ordinato: 0</div>
+          
+        </div>
+        <div class="prod-info-half">
+          <div class="prod-tier-tag elite">OSIRIS AM</div>
+          <div class="prod-name">Axis Model 1/100 Osiris Aerial Dominator Model Kit</div>
+          <div class="prod-sku">202603-OSIRIS_AM-DBC</div>
+          <div class="prod-price-row"><div class="prod-price">€145</div><span class="prod-price-pub">€155</span><span class="prod-price-disc">-6%</span></div>
+          <div class="prod-actions">
+            <button class="prod-btn" onclick="toggleSel(&#39;202603108&#39;,&#39;deposito&#39;)">
+              <div class="prod-btn-left"><span class="prod-btn-lbl">Prenota</span></div>
+              <div class="prod-btn-r"><span class="prod-btn-val">€15</span><div class="prod-dot"></div></div>
+            </button>
+            <button class="prod-btn" onclick="toggleSel(&#39;202603108&#39;,&#39;saldo&#39;)">
+              <div class="prod-btn-left"><span class="prod-btn-lbl">Acquista ora</span></div>
+              <div class="prod-btn-r"><span class="prod-btn-val">€145</span><div class="prod-dot"></div></div>
+            </button>
+          </div>
+        </div>
+      </div><div class="prod-card ">
+        <div class="prod-photo-half">
+          <img src="file:///C:/Users/crial/Downloads/img_catalogo/202603-FENRIR_IE-DBC/FENRIR_IE-01.jpg" alt="IN ERA+ 1/72 RMD Series Fenrir Model Kit" loading="lazy">
+          
+          <div class="prod-ordinati-overlay zero">Hai già ordinato: 0</div>
+          
+        </div>
+        <div class="prod-info-half">
+          <div class="prod-tier-tag elite">FENRIR IE</div>
+          <div class="prod-name">IN ERA+ 1/72 RMD Series Fenrir Model Kit</div>
+          <div class="prod-sku">202603-FENRIR_IE-DBC</div>
+          <div class="prod-price-row"><div class="prod-price">€105</div><span class="prod-price-pub">€125</span><span class="prod-price-disc">-16%</span></div>
+          <div class="prod-actions">
+            <button class="prod-btn" onclick="toggleSel(&#39;202603109&#39;,&#39;deposito&#39;)">
+              <div class="prod-btn-left"><span class="prod-btn-lbl">Prenota</span></div>
+              <div class="prod-btn-r"><span class="prod-btn-val">€10</span><div class="prod-dot"></div></div>
+            </button>
+            <button class="prod-btn" onclick="toggleSel(&#39;202603109&#39;,&#39;saldo&#39;)">
+              <div class="prod-btn-left"><span class="prod-btn-lbl">Acquista ora</span></div>
+              <div class="prod-btn-r"><span class="prod-btn-val">€105</span><div class="prod-dot"></div></div>
+            </button>
+          </div>
+        </div>
+      </div></div>
+      </div>
+    </div></div>
         <div class="cat-sidebar">
           <div class="sidebar-hdr" onclick="toggleSidebar()">
             <span>Il tuo carrello <span class="sidebar-cart-badge" id="sideCartBadge" style="display:none"></span></span>
           </div>
           <!-- bottone conferma in cima (desktop): sempre visibile scrollando -->
           <div class="sidebar-cta-top" id="sideCtaTop" style="display:none">
-            <button class="btn-conferma btn-conferma-top" id="btnConfermaTop" onclick="apriConferma()" disabled>
+            <button class="btn-conferma btn-conferma-top" id="btnConfermaTop" onclick="apriConferma()" disabled="">
               Conferma Ordine
             </button>
           </div>
           <div class="sidebar-items" id="sideItems">
-            <div class="sidebar-empty" id="sideEmpty">Nessuna selezione</div>
+            <div class="sidebar-empty" id="sideEmpty" style="display: flex;">Nessuna selezione</div>
           </div>
           <div class="sidebar-totals" id="sideTotals" style="display:none">
             <div class="tot-row">
@@ -1105,7 +1330,7 @@ white-space:nowrap;}
             </div>
           </div>
           <div class="sidebar-cta">
-            <button class="btn-conferma" id="btnConferma" onclick="apriConferma()" disabled>
+            <button class="btn-conferma" id="btnConferma" onclick="apriConferma()" disabled="">
               Conferma Ordine
             </button>
           </div>
@@ -1118,25 +1343,63 @@ white-space:nowrap;}
       <div class="orders-wrap">
         <div class="filters" style="justify-content:space-between;align-items:center">
           <div style="display:flex;gap:6px;flex-wrap:wrap">
-            <button class="flt-btn active" onclick="setFiltro('tutti',this)">Tutti <span class="flt-badge" id="fltBadgeTutti" style="display:none"></span></button>
-            <button class="flt-btn" onclick="setFiltro('in_preparazione',this)">In conferma <span class="flt-badge" id="fltBadgeConferma" style="display:none"></span></button>
-            <button class="flt-btn" onclick="setFiltro('da_saldare',this)">Da saldare <span class="flt-badge" id="fltBadgeSaldare" style="display:none"></span></button>
-            <button class="flt-btn" onclick="setFiltro('saldato',this)">Saldato <span class="flt-badge" id="fltBadgeSaldato" style="display:none"></span></button>
-            <button class="flt-btn" onclick="setFiltro('spedito',this)">Spedito <span class="flt-badge" id="fltBadgeSpedito" style="display:none"></span></button>
+            <button class="flt-btn active" onclick="setFiltro(&#39;tutti&#39;,this)">Tutti <span class="flt-badge" id="fltBadgeTutti" style="display: inline-flex;">3</span></button>
+            <button class="flt-btn" onclick="setFiltro(&#39;in_preparazione&#39;,this)">In conferma <span class="flt-badge" id="fltBadgeConferma" style="display: inline-flex;">2</span></button>
+            <button class="flt-btn" onclick="setFiltro(&#39;da_saldare&#39;,this)">Da saldare <span class="flt-badge" id="fltBadgeSaldare" style="display: inline-flex;">1</span></button>
+            <button class="flt-btn" onclick="setFiltro(&#39;saldato&#39;,this)">Saldato <span class="flt-badge" id="fltBadgeSaldato" style="display:none">0</span></button>
+            <button class="flt-btn" onclick="setFiltro(&#39;spedito&#39;,this)">Spedito <span class="flt-badge" id="fltBadgeSpedito" style="display:none">0</span></button>
           </div>
           <button class="btn-rileva" id="btnRileva" onclick="rilevaMieiOrdini(this)" title="Ricarica ordini dal server">
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"></polyline><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"></path></svg>
             <span class="rileva-txt">Rileva i miei ordini</span>
           </button>
         </div>
 
-        <div id="grpDaSaldare" class="ord-group" style="display:none">
+        <div id="grpDaSaldare" class="ord-group" style="display: flex;">
           <div class="ord-group-hdr da_saldare">
             <div class="grp-dot"></div>
             <span class="grp-label">Da saldare</span>
-            <span class="grp-cnt" id="cntDaSaldare">0</span>
+            <span class="grp-cnt" id="cntDaSaldare">1</span>
           </div>
-          <div id="ordDaSaldare"></div>
+          <div id="ordDaSaldare"><div class="ocard da_saldare" id="oc-P0012">
+      <div class="ocard-left">
+        <div class="ocard-thumb" onclick="apriLightboxFromUrls([" img_catalogo="" 202603-mazinkaiser_tron-dbc="" mazinkaiser_tron_01.jpg;="" mazinkaiser_tron_02.jpg;="" mazinkaiser_tron_03.jpg;="" mazinkaiser_tron_04.jpg;="" mazinkaiser_tron_05.jpg;="" mazinkaiser_tron_06.jpg;="" mazinkaiser_tron_07.jpg;="" mazinkaiser_tron_08.jpg;="" mazinkaiser_tron_09.jpg;="" mazinkaiser_tron_10.jpg;="" mazinkaiser_tron_11.jpg;="" mazinkaiser_tron_12.jpg;="" mazinkaiser_tron_13.jpg;="" mazinkaiser_tron_14.jpg;="" mazinkaiser_tron_15.jpg;="" mazinkaiser_tron_16.jpg;="" mazinkaiser_tron_17.jpg;="" mazinkaiser_tron_18.jpg;="" mazinkaiser_tron_19.jpg;="" mazinkaiser_tron_20.jpg;="" mazinkaiser_tron_21.jpg;="" mazinkaiser_tron_22.jpg;="" mazinkaiser_tron_23.jpg;="" mazinkaiser_tron_24.jpg;="" mazinkaiser_tron_25.jpg"],'tron="" model="" mazinkaiser="" kit')"="" style="cursor:pointer"><img src="file:///C:/Users/crial/Downloads/img_catalogo/202603-MAZINKAISER_TRON-DBC/MAZINKAISER_TRON_01.jpg;%20MAZINKAISER_TRON_02.jpg;%20MAZINKAISER_TRON_03.jpg;%20MAZINKAISER_TRON_04.jpg;%20MAZINKAISER_TRON_05.jpg;%20MAZINKAISER_TRON_06.jpg;%20MAZINKAISER_TRON_07.jpg;%20MAZINKAISER_TRON_08.jpg;%20MAZINKAISER_TRON_09.jpg;%20MAZINKAISER_TRON_10.jpg;%20MAZINKAISER_TRON_11.jpg;%20MAZINKAISER_TRON_12.jpg;%20MAZINKAISER_TRON_13.jpg;%20MAZINKAISER_TRON_14.jpg;%20MAZINKAISER_TRON_15.jpg;%20MAZINKAISER_TRON_16.jpg;%20MAZINKAISER_TRON_17.jpg;%20MAZINKAISER_TRON_18.jpg;%20MAZINKAISER_TRON_19.jpg;%20MAZINKAISER_TRON_20.jpg;%20MAZINKAISER_TRON_21.jpg;%20MAZINKAISER_TRON_22.jpg;%20MAZINKAISER_TRON_23.jpg;%20MAZINKAISER_TRON_24.jpg;%20MAZINKAISER_TRON_25.jpg" alt="" loading="lazy"></div>
+        <div class="ocard-info">
+          <div class="ocard-name">Tron Model Mazinkaiser Model Kit</div>
+          <div class="ocard-meta">
+            <span class="tier-pill elite">Élite</span>
+            <span class="stato-pill da_saldare">Da saldare</span>
+            
+          </div>
+        </div>
+      </div>
+      
+      <div class="ocard-mobile-nums">
+        <div class="omob-num"><span class="omob-val warn">€115</span><span class="omob-lbl">Residuo</span></div>
+        <div class="omob-num"><span class="omob-val dim">€130</span><span class="omob-lbl">Prezzo</span></div>
+        <div class="omob-num"><span class="omob-val blue">€15</span><span class="omob-lbl">Versato</span></div>
+      </div>
+      
+      <div class="ocard-sep"></div>
+      <div class="ocard-nums">
+        <div class="onum residuo-block">
+          <div class="onum-val big res">€115</div>
+          <div class="onum-lbl">da saldare</div>
+        </div>
+        <div class="onum" style="border-right:1px solid var(--line2)">
+          <div class="onum-val tot">€130</div>
+          <div class="onum-lbl">prezzo</div>
+        </div>
+        <div class="onum" style="padding-right:16px">
+          <div class="onum-val acc">€15</div>
+          <div class="onum-lbl">versato</div>
+        </div>
+      </div>
+      <div class="ocard-sep"></div><div class="ocard-actions">
+        <button class="btn-salda-ord" onclick="apriModalSalda(&#39;P0012&#39;)">Salda €115</button>
+        <button class="btn-acc-ord" onclick="apriModalAcconto(&#39;P0012&#39;)">Imposta acconto</button>
+      </div>
+    </div></div>
         </div>
 
         <div id="grpSaldato" class="ord-group" style="display:none">
@@ -1157,13 +1420,83 @@ white-space:nowrap;}
           <div id="ordSpedito"></div>
         </div>
 
-        <div id="grpDraft" class="ord-group" style="display:none">
+        <div id="grpDraft" class="ord-group" style="display: flex;">
           <div class="ord-group-hdr in_conferma">
             <div class="grp-dot"></div>
             <span class="grp-label">In conferma</span>
-            <span class="grp-cnt" id="cntDraft">0</span>
+            <span class="grp-cnt" id="cntDraft">2</span>
           </div>
-          <div id="ordDraft"></div>
+          <div id="ordDraft"><div class="ocard in_preparazione" id="oc-P0013">
+      <div class="ocard-left">
+        <div class="ocard-thumb" onclick="apriLightboxFromUrls([" img_catalogo="" 202603-osiris_am-dbc="" osiris_am-01.jpg"],'axis="" model="" 1="" 100="" osiris="" aerial="" dominator="" kit')"="" style="cursor:pointer"><img src="file:///C:/Users/crial/Downloads/img_catalogo/202603-OSIRIS_AM-DBC/OSIRIS_AM-01.jpg" alt="" loading="lazy"></div>
+        <div class="ocard-info">
+          <div class="ocard-name">Axis Model 1/100 Osiris Aerial Dominator Model Kit</div>
+          <div class="ocard-meta">
+            <span class="tier-pill elite">Élite</span>
+            <span class="stato-pill in_preparazione">In preparazione</span>
+            
+          </div>
+        </div>
+      </div>
+      
+      <div class="ocard-mobile-nums">
+        <div class="omob-num"><span class="omob-val zero">€0</span><span class="omob-lbl">Residuo</span></div>
+        <div class="omob-num"><span class="omob-val dim">€145</span><span class="omob-lbl">Prezzo</span></div>
+        <div class="omob-num"><span class="omob-val blue">€145</span><span class="omob-lbl">Versato</span></div>
+      </div>
+      
+      <div class="ocard-sep"></div>
+      <div class="ocard-nums">
+        <div class="onum residuo-block">
+          <div class="onum-val big zero">€0</div>
+          <div class="onum-lbl">da saldare</div>
+        </div>
+        <div class="onum" style="border-right:1px solid var(--line2)">
+          <div class="onum-val tot">€145</div>
+          <div class="onum-lbl">prezzo</div>
+        </div>
+        <div class="onum" style="padding-right:16px">
+          <div class="onum-val acc">€145</div>
+          <div class="onum-lbl">versato</div>
+        </div>
+      </div>
+      
+    </div><div class="ocard in_preparazione" id="oc-P0014">
+      <div class="ocard-left">
+        <div class="ocard-thumb" onclick="apriLightboxFromUrls([" img_catalogo="" 202603-fenrir_ie-dbc="" fenrir_ie-01.jpg"],'in="" era+="" 1="" 72="" rmd="" series="" fenrir="" model="" kit')"="" style="cursor:pointer"><img src="file:///C:/Users/crial/Downloads/img_catalogo/202603-FENRIR_IE-DBC/FENRIR_IE-01.jpg" alt="" loading="lazy"></div>
+        <div class="ocard-info">
+          <div class="ocard-name">IN ERA+ 1/72 RMD Series Fenrir Model Kit</div>
+          <div class="ocard-meta">
+            <span class="tier-pill elite">Élite</span>
+            <span class="stato-pill in_preparazione">In preparazione</span>
+            
+          </div>
+        </div>
+      </div>
+      
+      <div class="ocard-mobile-nums">
+        <div class="omob-num"><span class="omob-val zero">€0</span><span class="omob-lbl">Residuo</span></div>
+        <div class="omob-num"><span class="omob-val dim">€105</span><span class="omob-lbl">Prezzo</span></div>
+        <div class="omob-num"><span class="omob-val blue">€105</span><span class="omob-lbl">Versato</span></div>
+      </div>
+      
+      <div class="ocard-sep"></div>
+      <div class="ocard-nums">
+        <div class="onum residuo-block">
+          <div class="onum-val big zero">€0</div>
+          <div class="onum-lbl">da saldare</div>
+        </div>
+        <div class="onum" style="border-right:1px solid var(--line2)">
+          <div class="onum-val tot">€105</div>
+          <div class="onum-lbl">prezzo</div>
+        </div>
+        <div class="onum" style="padding-right:16px">
+          <div class="onum-val acc">€105</div>
+          <div class="onum-lbl">versato</div>
+        </div>
+      </div>
+      
+    </div></div>
         </div>
       </div>
     </div>
@@ -1182,12 +1515,12 @@ white-space:nowrap;}
     <button class="cart-drawer-close" onclick="chiudiDrawerCarrello()">×</button>
   </div>
   <div style="padding:10px 14px;border-bottom:1px solid var(--line2);flex-shrink:0">
-    <button class="btn-conferma" id="btnConfermaDrawer" onclick="chiudiDrawerCarrello();apriConferma()" disabled>
+    <button class="btn-conferma" id="btnConfermaDrawer" onclick="chiudiDrawerCarrello();apriConferma()" disabled="">
       Conferma Ordine
     </button>
   </div>
   <div class="cart-drawer-body" id="drawerItems">
-    <div class="sidebar-empty" id="drawerEmpty">Nessuna selezione</div>
+    <div class="sidebar-empty" id="drawerEmpty" style="display: flex;">Nessuna selezione</div>
   </div>
   <div class="cart-drawer-totals" id="drawerTotals" style="display:none">
     <div class="tot-row">
@@ -1312,7 +1645,7 @@ white-space:nowrap;}
     </div>
     <div class="mfooter" id="mAccFooter" style="justify-content:flex-end">
       <button class="btn-cancel" onclick="chiudiModalAcconto()">Annulla</button>
-      <button class="btn-confirm" id="mAccBtn" disabled onclick="eseguiAcconto()" style="background:var(--blue)">
+      <button class="btn-confirm" id="mAccBtn" disabled="" onclick="eseguiAcconto()" style="background:var(--blue)">
         <div class="spin" style="border-color:rgba(255,255,255,.3);border-top-color:#fff"></div>
         <span class="ltxt">Conferma acconto</span>
       </button>
@@ -1347,7 +1680,7 @@ const TO         = {scout:0, veteran:1, elite:2};
 const TIER_NAMES = {scout:'Scout', veteran:'Veteran', elite:'Élite'};
 const TIER_QUOTA = {scout:25, veteran:45, elite:65};
 const STATI_LBL  = {in_preparazione:'In preparazione', da_saldare:'Da saldare',
-                    saldato:'Saldato', spedito:'Spedito'};
+                    in_lavorazione:'In lavorazione', saldato:'Saldato', spedito:'Spedito'};
 
 /* ─── STATO ──────────────────────────────────────────────────────────────── */
 const S = {utente:null, catalogo:[], prenotazioni:[], mese:'', _sessionToken:null};
@@ -1459,7 +1792,19 @@ function fmt(n){
 }
 
 function calcDepositoInfo(prod, bkCount) {
-  const base=Number(prod.acconto)||0, uO=TO[S.utente.tier], pO=TO[prod.tier], pay=S.utente.pagamento;
+  // Calcola acconto_base dalla fascia prezzo (indipendente dal valore nello sheet)
+  const price_raw = Number(prod.price) || 0;
+  const BASE_TIERS = {
+    scout:   { low: 5, mid: 5, high: 8  },
+    veteran: { low: 5, mid: 8, high: 10 },
+    elite:   { low: 5, mid: 10, high: 15 },
+  };
+  const bt = BASE_TIERS[prod.tier] || BASE_TIERS.scout;
+  const base = prod.isTbd ? 0
+             : price_raw < 15  ? bt.low
+             : price_raw <= 25 ? bt.mid
+             : bt.high;
+  const uO=TO[S.utente.tier], pO=TO[prod.tier], pay=S.utente.pagamento;
   const price=prod.isTbd?0:(pay==='paypal'?Math.ceil((Number(prod.price)||0)*1.04):(Number(prod.price)||0));
   let accCT;
   if(uO===pO){accCT=base;}
@@ -2905,4 +3250,4 @@ function particleBurst() {
   }, 3000);
 }
 
-</script>
+</script></body></html>
