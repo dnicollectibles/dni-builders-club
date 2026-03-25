@@ -1405,7 +1405,7 @@ const ACC_BASE   = {scout:5, veteran:8, elite:10};
 const TO         = {scout:0, veteran:1, elite:2};
 const TIER_NAMES = {scout:'Scout', veteran:'Veteran', elite:'Élite'};
 const TIER_QUOTA = {scout:25, veteran:45, elite:65};
-const STATI_LBL  = {da_saldare:'Da saldare',
+const STATI_LBL  = {in_preparazione:'In verifica', da_saldare:'Da saldare',
                     saldato:'Saldato', spedito:'Spedito'};
 
 /* ─── STATO ──────────────────────────────────────────────────────────────── */
@@ -1596,12 +1596,12 @@ function valRes(){
 function blPct(){return S.utente.creditoBloccatoPct[S.utente.tier]/100;}
 function bloccato(){return Math.ceil(valRes()*blPct());}
 
-// creditoEffettivo: credito reale = credito_backend - somma acconti già versati (acconto + acconto_extra)
-// È il numero che il socio vede in topbar — riflette quanto ha effettivamente speso.
-// Il GAS non aggiorna il foglio Utenti in tempo reale, quindi lo calcoliamo localmente.
+// creditoEffettivo: restituisce il credito dal backend.
+// Il GAS (Code_final.gs) scala già il foglio Utenti ad ogni acconto/FP/acconto_extra,
+// quindi S.utente.credito è già il valore netto reale — nessun ricalcolo locale necessario.
+// Calcolare di nuovo qui causerebbe un doppio conteggio (backend scala + frontend scala di nuovo).
 function creditoEffettivo(){
-  const accVersati = S.prenotazioni.reduce((s,b) => s + (Number(b.acconto)||0) + (Number(b.acconto_extra)||0), 0);
-  return Math.max(0, S.utente.credito - accVersati);
+  return Math.max(0, S.utente.credito);
 }
 
 // aggiornaCredito: aggiorna topbar con il credito effettivo calcolato localmente
@@ -2201,8 +2201,11 @@ async function inviaConferma(){
       return;
     }
 
-    // Non scalare S.utente.credito manualmente: creditoEffettivo() lo calcola
-    // dai dati reali in S.prenotazioni (aggiornati subito sotto con i nuovi ordini)
+    // Scala S.utente.credito localmente per aggiornare la topbar immediatamente,
+    // senza aspettare il rilevaMieiOrdini. Il backend ha già scalato il foglio Utenti,
+    // quindi quando rilevaMieiOrdini torna, S.utente.credito viene sovrascritto con il valore corretto.
+    const totAcc = sels.reduce((s,x) => s + (Number(x.acconto)||0), 0);
+    S.utente.credito = Math.max(0, S.utente.credito - totAcc);
 
     // Aggiunge i nuovi ordini a S.prenotazioni con i valori corretti (§07, §08, §09 manuale).
     // - tipo 'saldo'    → stato 'saldato',         residuo 0
@@ -2222,7 +2225,7 @@ async function inviaConferma(){
         prezzo_totale:  prezzo,
         garanzia_stock: x.garanzia_stock || 0,
         residuo:        isFP ? 0 : Math.max(0, prezzo - acc),   // mai negativo
-        stato_ordine:   isFP ? 'saldato' : 'da_saldare',
+        stato_ordine:   isFP ? 'in_preparazione' : 'da_saldare',
         confermata:     false,
         modificabile:   false,  // Alberto abilita manualmente (§11)
       };
@@ -2258,11 +2261,14 @@ async function inviaConferma(){
 // - FP (saldo)→ saldato     (residuo 0, merce in arrivo)
 // Il backend può sovrascrivere con da_saldare/saldato/spedito.
 function statoUI(p){
-  // stati validi: da_saldare, saldato, spedito — in_preparazione e in_conferma non esistono
-  if(p.stato_ordine === 'saldato' || p.stato_ordine === 'spedito' || p.stato_ordine === 'da_saldare')
+  // Stati validi: in_preparazione (FP in attesa verifica), da_saldare, saldato, spedito
+  // in_preparazione è usato SOLO per full payment — Alberto lo porta a saldato dopo verifica
+  // in_conferma non esiste più
+  if(p.stato_ordine === 'saldato' || p.stato_ordine === 'spedito' ||
+     p.stato_ordine === 'da_saldare' || p.stato_ordine === 'in_preparazione')
     return p.stato_ordine;
-  // Fallback da tipo (ordini appena confermati)
-  if(p.tipo === 'saldo') return 'saldato';
+  // Fallback da tipo per ordini appena confermati (prima del fetch backend)
+  if(p.tipo === 'saldo') return 'in_preparazione';
   return 'da_saldare';
 }
 
