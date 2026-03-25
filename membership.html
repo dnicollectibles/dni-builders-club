@@ -255,17 +255,16 @@ input{font-family:inherit}
 .prod-sku{font-family:var(--f-mono);font-size:13px;color:var(--text-dim);letter-spacing:.5px;margin-top:-4px}
 .prod-ordinati{display:inline-flex;align-items:center;gap:5px;font-family:var(--f-mono);font-size:13px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;padding:3px 8px;border-radius:2px;margin-top:2px;align-self:flex-start}
 /* "Hai già ordinato" overlay in fondo all'immagine */
-.prod-ordinati-overlay{position:absolute;bottom:0;left:0;right:0;z-index:4;font-family:var(--f-mono);font-size:11px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;padding:5px 10px;text-align:center;backdrop-filter:blur(4px);}
-.prod-ordinati-overlay.zero{color:var(--text-dim);background:rgba(11,12,14,.65);border-top:1px solid var(--line2)}
-.prod-ordinati-overlay.uno{color:var(--blue);background:rgba(10,20,40,.75);border-top:1px solid rgba(77,166,255,.3)}
-.prod-ordinati-overlay.multi{color:var(--warm);background:rgba(30,20,5,.75);border-top:1px solid rgba(247,201,72,.3)}
+.prod-ordinati-overlay{position:absolute;bottom:0;left:0;right:0;z-index:4;font-family:var(--f-mono);font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;padding:6px 10px;text-align:center;backdrop-filter:blur(6px);}
+.prod-ordinati-overlay.uno{color:var(--blue);background:rgba(10,20,40,.88);border-top:2px solid var(--blue);text-shadow:0 0 8px rgba(90,180,255,.5)}
+.prod-ordinati-overlay.multi{color:var(--warm);background:rgba(30,20,5,.88);border-top:2px solid var(--warm);text-shadow:0 0 8px rgba(247,201,72,.5)}
 .prod-ordinati.zero{color:var(--text-dim);background:transparent;border:1px solid var(--line2)}
 .prod-ordinati.uno{color:var(--blue);background:var(--blue-dim);border:1px solid rgba(90,180,255,.25)}
 .prod-ordinati.multi{color:var(--warm);background:var(--warm-dim);border:1px solid rgba(247,201,72,.25)}
 .prod-price-row{display:flex;align-items:baseline;gap:8px;flex-wrap:wrap}
 .prod-price{font-family:var(--f-title);font-size:26px;font-weight:700;line-height:1;font-variant-numeric:tabular-nums}
 .prod-price.tbd{color:var(--warm);font-size:20px}
-.prod-price-pub{font-size:15px;color:var(--text-dim);text-decoration:none;font-variant-numeric:tabular-nums;position:relative;display:inline-block}
+.prod-price-pub{font-size:14px;color:var(--text-dim);text-decoration:none;font-variant-numeric:tabular-nums;position:relative;display:inline-block;opacity:.7}
 .prod-price-pub::after{content:'';position:absolute;left:-2px;right:-2px;top:50%;height:1.5px;background:var(--text-dim);transform:rotate(-12deg);transform-origin:center}
 .prod-price-disc{font-family:var(--f-mono);font-size:13px;font-weight:700;color:#000;background:var(--neon);padding:2px 7px;border-radius:var(--r)}
 .prod-disc-bdg{font-family:var(--f-mono);font-size:13px;font-weight:700;color:var(--neon)}
@@ -299,7 +298,7 @@ input{font-family:inherit}
 .sel-del:hover{border-color:var(--red);color:var(--red);background:rgba(255,60,60,.08)}
 .sel-del{flex-shrink:0;width:34px;height:34px;display:flex;align-items:center;justify-content:center;border:1px solid var(--line2);border-radius:var(--r);background:transparent;color:var(--text-dim);font-size:16px;line-height:1;transition:all .15s;cursor:pointer}
 .sel-del:hover{border-color:var(--red);color:var(--red);background:rgba(255,60,60,.08)}
-.sel-thumb{width:38px;height:38px;flex-shrink:0;background:var(--bg4);overflow:hidden;display:flex;align-items:center;justify-content:center;font-size:14px;opacity:.4}
+.sel-thumb{width:38px;height:38px;flex-shrink:0;background:var(--bg4);overflow:hidden;display:flex;align-items:center;justify-content:center;font-size:14px;opacity:1}
 .sel-thumb img{width:100%;height:100%;object-fit:cover;opacity:1}
 .sel-info{flex:1;min-width:0}
 .sel-name{font-size:13px;font-weight:600;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;text-transform:uppercase;letter-spacing:.5px}
@@ -1188,7 +1187,6 @@ white-space:nowrap;}
         <div class="filters" style="justify-content:space-between;align-items:center">
           <div style="display:flex;gap:6px;flex-wrap:wrap">
             <button class="flt-btn active" onclick="setFiltro('tutti',this)">Tutti <span class="flt-badge" id="fltBadgeTutti" style="display:none"></span></button>
-            <button class="flt-btn" onclick="setFiltro('in_preparazione',this)">In conferma <span class="flt-badge" id="fltBadgeConferma" style="display:none"></span></button>
             <button class="flt-btn" onclick="setFiltro('da_saldare',this)">Da saldare <span class="flt-badge" id="fltBadgeSaldare" style="display:none"></span></button>
             <button class="flt-btn" onclick="setFiltro('saldato',this)">Saldato <span class="flt-badge" id="fltBadgeSaldato" style="display:none"></span></button>
             <button class="flt-btn" onclick="setFiltro('spedito',this)">Spedito <span class="flt-badge" id="fltBadgeSpedito" style="display:none"></span></button>
@@ -1226,14 +1224,6 @@ white-space:nowrap;}
           <div id="ordSpedito"></div>
         </div>
 
-        <div id="grpDraft" class="ord-group" style="display:none">
-          <div class="ord-group-hdr in_conferma">
-            <div class="grp-dot"></div>
-            <span class="grp-label">In conferma</span>
-            <span class="grp-cnt" id="cntDraft">0</span>
-          </div>
-          <div id="ordDraft"></div>
-        </div>
       </div>
     </div>
 
@@ -1415,7 +1405,7 @@ const ACC_BASE   = {scout:5, veteran:8, elite:10};
 const TO         = {scout:0, veteran:1, elite:2};
 const TIER_NAMES = {scout:'Scout', veteran:'Veteran', elite:'Élite'};
 const TIER_QUOTA = {scout:25, veteran:45, elite:65};
-const STATI_LBL  = {in_preparazione:'In preparazione', da_saldare:'Da saldare',
+const STATI_LBL  = {da_saldare:'Da saldare',
                     saldato:'Saldato', spedito:'Spedito'};
 
 /* ─── STATO ──────────────────────────────────────────────────────────────── */
@@ -1539,7 +1529,7 @@ function calcDepositoInfo(prod, bkCount) {
    Funzione pubblica: getAccontoOttimizzato(prodId) → {accFinale, accBase, garanzia, isSp}
    ────────────────────────────────────────────────────────────────────────── */
 function buildAccontiOttimizzati(){
-  // Ordini storici aperti (già confermati o in_preparazione, non saldati)
+  // Ordini storici aperti (non saldati)
   const storici = S.prenotazioni.filter(b=>b.stato_ordine!=='saldato').length;
 
   // Prodotti deposito nel carrello corrente, ordinati per prezzo decrescente
@@ -1585,7 +1575,7 @@ function countBefore(prodId){
 
 function countOrdinatiProd(prodId){
   // Conta quante volte il socio ha già ordinato questo prodotto
-  // (opzione B: tutti gli ordini non saldati, inclusi in_preparazione)
+  // tutti gli ordini non saldati
   return S.prenotazioni.filter(b =>
     String(b.prodotto_id) === String(prodId) && b.stato_ordine !== 'saldato'
   ).length;
@@ -1593,8 +1583,7 @@ function countOrdinatiProd(prodId){
 
 function valRes(){
   // Considera sia gli ordini confermati da Alberto (confermata=TRUE)
-  // sia gli ordini in_preparazione (inviati dal socio ma non ancora elaborati) — entrambi
-  // hanno già impegnato credito e residuo reale.
+  // tutti contano come aperti e impegnano credito e residuo.
   const prenAperte = S.prenotazioni.filter(b => b.stato_ordine !== 'saldato');
   let t = prenAperte.reduce((s,b) => s + (b.residuo||0), 0);
   for(const p of S.catalogo){
@@ -1607,8 +1596,23 @@ function valRes(){
 function blPct(){return S.utente.creditoBloccatoPct[S.utente.tier]/100;}
 function bloccato(){return Math.ceil(valRes()*blPct());}
 
+// creditoEffettivo: credito reale = credito_backend - somma acconti già versati (acconto + acconto_extra)
+// È il numero che il socio vede in topbar — riflette quanto ha effettivamente speso.
+// Il GAS non aggiorna il foglio Utenti in tempo reale, quindi lo calcoliamo localmente.
+function creditoEffettivo(){
+  const accVersati = S.prenotazioni.reduce((s,b) => s + (Number(b.acconto)||0) + (Number(b.acconto_extra)||0), 0);
+  return Math.max(0, S.utente.credito - accVersati);
+}
+
+// aggiornaCredito: aggiorna topbar con il credito effettivo calcolato localmente
+function aggiornaCredito(){
+  const v = creditoEffettivo();
+  document.getElementById('tbCred').textContent    = '€' + fmt(v);
+  document.getElementById('tbCredMob').textContent = '€' + fmt(v);
+}
+
 function credSim(){
-  let s=S.utente.credito;
+  let s=creditoEffettivo(); // parte dal credito reale già depurato degli acconti versati
   for(const p of S.catalogo){
     const t=SEL[String(p.id)]; if(!t)continue;
     if(t==='deposito'){
@@ -1625,8 +1629,8 @@ function credSim(){
 }
 
 function libSimPrima(excId){
-  // rSim include tutti gli ordini non saldati (in_preparazione + confermati aperti)
-  let s=S.utente.credito, rSim=S.prenotazioni.filter(b=>b.stato_ordine!=='saldato').reduce((x,b)=>x+(b.residuo||0),0);
+  // rSim include tutti gli ordini non saldati
+  let s=creditoEffettivo(), rSim=S.prenotazioni.filter(b=>b.stato_ordine!=='saldato').reduce((x,b)=>x+(b.residuo||0),0);
   for(const p of S.catalogo){
     if(String(p.id)===String(excId))continue; const t=SEL[String(p.id)]; if(!t)continue;
     const i=calcDepositoInfo(p,countBefore(p.id));
@@ -1637,7 +1641,7 @@ function libSimPrima(excId){
 }
 
 function hasOpenPos(){
-  // Considera aperti sia i confermati che gli in_preparazione non saldati
+  // Considera aperti tutti gli ordini non saldati
   if(S.prenotazioni.some(b=>b.stato_ordine!=='saldato'))return true;
   return S.catalogo.some(p=>SEL[String(p.id)]==='deposito');
 }
@@ -1649,7 +1653,8 @@ function credFP(excId){
     if(SEL[String(p.id)]==='saldo')a+=calcDepositoInfo(p,0).price;
     else if(SEL[String(p.id)]==='deposito')a+=calcDepositoInfo(p,countBefore(p.id)).accFinale;
   }
-  return hasOpenPos()?S.utente.credito-a:Math.max(0,S.utente.credito-bloccato())-a;
+  const ce=creditoEffettivo();
+  return hasOpenPos()?ce-a:Math.max(0,ce-bloccato())-a;
 }
 
 /* ─── NORMALIZZA TIER ────────────────────────────────────────────────────── */
@@ -1760,8 +1765,7 @@ function avviaApp(){
   avviaAutoRefresh();    // parte il timer 5 min auto-refresh ordini
   const u=S.utente;
   document.getElementById('tbNome').textContent=u.nome;
-  document.getElementById('tbCred').textContent='€'+fmt(u.credito);
-  document.getElementById('tbCredMob').textContent='€'+fmt(u.credito);
+  aggiornaCredito(); // mostra credito effettivo = backend - acconti già versati
   const te=document.getElementById('tbTier');
   te.textContent=TIER_NAMES[u.tier]; te.className='tb-tier '+u.tier;
   document.getElementById('tbMese').textContent=S.mese?'Mese: '+S.mese:'';
@@ -1838,7 +1842,7 @@ function renderCatalogo(){
   // Ricalcola la distribuzione ottimizzata degli acconti
   _accontiOtt = buildAccontiOttimizzati();
 
-  const locked=S.utente.stato==='attesa';
+  const locked=false; // 'attesa' è solo banner informativo — i pulsanti restano sempre abilitati; la protezione reale è il credito bloccato
   const QUOTA={scout:'€25/mese',veteran:'€45/mese',elite:'€65/mese'};
   const html=['scout','veteran','elite'].map(tier=>{
     const prods=S.catalogo.filter(p=>p.tier===tier);
@@ -1879,7 +1883,7 @@ function renderCatalogo(){
       const info=calcDepositoInfo(prod,countBefore(String(prod.id)));
       const nOrd=countOrdinatiProd(String(prod.id));
       const ordCls=nOrd===0?'zero':nOrd===1?'uno':'multi';
-      const ordLbl=nOrd===0?'Hai già ordinato: 0':`Hai già ordinato: ${nOrd}`;
+      const ordLbl=nOrd===0?'':nOrd===1?'✓ Già ordinato: 1':`✓ Già ordinato: ${nOrd}×`;
       const libP=libSimPrima(String(prod.id));
       const canD=!locked&&libP>=infoBase.accConPaypal;
       const depA=sel==='deposito'?(getAccontoOttimizzato(String(prod.id))?.accFinale||infoBase.accConPaypal):0;
@@ -1902,10 +1906,11 @@ function renderCatalogo(){
       const priceH=info.isTbd
         ?`<div class="prod-price tbd">TBD<span style="font-size:11px;color:var(--text-dim);font-family:var(--f-mono);margin-left:6px">prezzo da definire</span></div>`
         :(()=>{
-          const _pp=prod.prezzo_pub||null;
-          const pub=_pp&&_pp>info.price
-            ?`<span class="prod-price-pub">€${_pp}</span><span class="prod-price-disc">-${Math.round((1-info.price/_pp)*100)}%</span>`:'';
-          return`<div class="prod-price-row"><div class="prod-price">€${fmt(info.price)}</div>${pub}</div>`;
+          const _pp=prod.prezzo_pub||prod.prezzo_pubblico||null;
+          const _priceSoci=info.price;
+          const pub=_pp&&_pp>_priceSoci
+            ?`<span class="prod-price-pub">€${fmt(_pp)}</span><span class="prod-price-disc">-${Math.round((1-_priceSoci/_pp)*100)}%</span>`:'';
+          return`<div class="prod-price-row"><div class="prod-price">€${fmt(_priceSoci)}</div>${pub}</div>`;
         })();
 
       // Bottoni: mostrano SEMPRE l'acconto base — stabile, non cambia con le selezioni
@@ -1933,7 +1938,7 @@ function renderCatalogo(){
                   <span>Foto</span>
                 </div>`}
           ${badge}
-          <div class="prod-ordinati-overlay ${ordCls}">${ordLbl}</div>
+          ${nOrd>0?`<div class="prod-ordinati-overlay ${ordCls}">${ordLbl}</div>`:''}
           ${hasMulti?`<div class="photo-dots">${imgs.map((_,i)=>`<div class="photo-dot${i===0?' active':''}"></div>`).join('')}</div>`:''}
         </div>
         <div class="prod-info-half">
@@ -2070,7 +2075,7 @@ function renderSidebar(){
 
   document.getElementById('tbCred').textContent='€'+fmt(S.utente.credito);
   document.getElementById('tbCredMob').textContent='€'+fmt(S.utente.credito);
-  const disabled = !sels.length || S.utente.stato==='attesa';
+  const disabled = !sels.length; // 'attesa' non blocca la conferma — solo credito insufficiente lo fa
   btn.disabled = disabled;
   if(dBtn) dBtn.disabled = disabled;
   const btnTop = document.getElementById('btnConfermaTop');
@@ -2196,14 +2201,40 @@ async function inviaConferma(){
       return;
     }
 
-    const totAcc=sels.reduce((s,x)=>s+x.acconto,0);
-    S.utente.credito=Math.max(0,S.utente.credito-totAcc);
-    document.getElementById('tbCred').textContent='€'+fmt(S.utente.credito);document.getElementById('tbCredMob').textContent='€'+fmt(S.utente.credito);
+    // Non scalare S.utente.credito manualmente: creditoEffettivo() lo calcola
+    // dai dati reali in S.prenotazioni (aggiornati subito sotto con i nuovi ordini)
+
+    // Aggiunge i nuovi ordini a S.prenotazioni con i valori corretti (§07, §08, §09 manuale).
+    // - tipo 'saldo'    → stato 'saldato',         residuo 0
+    // - tipo 'deposito' → stato 'da_saldare', residuo = prezzo_totale − acconto
+    const nuovi = sels.map(x => {
+      const prezzo = Number(x.prezzo_totale) || 0;
+      const acc    = Number(x.acconto)       || 0;
+      const isFP   = x.tipo === 'saldo';
+      return {
+        prodotto_id:    x.prodotto_id,
+        nome_prodotto:  x.nome_prodotto,
+        sku:            x.sku,
+        tier_prodotto:  x.tier_prodotto,
+        tipo:           x.tipo,
+        acconto:        acc,
+        acconto_extra:  0,
+        prezzo_totale:  prezzo,
+        garanzia_stock: x.garanzia_stock || 0,
+        residuo:        isFP ? 0 : Math.max(0, prezzo - acc),   // mai negativo
+        stato_ordine:   isFP ? 'saldato' : 'da_saldare',
+        confermata:     false,
+        modificabile:   false,  // Alberto abilita manualmente (§11)
+      };
+    });
+    S.prenotazioni = [...S.prenotazioni, ...nuovi];
+    aggiornaCredito(); // aggiorna topbar con il nuovo credito effettivo
+
     Object.keys(SEL).forEach(k=>delete SEL[k]);
     aggiornaCache();
     document.getElementById('mConferma').classList.remove('open');
     renderCatalogo();
-    rilevaMieiOrdini();
+    rilevaMieiOrdini(); // aggiorna poi dal backend (sovrascrive con dati reali)
     mostraToast('Ordine inviato con successo ✔','neon');
     particleBurst(); // 🎉 gaming effect
     setTimeout(()=>switchTab('ord'),1800);
@@ -2221,25 +2252,31 @@ async function inviaConferma(){
 }
 
 /* ─── RENDER ORDINI ──────────────────────────────────────────────────────── */
-// statoUI: determina la categoria visiva basandosi SOLO su stato_ordine + confermata.
-// "modificabile" NON influenza la sezione — serve solo per mostrare/nascondere il widget acconto extra.
-function statoUI(p){ return !p.confermata ? 'in_preparazione' : (p.stato_ordine || 'in_preparazione'); }
+// statoUI: gli unici stati validi sono da_saldare, saldato, spedito.
+// in_preparazione e in_conferma non esistono.
+// - deposito  → da_saldare  (residuo aperto, utente libero)
+// - FP (saldo)→ saldato     (residuo 0, merce in arrivo)
+// Il backend può sovrascrivere con da_saldare/saldato/spedito.
+function statoUI(p){
+  // stati validi: da_saldare, saldato, spedito — in_preparazione e in_conferma non esistono
+  if(p.stato_ordine === 'saldato' || p.stato_ordine === 'spedito' || p.stato_ordine === 'da_saldare')
+    return p.stato_ordine;
+  // Fallback da tipo (ordini appena confermati)
+  if(p.tipo === 'saldo') return 'saldato';
+  return 'da_saldare';
+}
 
 function renderOrdini(){
   const flt = p => filtro==='tutti' || statoUI(p)===filtro;
 
-  const inPrep       = S.prenotazioni.filter(p => statoUI(p)==='in_preparazione' && flt(p));
   const daSaldare    = S.prenotazioni.filter(p => statoUI(p)==='da_saldare'     && flt(p));
   const saldato      = S.prenotazioni.filter(p => statoUI(p)==='saldato'        && flt(p));
   const spedito      = S.prenotazioni.filter(p => statoUI(p)==='spedito'        && flt(p));
-
-  document.getElementById('cntDraft').textContent     = inPrep.length;
   document.getElementById('cntDaSaldare').textContent = daSaldare.length;
   document.getElementById('cntSaldato').textContent   = saldato.length;
   document.getElementById('cntSpedito').textContent   = spedito.length;
 
   // Badge gialli sui filtri — contano TUTTI gli ordini (indipendente dal filtro attivo)
-  const allInPrep    = S.prenotazioni.filter(p => statoUI(p)==='in_preparazione');
   const allDaSaldare = S.prenotazioni.filter(p => statoUI(p)==='da_saldare');
   const allSaldato   = S.prenotazioni.filter(p => statoUI(p)==='saldato');
   const allSpedito   = S.prenotazioni.filter(p => statoUI(p)==='spedito');
@@ -2249,7 +2286,6 @@ function renderOrdini(){
     el.textContent = n; el.style.display = n > 0 ? 'inline-flex' : 'none';
   }
   aggiornaBadgeFiltro('fltBadgeTutti',    allTot);
-  aggiornaBadgeFiltro('fltBadgeConferma', allInPrep.length);
   aggiornaBadgeFiltro('fltBadgeSaldare',  allDaSaldare.length);
   aggiornaBadgeFiltro('fltBadgeSaldato',  allSaldato.length);
   aggiornaBadgeFiltro('fltBadgeSpedito',  allSpedito.length);
@@ -2266,9 +2302,7 @@ function renderOrdini(){
   document.getElementById('grpDaSaldare').style.display = daSaldare.length ? 'flex' : 'none';
   document.getElementById('grpSaldato').style.display   = saldato.length   ? 'flex' : 'none';
   document.getElementById('grpSpedito').style.display   = spedito.length   ? 'flex' : 'none';
-  document.getElementById('grpDraft').style.display     = inPrep.length    ? 'flex' : 'none';
 
-  renderOrdSection('ordDraft',     inPrep,     imgMap);
   renderOrdSection('ordDaSaldare', daSaldare,  imgMap);
   renderOrdSection('ordSaldato',   saldato,    imgMap);
   renderOrdSection('ordSpedito',   spedito,    imgMap);
@@ -2282,7 +2316,8 @@ function renderOrdSection(elId, prens, imgMap){
     const stato=statoUI(p);
     const sl=STATI_LBL[stato]||stato;
     const max=p.residuo||0;
-    const puoModificare = p.confermata && p.residuo > 0 && stato !== 'saldato';
+    // §11 manuale: il flag modificabile deve essere TRUE (Alberto lo imposta) e residuo > 0
+    const puoModificare = p.modificabile && p.residuo > 0 && stato !== 'saldato' && stato !== 'spedito';
 
     // Recupera immagine dalla mappa catalogo (le prenotazioni non hanno imgFile)
     const imgs = imgMap[String(p.prodotto_id)] || {};
@@ -2329,10 +2364,6 @@ function renderOrdSection(elId, prens, imgMap){
     } else if(stato==='spedito' && p.tracking){
       actions = `<div class="ocard-sep"></div><div class="ocard-actions">
         <div class="ocard-tracking">🚚 ${p.tracking}</div>
-      </div>`;
-    } else if(stato==='in_conferma'){
-      actions = `<div class="ocard-sep"></div><div class="ocard-actions">
-        <span class="ocard-wait">In attesa di DNI</span>
       </div>`;
     }
 
@@ -2693,6 +2724,14 @@ function mostraToast(msg, tipo) {
 }
 
 /* ─── INIT ───────────────────────────────────────────────────────────────── */
+// Refresh immediato quando l'utente torna sulla pagina (da altra tab o altra app)
+document.addEventListener('visibilitychange', () => {
+  if (!document.hidden && S.utente) rilevaMieiOrdini();
+});
+window.addEventListener('focus', () => {
+  if (S.utente) rilevaMieiOrdini();
+});
+
 window.addEventListener('DOMContentLoaded',()=>{
   const gl=document.getElementById('gLoad');
   setTimeout(()=>{
@@ -2715,17 +2754,13 @@ document.addEventListener('keydown',e=>{
 
 /* ─── CACHE SESSIONE — ripristino dopo refresh ───────────────────────────── */
 const DNI_CACHE_KEY = 'dni_cache';
-const DNI_CACHE_TTL = 8 * 60 * 60 * 1000; // 8 ore
-// ↑ Incrementa questo numero ogni volta che cambi la struttura dati del backend.
-// La cache vecchia viene scartata automaticamente e i dati vengono ricaricati dal server.
-const DNI_CACHE_VER = 4;
+const DNI_CACHE_TTL = 8 * 60 * 60 * 1000; // 8 ore — ripristino rapido senza schermata nera
 
 function salvaCacheSessione() {
   try {
     localStorage.setItem(DNI_CACHE_KEY, JSON.stringify({
-      v: DNI_CACHE_VER,
       utente: S.utente,
-      pin: S.utente._codice,
+      pin: S.utente._codice,        // salvo esplicitamente per sicurezza
       catalogo: S.catalogo,
       prenotazioni: S.prenotazioni,
       mese: S.mese,
@@ -2735,20 +2770,18 @@ function salvaCacheSessione() {
   } catch(e) {}
 }
 
-// Carica dalla cache per apertura istantanea, poi aggiorna dal backend in background.
+// Carica dalla cache per apertura istantanea (nessuna schermata nera),
+// poi chiama rilevaMieiOrdini() in background per aggiornare i dati dal backend.
 function ripristinaSessione() {
   try {
     const raw = localStorage.getItem(DNI_CACHE_KEY);
     if (!raw) return false;
     const c = JSON.parse(raw);
-    // Scarta cache se: versione vecchia, scaduta, o dati mancanti
-    if (c.v !== DNI_CACHE_VER) {
-      localStorage.removeItem(DNI_CACHE_KEY); return false;
-    }
     if (!c.savedAt || Date.now() - c.savedAt > DNI_CACHE_TTL) {
       localStorage.removeItem(DNI_CACHE_KEY); return false;
     }
     if (!c.utente || !c.utente.id) return false;
+    // Ripristina _codice: prima da utente, poi dal campo pin di backup
     if (!c.utente._codice && c.pin) c.utente._codice = c.pin;
     if (!c.utente._codice) return false;
     S.utente = c.utente; S.catalogo = c.catalogo || [];
@@ -2759,7 +2792,8 @@ function ripristinaSessione() {
       avviaSessionWatch(S.utente.id);
     }
     avviaApp();
-    // Aggiorna silenziosamente dal backend dopo il ripristino dalla cache.
+    // Aggiorna silenziosamente ordini, credito e stato dal backend dopo il ripristino.
+    // L'app è già visibile dalla cache; i dati freschi arrivano in background.
     setTimeout(() => rilevaMieiOrdini(), 100);
     return true;
   } catch(e) { localStorage.removeItem(DNI_CACHE_KEY); return false; }
@@ -2792,10 +2826,13 @@ async function rilevaMieiOrdini(btn) {
       S.prenotazioni = res.prenotazioni || [];
       S.utente.credito = res.credito ?? S.utente.credito;
       S.utente.stato   = res.stato   ?? S.utente.stato;
-      document.getElementById('tbCred').textContent = '€' + fmt(S.utente.credito); document.getElementById('tbCredMob').textContent = '€' + fmt(S.utente.credito);
+      aggiornaCredito(); // credito effettivo = backend - acconti già versati
       document.getElementById('ordCount').textContent = S.prenotazioni.length;
       document.getElementById('lockBanner').classList.toggle('on', S.utente.stato === 'attesa');
       aggiornaCache();
+      // Ricalcola il catalogo con credito e prenotazioni aggiornati dal backend,
+      // così i pulsanti Deposito/Full Pay riflettono il saldo reale (non quello in cache)
+      renderCatalogo();
     }
   } catch(e) { console.error('rilevaMieiOrdini error:', e); }
   finally {
@@ -2809,9 +2846,8 @@ let _autoRefreshTimer = null;
 function avviaAutoRefresh() {
   if (_autoRefreshTimer) clearInterval(_autoRefreshTimer);
   _autoRefreshTimer = setInterval(() => {
-    // Aggiorna solo se la tab ordini è visibile e la pagina è in foreground
-    if (document.getElementById('pOrd').classList.contains('active') &&
-        !document.hidden) {
+    // Aggiorna sempre (catalogo o ordini) purché la pagina sia in foreground
+    if (S.utente && !document.hidden) {
       rilevaMieiOrdini();
     }
   }, 5 * 60 * 1000); // 5 minuti
