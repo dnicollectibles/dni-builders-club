@@ -1902,7 +1902,7 @@ function renderCatalogo(){
       const priceH=info.isTbd
         ?`<div class="prod-price tbd">TBD<span style="font-size:11px;color:var(--text-dim);font-family:var(--f-mono);margin-left:6px">prezzo da definire</span></div>`
         :(()=>{
-          const _pp=prod.prezzoPub||prod.prezzo_pubblico||null;
+          const _pp=prod.prezzo_pub||null;
           const pub=_pp&&_pp>info.price
             ?`<span class="prod-price-pub">€${_pp}</span><span class="prod-price-disc">-${Math.round((1-info.price/_pp)*100)}%</span>`:'';
           return`<div class="prod-price-row"><div class="prod-price">€${fmt(info.price)}</div>${pub}</div>`;
@@ -1915,13 +1915,10 @@ function renderCatalogo(){
       const ottCard = isDep ? getAccontoOttimizzato(String(prod.id)) : null;
       const garInBtn = ottCard&&ottCard.isSp&&ottCard.garanzia>0
         ? `<span class="prod-btn-gar">+ Gar. stock €${ottCard.garanzia}</span>` : '';
-      // Usa prod.immagini (array URL assoluti forniti dal backend Code.gs)
-      // Fallback a prod.imgs (nome vecchio) per retrocompatibilità
+      // Usa prod.immagini — URL assoluti forniti dal backend
       const imgs = Array.isArray(prod.immagini) && prod.immagini.length
         ? prod.immagini
-        : Array.isArray(prod.imgs) && prod.imgs.length
-          ? prod.imgs
-          : [];
+        : Array.isArray(prod.imgs) && prod.imgs.length ? prod.imgs : [];
       const img=imgs[0]||'';
       const hasImgs=imgs.length>0;
       const hasMulti=imgs.length>1;
@@ -2023,10 +2020,9 @@ function renderSidebar(){
   function creaSelItem(p,t,acc){
     const div=document.createElement('div');
     div.className=`sel-item ${t==='deposito'?'dep':'fp'}`;
-    // Usa p.immagini (URL assoluti dal backend)
+    // Usa p.immagini — URL assoluti dal backend
     const imgs_cart = Array.isArray(p.immagini) && p.immagini.length
-      ? p.immagini
-      : Array.isArray(p.imgs) && p.imgs.length ? p.imgs : [];
+      ? p.immagini : Array.isArray(p.imgs) && p.imgs.length ? p.imgs : [];
     const img = imgs_cart[0] || '';
     div.innerHTML=`
       <div class="sel-thumb">${img?`<img src="${img}" alt="">`:'🖼'}</div>
@@ -2258,18 +2254,12 @@ function renderOrdini(){
   aggiornaBadgeFiltro('fltBadgeSaldato',  allSaldato.length);
   aggiornaBadgeFiltro('fltBadgeSpedito',  allSpedito.length);
 
-  // Mappa prodotto_id → immagini dal catalogo (URL assoluti da prod.immagini)
+  // Mappa prodotto_id → immagini dal catalogo (URL assoluti da c.immagini)
   const imgMap = {};
   for(const c of S.catalogo){
-    const imgs = Array.isArray(c.immagini) && c.immagini.length
-      ? c.immagini
-      : Array.isArray(c.imgs) && c.imgs.length ? c.imgs : [];
-    imgMap[String(c.id)] = {
-      f1: imgs[0] || '',
-      f2: imgs[1] || '',
-      f3: imgs[2] || '',
-      all: imgs
-    };
+    const imgs_c = Array.isArray(c.immagini) && c.immagini.length
+      ? c.immagini : Array.isArray(c.imgs) && c.imgs.length ? c.imgs : [];
+    imgMap[String(c.id)] = { f1: imgs_c[0]||'', f2: imgs_c[1]||'', f3: imgs_c[2]||'', all: imgs_c };
   }
 
   // Nascondi gruppi vuoti, mostra quelli con ordini
@@ -2599,12 +2589,10 @@ let _lbName = '';   // nome prodotto
 function apriLightbox(prodId) {
   const prod = S.catalogo.find(p => String(p.id) === String(prodId));
   if (!prod) return;
-  // Usa prod.immagini (array URL assoluti forniti dal backend Code.gs)
+  // Usa prod.immagini — URL assoluti dal backend
   _lbImgs = Array.isArray(prod.immagini) && prod.immagini.length
     ? prod.immagini
-    : Array.isArray(prod.imgs) && prod.imgs.length
-      ? prod.imgs
-      : [];
+    : Array.isArray(prod.imgs) && prod.imgs.length ? prod.imgs : [];
   if (!_lbImgs.length) return;
   _lbIdx  = 0;
   _lbName = prod.name;
@@ -2727,13 +2715,17 @@ document.addEventListener('keydown',e=>{
 
 /* ─── CACHE SESSIONE — ripristino dopo refresh ───────────────────────────── */
 const DNI_CACHE_KEY = 'dni_cache';
-const DNI_CACHE_TTL = 8 * 60 * 60 * 1000; // 8 ore — ripristino rapido senza schermata nera
+const DNI_CACHE_TTL = 8 * 60 * 60 * 1000; // 8 ore
+// ↑ Incrementa questo numero ogni volta che cambi la struttura dati del backend.
+// La cache vecchia viene scartata automaticamente e i dati vengono ricaricati dal server.
+const DNI_CACHE_VER = 4;
 
 function salvaCacheSessione() {
   try {
     localStorage.setItem(DNI_CACHE_KEY, JSON.stringify({
+      v: DNI_CACHE_VER,
       utente: S.utente,
-      pin: S.utente._codice,        // salvo esplicitamente per sicurezza
+      pin: S.utente._codice,
       catalogo: S.catalogo,
       prenotazioni: S.prenotazioni,
       mese: S.mese,
@@ -2743,18 +2735,20 @@ function salvaCacheSessione() {
   } catch(e) {}
 }
 
-// Carica dalla cache per apertura istantanea (nessuna schermata nera),
-// poi chiama rilevaMieiOrdini() in background per aggiornare i dati dal backend.
+// Carica dalla cache per apertura istantanea, poi aggiorna dal backend in background.
 function ripristinaSessione() {
   try {
     const raw = localStorage.getItem(DNI_CACHE_KEY);
     if (!raw) return false;
     const c = JSON.parse(raw);
+    // Scarta cache se: versione vecchia, scaduta, o dati mancanti
+    if (c.v !== DNI_CACHE_VER) {
+      localStorage.removeItem(DNI_CACHE_KEY); return false;
+    }
     if (!c.savedAt || Date.now() - c.savedAt > DNI_CACHE_TTL) {
       localStorage.removeItem(DNI_CACHE_KEY); return false;
     }
     if (!c.utente || !c.utente.id) return false;
-    // Ripristina _codice: prima da utente, poi dal campo pin di backup
     if (!c.utente._codice && c.pin) c.utente._codice = c.pin;
     if (!c.utente._codice) return false;
     S.utente = c.utente; S.catalogo = c.catalogo || [];
@@ -2765,8 +2759,7 @@ function ripristinaSessione() {
       avviaSessionWatch(S.utente.id);
     }
     avviaApp();
-    // Aggiorna silenziosamente ordini, credito e stato dal backend dopo il ripristino.
-    // L'app è già visibile dalla cache; i dati freschi arrivano in background.
+    // Aggiorna silenziosamente dal backend dopo il ripristino dalla cache.
     setTimeout(() => rilevaMieiOrdini(), 100);
     return true;
   } catch(e) { localStorage.removeItem(DNI_CACHE_KEY); return false; }
