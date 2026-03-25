@@ -1361,6 +1361,17 @@ const URL_API = 'https://script.google.com/macros/s/AKfycbwGssg8OS93eHa6DvYlxQBp
 const sleep = ms => new Promise(r => setTimeout(r, ms));
 
 /**
+ * Risolve il percorso di un'immagine.
+ * Se f inizia con http/https → URL assoluto, usato direttamente.
+ * Altrimenti costruisce il percorso relativo: basePath + f
+ */
+function resolveImgPath(f, basePath) {
+  if (!f) return '';
+  if (/^https?:\/\//i.test(f)) return f;
+  return basePath + f;
+}
+
+/**
  * Normalizza la risposta dal backend Apps Script.
  * Il backend restituisce sempre { ok, ... } in JSON.
  */
@@ -1847,10 +1858,13 @@ function renderCatalogo(){
         ? `<span class="prod-btn-gar">+ Gar. stock €${ottCard.garanzia}</span>` : '';
       // Estrae vendor_sku dal SKU DNI: "DNI-VENDOR_SKU" -> "VENDOR_SKU"
       const vendorSku = prod.sku ? prod.sku.replace(/^DNI-/, '') : '';
-      // Il backend manda imgs[] (array già splittato) e imgBase (= vendor_sku)
-      const imgList = prod.imgs || [];
-      const base = prod.imgBase || vendorSku || '';
-      const imgs = imgList.map(f => base ? `img_catalogo/${base}/${f}` : `img_catalogo/${f}`);
+      // Legge immagini dalla colonna IMG (separate da ";") oppure da imgFile/imgFile2/imgFile3
+      const imgList = prod.img 
+        ? prod.img.split(';').map(s => s.trim()).filter(Boolean)
+        : [prod.imgFile, prod.imgFile2, prod.imgFile3].filter(Boolean);
+      // Costruisce i percorsi: img_catalogo/VENDOR_SKU/filename (o URL assoluto)
+      const _bp1 = vendorSku ? `img_catalogo/${vendorSku}/` : 'img_catalogo/';
+      const imgs = imgList.map(f => resolveImgPath(f, _bp1));
       const img=imgs[0]||'';
       const hasMulti=imgs.length>1;
 
@@ -1953,11 +1967,12 @@ function renderSidebar(){
     div.className=`sel-item ${t==='deposito'?'dep':'fp'}`;
     // Estrae vendor_sku dal SKU per il percorso immagine
     const vendorSku = p.sku ? p.sku.replace(/^DNI-/, '') : '';
-    // Il backend manda imgs[] (array già splittato) e imgBase (= vendor_sku)
-    const imgList = p.imgs || [];
-    const base = p.imgBase || vendorSku || '';
+    // Legge prima immagine dalla colonna IMG (separata da ";") oppure da imgFile
+    const imgList = p.img 
+      ? p.img.split(';').map(s => s.trim()).filter(Boolean)
+      : (p.imgFile ? [p.imgFile] : []);
     const firstImg = imgList[0] || '';
-    const img = firstImg ? (base ? `img_catalogo/${base}/${firstImg}` : `img_catalogo/${firstImg}`) : '';
+    const img = firstImg ? (vendorSku ? `img_catalogo/${vendorSku}/${firstImg}` : `img_catalogo/${firstImg}`) : '';
     div.innerHTML=`
       <div class="sel-thumb">${img?`<img src="${img}" alt="">`:'🖼'}</div>
       <div class="sel-info">
@@ -2193,13 +2208,15 @@ function renderOrdini(){
   for(const c of S.catalogo){
     // Estrae vendor_sku dal SKU DNI per il percorso immagine
     const vendorSku = c.sku ? c.sku.replace(/^DNI-/, '') : '';
-    // Il backend manda imgs[] (array già splittato) e imgBase (= vendor_sku)
-    const imgList = c.imgs || [];
-    const basePath = (c.imgBase || vendorSku) ? `img_catalogo/${c.imgBase || vendorSku}/` : 'img_catalogo/';
+    const basePath = vendorSku ? `img_catalogo/${vendorSku}/` : 'img_catalogo/';
+    // Legge immagini dalla colonna IMG (separate da ";") oppure da imgFile/imgFile2/imgFile3
+    const imgList = c.img 
+      ? c.img.split(';').map(s => s.trim()).filter(Boolean)
+      : [c.imgFile, c.imgFile2, c.imgFile3].filter(Boolean);
     imgMap[String(c.id)] = { 
-      f1: imgList[0] ? (basePath + imgList[0]) : '',
-      f2: imgList[1] ? (basePath + imgList[1]) : '',
-      f3: imgList[2] ? (basePath + imgList[2]) : ''
+      f1: resolveImgPath(imgList[0], basePath),
+      f2: resolveImgPath(imgList[1], basePath),
+      f3: resolveImgPath(imgList[2], basePath)
     };
   }
 
@@ -2532,11 +2549,12 @@ function apriLightbox(prodId) {
   if (!prod) return;
   // Estrae vendor_sku dal SKU per il percorso immagine
   const vendorSku = prod.sku ? prod.sku.replace(/^DNI-/, '') : '';
-  // Il backend manda imgs[] (array già splittato) e imgBase (= vendor_sku)
-  const imgList = prod.imgs || [];
-  const base = prod.imgBase || vendorSku || '';
-  const basePath = base ? `img_catalogo/${base}/` : 'img_catalogo/';
-  _lbImgs = imgList.map(f => basePath + f);
+  const basePath = vendorSku ? `img_catalogo/${vendorSku}/` : 'img_catalogo/';
+  // Legge immagini dalla colonna IMG (separate da ";") oppure da imgFile/imgFile2/imgFile3
+  const imgList = prod.img 
+    ? prod.img.split(';').map(s => s.trim()).filter(Boolean)
+    : [prod.imgFile, prod.imgFile2, prod.imgFile3].filter(Boolean);
+  _lbImgs = imgList.map(f => resolveImgPath(f, basePath));
   if (!_lbImgs.length) return;
   _lbIdx  = 0;
   _lbName = prod.name;
@@ -2548,7 +2566,7 @@ function apriLightbox(prodId) {
 
 // Apre il lightbox a partire da un array di filename (usato dagli order card)
 function apriLightboxFromUrls(fileNames, nome) {
-  _lbImgs = fileNames.map(f => 'img_catalogo/' + f);
+  _lbImgs = fileNames.map(f => resolveImgPath(f, 'img_catalogo/'));
   if (!_lbImgs.length) return;
   _lbIdx  = 0;
   _lbName = nome || '';
