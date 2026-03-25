@@ -1915,27 +1915,20 @@ function renderCatalogo(){
       const ottCard = isDep ? getAccontoOttimizzato(String(prod.id)) : null;
       const garInBtn = ottCard&&ottCard.isSp&&ottCard.garanzia>0
         ? `<span class="prod-btn-gar">+ Gar. stock €${ottCard.garanzia}</span>` : '';
-      // Estrae vendor_sku dal SKU DNI: "DNI-VENDOR_SKU" -> "VENDOR_SKU"
-      const vendorSku = prod.sku ? prod.sku.replace(/^DNI-/, '') : (prod.vendor_sku || prod.imgBase || '');
-      // Legge immagini: supporta sia imgs[] (nuovo backend) che img (stringa con ";") che imgFile legacy
-      const imgList = Array.isArray(prod.imgs) && prod.imgs.length
-        ? prod.imgs
-        : prod.img
-          ? prod.img.split(';').map(s => s.trim()).filter(Boolean)
-          : [prod.imgFile, prod.imgFile2, prod.imgFile3].filter(Boolean);
-      // Costruisce i percorsi: img_catalogo/VENDOR_SKU/filename
-      const imgs = imgList.map(f => {
-        if (vendorSku) {
-          return `img_catalogo/${vendorSku}/${f}`;
-        }
-        return `img_catalogo/${f}`;
-      });
+      // Usa prod.immagini (array URL assoluti forniti dal backend Code.gs)
+      // Fallback a prod.imgs (nome vecchio) per retrocompatibilità
+      const imgs = Array.isArray(prod.immagini) && prod.immagini.length
+        ? prod.immagini
+        : Array.isArray(prod.imgs) && prod.imgs.length
+          ? prod.imgs
+          : [];
       const img=imgs[0]||'';
+      const hasImgs=imgs.length>0;
       const hasMulti=imgs.length>1;
 
       return`<div class="prod-card ${cc}">
-        <div class="prod-photo-half${hasMulti?' has-imgs':''}"
-          ${hasMulti?`onclick="apriLightbox('${prod.id}')" title="Clicca per vedere tutte le foto"`:''}
+        <div class="prod-photo-half${hasImgs?' has-imgs':''}"
+          ${hasImgs?`onclick="apriLightbox('${prod.id}')" title="Clicca per vedere le foto"`:''}
         >
           ${img?`<img src="${img}" alt="${prod.name}" loading="lazy">`
               :`<div class="prod-photo-ph">
@@ -2030,15 +2023,11 @@ function renderSidebar(){
   function creaSelItem(p,t,acc){
     const div=document.createElement('div');
     div.className=`sel-item ${t==='deposito'?'dep':'fp'}`;
-    // Estrae vendor_sku dal SKU per il percorso immagine
-    const vendorSku = p.sku ? p.sku.replace(/^DNI-/, "") : (p.vendor_sku || p.imgBase || "");
-    // Supporta imgs[] (nuovo backend), img (stringa), imgFile (legacy)
-    const imgList = Array.isArray(p.imgs) && p.imgs.length
-      ? p.imgs
-      : p.img ? p.img.split(";").map(s => s.trim()).filter(Boolean)
-      : (p.imgFile ? [p.imgFile] : []);
-    const firstImg = imgList[0] || '';
-    const img = firstImg ? (vendorSku ? `img_catalogo/${vendorSku}/${firstImg}` : `img_catalogo/${firstImg}`) : '';
+    // Usa p.immagini (URL assoluti dal backend)
+    const imgs_cart = Array.isArray(p.immagini) && p.immagini.length
+      ? p.immagini
+      : Array.isArray(p.imgs) && p.imgs.length ? p.imgs : [];
+    const img = imgs_cart[0] || '';
     div.innerHTML=`
       <div class="sel-thumb">${img?`<img src="${img}" alt="">`:'🖼'}</div>
       <div class="sel-info">
@@ -2269,20 +2258,17 @@ function renderOrdini(){
   aggiornaBadgeFiltro('fltBadgeSaldato',  allSaldato.length);
   aggiornaBadgeFiltro('fltBadgeSpedito',  allSpedito.length);
 
-  // Mappa prodotto_id → immagini dal catalogo (le prenotazioni non hanno img)
+  // Mappa prodotto_id → immagini dal catalogo (URL assoluti da prod.immagini)
   const imgMap = {};
   for(const c of S.catalogo){
-    // Estrae vendor_sku dal SKU DNI per il percorso immagine
-    const vendorSku = c.sku ? c.sku.replace(/^DNI-/, '') : '';
-    const basePath = vendorSku ? `img_catalogo/${vendorSku}/` : 'img_catalogo/';
-    // Legge immagini dalla colonna IMG (separate da ";") oppure da imgFile/imgFile2/imgFile3
-    const imgList = c.img 
-      ? c.img.split(';').map(s => s.trim()).filter(Boolean)
-      : [c.imgFile, c.imgFile2, c.imgFile3].filter(Boolean);
-    imgMap[String(c.id)] = { 
-      f1: imgList[0] ? (basePath + imgList[0]) : '',
-      f2: imgList[1] ? (basePath + imgList[1]) : '',
-      f3: imgList[2] ? (basePath + imgList[2]) : ''
+    const imgs = Array.isArray(c.immagini) && c.immagini.length
+      ? c.immagini
+      : Array.isArray(c.imgs) && c.imgs.length ? c.imgs : [];
+    imgMap[String(c.id)] = {
+      f1: imgs[0] || '',
+      f2: imgs[1] || '',
+      f3: imgs[2] || '',
+      all: imgs
     };
   }
 
@@ -2613,14 +2599,12 @@ let _lbName = '';   // nome prodotto
 function apriLightbox(prodId) {
   const prod = S.catalogo.find(p => String(p.id) === String(prodId));
   if (!prod) return;
-  // Estrae vendor_sku dal SKU per il percorso immagine
-  const vendorSku = prod.sku ? prod.sku.replace(/^DNI-/, '') : '';
-  const basePath = vendorSku ? `img_catalogo/${vendorSku}/` : 'img_catalogo/';
-  // Legge immagini dalla colonna IMG (separate da ";") oppure da imgFile/imgFile2/imgFile3
-  const imgList = prod.img 
-    ? prod.img.split(';').map(s => s.trim()).filter(Boolean)
-    : [prod.imgFile, prod.imgFile2, prod.imgFile3].filter(Boolean);
-  _lbImgs = imgList.map(f => basePath + f);
+  // Usa prod.immagini (array URL assoluti forniti dal backend Code.gs)
+  _lbImgs = Array.isArray(prod.immagini) && prod.immagini.length
+    ? prod.immagini
+    : Array.isArray(prod.imgs) && prod.imgs.length
+      ? prod.imgs
+      : [];
   if (!_lbImgs.length) return;
   _lbIdx  = 0;
   _lbName = prod.name;
