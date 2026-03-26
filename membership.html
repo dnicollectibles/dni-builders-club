@@ -2886,7 +2886,7 @@ function apriLightbox(prodId) {
 
 // Apre il lightbox a partire da un array di filename (usato dagli order card)
 function apriLightboxFromUrls(fileNames, nome) {
-  _lbImgs = fileNames.map(f => 'img_catalogo/' + f);
+  _lbImgs = fileNames.map(f => 'https://dnicollectibles.com/img_catalog/' + f);
   if (!_lbImgs.length) return;
   _lbIdx  = 0;
   _lbName = nome || '';
