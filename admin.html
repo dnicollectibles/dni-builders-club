@@ -524,12 +524,11 @@ tbody td strong{color:var(--text);font-weight:500}
       <div class="sp-section-title">Host Immagini (Aruba)</div>
       <div style="font-family:var(--f-mono);font-size:10px;color:var(--text-dim);line-height:1.8;padding:10px 12px;background:var(--bg3);border:1px solid var(--line2);border-radius:var(--r)">
         <div style="color:var(--neon);margin-bottom:6px;letter-spacing:1px">STRUTTURA FTP</div>
-        <div>&#128193; img_catalog/</div>
-        <div style="padding-left:14px">&#128193; {sku_minuscolo}/</div>
-        <div style="padding-left:28px">&#128247; {SKU_MAIUSCOLO}_01.jpg</div>
-        <div style="margin-top:8px;color:var(--text-mid)">Es: SNAA-TRISTAN &#8594;</div>
-        <div style="padding-left:14px;color:var(--text-mid)">img_catalog/snaa_tristan/SNAA_TRISTAN_01.jpg</div>
-        <div style="margin-top:8px;color:var(--warn)">Carica le immagini via FTP, poi aggiorna il numero nella colonna <strong>img</strong> del foglio Catalogo.</div>
+        <div>&#x1F4C1; img_catalog/</div>
+        <div style="padding-left:14px">&#x1F4C1; {sku_minuscolo}/</div>
+        <div style="padding-left:28px">&#x1F5BC; {SKU_MAIUSCOLO}_01.jpg</div>
+        <div style="margin-top:8px;color:var(--text-mid)">Es: SNAA-TRISTAN &#8594; img_catalog/snaa_tristan/SNAA_TRISTAN_01.jpg</div>
+        <div style="margin-top:8px;color:var(--warn)">Carica le immagini via FTP, poi usa Sincronizza.</div>
       </div>
     </div>
     <div style="margin-top:auto;padding-top:16px">
@@ -938,7 +937,7 @@ tbody td strong{color:var(--text);font-weight:500}
         <div class="fld span3">
           <label>Immagini (nomi file separati da ";")</label>
           <input type="text" id="pImg" placeholder="es. SNAA-SC-008_01.jpg;SNAA-SC-008_02.jpg">
-          <span class="fld-hint">File caricati via FTP su Aruba nella cartella img_catalog/{sku_lower}/</span>
+          <span class="fld-hint">File caricati via FTP su Aruba in img_catalog/{sku_lower}/</span>
         </div>
         <div class="fld">
           <div class="toggle-wrap">
@@ -1371,21 +1370,21 @@ function renderCatalogo() {
   const search = (document.getElementById('searchCat')?.value||'').toLowerCase();
   const rows = D.catalogo.filter(p => {
     if (_filtCat==='tbd' && !p.isTbd) return false;
-    if (_filtCat==='senza_foto' && Array.isArray(p.immagini) && p.immagini.length) return false;
+    if (_filtCat==='senza_foto' && p.img1) return false;
     if (_filtCat!=='tutti' && _filtCat!=='tbd' && _filtCat!=='senza_foto' && p.tier!==_filtCat) return false;
     if (search && !p.name.toLowerCase().includes(search) && !(p.vendor_sku||'').toLowerCase().includes(search)) return false;
     return true;
   });
 
   // Aggiorna contatore badge "Senza foto"
-  const nSenzaFoto = D.catalogo.filter(p => !Array.isArray(p.immagini) || !p.immagini.length).length;
+  const nSenzaFoto = D.catalogo.filter(p => !p.img1).length;
   const fltBtn = document.getElementById('fltSenzaFoto');
   if (fltBtn) fltBtn.textContent = `⊘ Senza foto${nSenzaFoto ? ' ('+nSenzaFoto+')' : ''}`;
 
   const tbody = document.getElementById('tblCatalogo');
   tbody.innerHTML = rows.length ? rows.map(p => {
-    const nFoto = Array.isArray(p.immagini) ? p.immagini.length : 0;
-    const img   = nFoto ? p.immagini[0] : null;
+    const img = p.img1 || null;
+    const nFoto = img ? 1 : 0; // conteggio reale scoperto lazy
     const thumbHtml = img
       ? `<img class="prod-thumb" src="${img}" onerror="this.style.display='none'">`
       : `<div class="prod-thumb-ph-btn" onclick="event.stopPropagation();apriAzioneFoto('${p.id}')" title="Nessuna foto — clicca per caricare">📷</div>`;
@@ -1505,7 +1504,8 @@ function apriModalProdotto(id) {
   document.getElementById('pPrezzoDbc').value  = p?.price||'';
   document.getElementById('pPrezzoPub').value  = p?.prezzo_pub||'';
   document.getElementById('pAcconto').value    = p?.acconto||'';
-  document.getElementById('pImg').value        = Array.isArray(p?.immagini)
+  // img1 gestita automaticamente da Aruba — non serve campo nel form
+  // document.getElementById('pImg').value =
     ? '' // non mostrare URL completi, l'admin inserisce solo nomi file
     : '';
   document.getElementById('pTbd').checked      = !!p?.isTbd;
@@ -1695,60 +1695,24 @@ async function avviaUpload() {
   const progList = document.getElementById('progressList');
   progList.innerHTML = '';
 
-  const prodotto = D.catalogo.find(p => p.vendor_sku === sku);
-  const existingCount = prodotto && Array.isArray(prodotto.immagini) ? prodotto.immagini.length : 0;
-  const nomiFile = [];
-
-  for (let i = 0; i < _uploadFiles.length; i++) {
-    const file = _uploadFiles[i];
-    const num  = String(existingCount + i + 1).padStart(2,'0');
-    const ext  = file.name.split('.').pop().toLowerCase();
-    const nomeFile = `${sku}_${num}.${ext}`;
-    nomiFile.push(nomeFile);
-
-    const rowId = 'prog_' + i;
+  // Le immagini vengono caricate via FTP su Aruba — qui mostriamo solo i nomi attesi
+  const skuFolder = sku.toLowerCase().replace(/-/g,'_');
+  const skuFile   = sku.toUpperCase().replace(/-/g,'_');
+  _uploadFiles.forEach((file, i) => {
+    const num  = String(i + 1).padStart(2,'0');
+    const ext  = file.name.split('.').pop().toLowerCase().replace('jpeg','jpg');
+    const nome = `${skuFile}_${num}.${ext}`;
     progList.innerHTML += `
-      <div id="${rowId}" style="display:flex;align-items:center;gap:8px">
-        <span style="font-family:var(--f-mono);font-size:10px;color:var(--text-mid);flex:1">${nomeFile}</span>
-        <div class="progress-bar" style="width:120px"><div class="progress-fill" id="pf_${i}" style="width:0%"></div></div>
-        <span id="ps_${i}" style="font-family:var(--f-mono);font-size:9px;color:var(--text-dim)">In coda</span>
+      <div style="display:flex;align-items:center;gap:8px;padding:4px 0">
+        <span style="font-family:var(--f-mono);font-size:10px;color:var(--text-mid);flex:1">${nome}</span>
+        <span style="font-family:var(--f-mono);font-size:9px;color:var(--neon)">→ img_catalog/${skuFolder}/</span>
       </div>`;
-
-    try {
-      document.getElementById(`ps_${i}`).textContent = 'Upload...';
-      document.getElementById(`pf_${i}`).style.width = '30%';
-
-      // Upload Aruba via FTP esterno — qui registriamo solo il nome file previsto
-      document.getElementById(`pf_${i}`).style.width = '100%';
-      document.getElementById(`ps_${i}`).textContent = '✓';
-      document.getElementById(`ps_${i}`).style.color = 'var(--green)';
-    }
-  }
+  });
 
   setBtnLoading(btn, false);
-  toast('Nomi file registrati. Carica le immagini via FTP su Aruba nella cartella img_catalog/', 'ok');
-
-  // Aggiorna contatore immagini nel foglio (count, non lista filenames)
-  if (nomiFile.length) {
-    const nuovoCount = existingCount + nomiFile.length;
-    try {
-      await apiPost({ action:'aggiorna_img_prodotto', vendor_sku:sku, img_count:nuovoCount });
-      toast('Colonna img aggiornata nel foglio ✓','ok');
-    } catch(e) { toast('Img non aggiornata nel foglio: '+e.message,'warn'); }
-    // Aggiorna cache locale
-    const pLocal = D.catalogo.find(x => x.vendor_sku===sku);
-    if (pLocal) {
-      pLocal.immagini = Array.from({length:nuovoCount},(_,n)=>{
-        const pad=String(n+1).padStart(2,'0');
-        const skuF=sku.toUpperCase().replace(/-/g,'_'), skuD=sku.toLowerCase().replace(/-/g,'_');
-        return `${CFG.imgBase}${skuD}/${skuF}_${pad}.jpg`;
-      });
-    }
-  }
-
+  toast('Carica questi file via FTP in img_catalog/' + skuFolder + '/ poi premi Sincronizza', 'ok');
   _uploadFiles = [];
   document.getElementById('uploadPreview').style.display = 'none';
-  sincronizza();
 }
 
 function leggiFileBase64(file) {
@@ -1764,18 +1728,35 @@ async function caricaGalleria() {
   const sku = document.getElementById('gallerySku').value;
   const grid = document.getElementById('imgGrid');
   if (!sku) { grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;font-family:var(--f-mono);font-size:10px;color:var(--text-dim);padding:24px">Seleziona un prodotto</div>'; return; }
-  const p = D.catalogo.find(x => x.vendor_sku===sku);
-  const imgs = Array.isArray(p?.immagini) ? p.immagini : [];
-  grid.innerHTML = imgs.length
-    ? imgs.map((url,i) => `
+  grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;font-family:var(--f-mono);font-size:10px;color:var(--text-dim);padding:24px">Ricerca immagini su Aruba...</div>';
+  const skuFolder = sku.toLowerCase().replace(/-/g,'_');
+  const skuFile   = sku.toUpperCase().replace(/-/g,'_');
+  const base = 'https://dnicollectibles.com/img_catalog/';
+  const urls = [];
+  for (let n = 1; n <= 30; n++) {
+    const pad = String(n).padStart(2,'0');
+    const url = `${base}${skuFolder}/${skuFile}_${pad}.jpg`;
+    const ok = await fetch(url, {method:'HEAD'}).then(r=>r.ok).catch(()=>false);
+    if (!ok) break;
+    urls.push(url);
+  }
+  grid.innerHTML = urls.length
+    ? urls.map((url,i) => `
         <div class="img-card">
-          <img src="${url}" loading="lazy" onerror="this.src=''">
+          <img src="${url}" loading="lazy">
           <div class="img-card-overlay">
-            <button class="btn sm danger" onclick="eliminaImg('${sku}',${i})" title="Elimina">✕</button>
+            <button class="btn sm danger" onclick="eliminaImgAruba('${sku}',${i+1})" title="Elimina">✕</button>
           </div>
           <div class="img-card-name">${url.split('/').pop()}</div>
         </div>`).join('')
-    : '<div style="grid-column:1/-1;text-align:center;font-family:var(--f-mono);font-size:10px;color:var(--text-dim);padding:24px">Nessuna immagine</div>';
+    : '<div style="grid-column:1/-1;text-align:center;font-family:var(--f-mono);font-size:10px;color:var(--text-dim);padding:24px">Nessuna immagine trovata su Aruba</div>';
+}
+
+function eliminaImgAruba(sku, num) {
+  const skuFolder = sku.toLowerCase().replace(/-/g,'_');
+  const skuFile   = sku.toUpperCase().replace(/-/g,'_');
+  const nome = `${skuFile}_${String(num).padStart(2,'0')}.jpg`;
+  toast(`Elimina manualmente via FTP: img_catalog/${skuFolder}/${nome}`, 'warn');
 }
 
 async function eliminaImg(sku, idx) {
@@ -1784,15 +1765,8 @@ async function eliminaImg(sku, idx) {
   if (!p || !Array.isArray(p.immagini)) return;
   const url = p.immagini[idx];
   const filename = url.split('/').pop();
-  // Eliminazione fisica via FTP su Aruba — aggiorniamo solo il contatore nel foglio
-  toast(`${filename} rimossa dal contatore. Elimina il file manualmente via FTP.`,'warn');
-  // Aggiorna contatore (count = immagini rimanenti)
-  const nuovoCount = p.immagini.length - 1;
-  try {
-    await apiPost({ action:'aggiorna_img_prodotto', vendor_sku:sku, img_count:Math.max(0,nuovoCount) });
-  } catch(e) {}
-  sincronizza();
-  caricaGalleria();
+  // Eliminazione via FTP — questo avviso già gestito da eliminaImgAruba
+  toast('Usa eliminaImgAruba per le immagini Aruba', 'warn');
 }
 
 /* ─── MODAL AZIONE FOTO ───────────────────────────────────────────────────── */
@@ -1900,9 +1874,6 @@ function mHandleFileSelect(fileList) {
 }
 
 async function mAvviaUpload() {
-  // Upload fisico via FTP esterno su Aruba.
-  // Questa funzione genera i nomi file attesi, aggiorna il contatore nel foglio
-  // e aggiorna la cache locale. L'upload reale delle immagini avviene via FTP.
   const p = D.catalogo.find(x => String(x.id) === String(_fotoTargetId));
   if (!p || !_mUploadFiles.length) return;
 
@@ -1913,43 +1884,40 @@ async function mAvviaUpload() {
   const progList = document.getElementById('mProgressList');
   progList.innerHTML = '';
 
-  const sku           = p.vendor_sku || p.id;
-  const skuFolder     = sku.toLowerCase().replace(/-/g, '_');
-  const skuFile       = sku.toUpperCase().replace(/-/g, '_');
-  const existingCount = Array.isArray(p.immagini) ? p.immagini.length : 0;
-  const nomiFile      = [];
+  const sku       = p.vendor_sku || p.id;
+  const skuFolder = sku.toLowerCase().replace(/-/g,'_');
+  const skuFile   = sku.toUpperCase().replace(/-/g,'_');
+  const nomiFile  = [];
 
   for (let i = 0; i < _mUploadFiles.length; i++) {
-    const file     = _mUploadFiles[i];
-    const num      = String(existingCount + i + 1).padStart(2, '0');
-    const ext      = file.name.split('.').pop().toLowerCase().replace('jpeg','jpg');
+    const file    = _mUploadFiles[i];
+    const num     = String(i + 1).padStart(2, '0');
+    const ext     = file.name.split('.').pop().toLowerCase().replace('jpeg','jpg');
     const nomeFile = `${skuFile}_${num}.${ext}`;
     nomiFile.push(nomeFile);
 
+    const rowId = 'mp_' + i;
     progList.insertAdjacentHTML('beforeend', `
-      <div style="display:flex;align-items:center;gap:8px">
+      <div id="${rowId}" style="display:flex;align-items:center;gap:8px">
         <span style="font-family:var(--f-mono);font-size:10px;color:var(--text-mid);flex:1">${nomeFile}</span>
-        <div class="progress-bar" style="width:100px"><div class="progress-fill" style="width:100%"></div></div>
-        <span style="font-family:var(--f-mono);font-size:9px;color:var(--green);width:50px;text-align:right">✓ FTP</span>
+        <div class="progress-bar" style="width:100px"><div class="progress-fill" id="mpf_${i}" style="width:0%"></div></div>
+        <span id="mps_${i}" style="font-family:var(--f-mono);font-size:9px;color:var(--text-dim);width:50px;text-align:right">In coda</span>
       </div>`);
+
+    try {
+      document.getElementById(`mps_${i}`).textContent = 'Upload...';
+      document.getElementById(`mpf_${i}`).style.width = '30%';
+
+      // Mostra il nome file atteso per l'upload FTP
+      document.getElementById(`mpf_${i}`).style.width = '100%';
+      document.getElementById(`mps_${i}`).textContent = '→ FTP';
+      document.getElementById(`mps_${i}`).style.color = 'var(--neon)';
+    }
   }
 
   setBtnLoading(btn, false);
-
-  const nuovoCount = existingCount + nomiFile.length;
-  try {
-    await apiPost({ action:'aggiorna_img_prodotto', vendor_sku:sku, img_count:nuovoCount });
-    toast('Contatore aggiornato nel foglio ✓', 'ok');
-  } catch(e) { toast('Sheet non aggiornato: ' + e.message, 'warn'); }
-
-  // Aggiorna cache locale con URL Aruba
-  p.immagini = Array.from({length:nuovoCount},(_,n)=>{
-    const pad = String(n+1).padStart(2,'0');
-    return `${CFG.imgBase}${skuFolder}/${skuFile}_${pad}.jpg`;
-  });
-
-  toast(`${nomiFile.length} nomi registrati — carica via FTP in img_catalog/${skuFolder}/`, 'ok');
-  setTimeout(() => { sincronizza(); chiudiModal('mUploadFoto'); _mUploadFiles = []; }, 2000);
+  toast(`Carica ${nomiFile.length} file via FTP in img_catalog/${skuFolder}/ poi premi Sincronizza`, 'ok');
+  setTimeout(() => { chiudiModal('mUploadFoto'); _mUploadFiles = []; }, 2500);
 }
 
 /* ─── FILTRI ─────────────────────────────────────────────────────────────── */

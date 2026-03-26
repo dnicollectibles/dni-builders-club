@@ -1992,13 +1992,10 @@ function renderCatalogo(){
       const ottCard = isDep ? getAccontoOttimizzato(String(prod.id)) : null;
       const garInBtn = ottCard&&ottCard.isSp&&ottCard.garanzia>0
         ? `<span class="prod-btn-gar">+ Gar. stock €${ottCard.garanzia}</span>` : '';
-      // Usa prod.immagini — URL assoluti forniti dal backend
-      const imgs = Array.isArray(prod.immagini) && prod.immagini.length
-        ? prod.immagini
-        : Array.isArray(prod.imgs) && prod.imgs.length ? prod.imgs : [];
-      const img=imgs[0]||'';
-      const hasImgs=imgs.length>0;
-      const hasMulti=imgs.length>1;
+      // img1 = URL prima immagine dal backend (Aruba); le altre vengono scoperte lazy nel lightbox
+      const img = prod.img1 || '';
+      const hasImgs = !!img;
+      const hasMulti = false; // dots nascosti — numero reale scoperto al click
 
       return`<div class="prod-card ${cc}">
         <div class="prod-photo-half${hasImgs?' has-imgs':''}"
@@ -2011,7 +2008,7 @@ function renderCatalogo(){
                 </div>`}
           ${badge}
           ${nOrd>0?`<div class="prod-ordinati-overlay ${ordCls}">${ordLbl}</div>`:''}
-          ${hasMulti?`<div class="photo-dots">${imgs.map((_,i)=>`<div class="photo-dot${i===0?' active':''}"></div>`).join('')}</div>`:''}
+          <!-- dots aggiornati dopo discovery lazy nel lightbox -->
         </div>
         <div class="prod-info-half">
           <div class="prod-tier-tag ${prod.tier}">${tierLbl}</div>
@@ -2097,10 +2094,7 @@ function renderSidebar(){
   function creaSelItem(p,t,acc){
     const div=document.createElement('div');
     div.className=`sel-item ${t==='deposito'?'dep':'fp'}`;
-    // Usa p.immagini — URL assoluti dal backend
-    const imgs_cart = Array.isArray(p.immagini) && p.immagini.length
-      ? p.immagini : Array.isArray(p.imgs) && p.imgs.length ? p.imgs : [];
-    const img = imgs_cart[0] || '';
+    const img = p.img1 || '';
     div.innerHTML=`
       <div class="sel-thumb">${img?`<img src="${img}" alt="">`:'🖼'}</div>
       <div class="sel-info">
@@ -2383,12 +2377,10 @@ function renderOrdini(){
   aggiornaBadgeFiltro('fltBadgeSaldato',  allSaldato.length);
   aggiornaBadgeFiltro('fltBadgeSpedito',  allSpedito.length);
 
-  // Mappa prodotto_id → immagini dal catalogo (URL assoluti da c.immagini)
+  // Mappa prodotto_id → img1 (Aruba, prima immagine)
   const imgMap = {};
   for(const c of S.catalogo){
-    const imgs_c = Array.isArray(c.immagini) && c.immagini.length
-      ? c.immagini : Array.isArray(c.imgs) && c.imgs.length ? c.imgs : [];
-    imgMap[String(c.id)] = { f1: imgs_c[0]||'', f2: imgs_c[1]||'', f3: imgs_c[2]||'', all: imgs_c };
+    imgMap[String(c.id)] = { f1: c.img1||'', f2:'', f3:'', all: c.img1?[c.img1]:[] };
   }
 
   // Nascondi gruppi vuoti, mostra quelli con ordini
@@ -2525,9 +2517,7 @@ function apriModalSpostaDeposito(prenId) {
 
   const imgMap = {};
   for (const c of S.catalogo) {
-    const imgs = Array.isArray(c.immagini) && c.immagini.length ? c.immagini
-               : Array.isArray(c.imgs) && c.imgs.length ? c.imgs : [];
-    imgMap[String(c.id)] = imgs[0] || '';
+    imgMap[String(c.id)] = c.img1 || '';
   }
 
   const listEl = document.getElementById('spostaListaProdotti');
@@ -2868,25 +2858,34 @@ let _lbImgs = [];   // array URL immagini del prodotto corrente
 let _lbIdx  = 0;    // indice immagine attiva
 let _lbName = '';   // nome prodotto
 
-function apriLightbox(prodId) {
+async function apriLightbox(prodId) {
   const prod = S.catalogo.find(p => String(p.id) === String(prodId));
-  if (!prod) return;
-  // Usa prod.immagini — URL assoluti dal backend
-  _lbImgs = Array.isArray(prod.immagini) && prod.immagini.length
-    ? prod.immagini
-    : Array.isArray(prod.imgs) && prod.imgs.length ? prod.imgs : [];
-  if (!_lbImgs.length) return;
+  if (!prod || !prod.img1) return;
   _lbIdx  = 0;
   _lbName = prod.name;
   document.getElementById('lbTitle').textContent = prod.name;
+  // Mostra subito il lightbox con la prima immagine già nota
+  _lbImgs = [prod.img1];
   lbRender();
   document.getElementById('mLightbox').classList.add('open');
   document.body.style.overflow = 'hidden';
+  // Discovery lazy: verifica _02, _03... finché 404
+  const base = 'https://dnicollectibles.com/img_catalog/';
+  const folder = prod.skuFolder || prod.vendor_sku.toLowerCase().replace(/-/g,'_');
+  const file   = prod.skuFile   || prod.vendor_sku.toUpperCase().replace(/-/g,'_');
+  for (let n = 2; n <= 30; n++) {
+    const pad = String(n).padStart(2,'0');
+    const url = `${base}${folder}/${file}_${pad}.jpg`;
+    const ok = await fetch(url, {method:'HEAD'}).then(r=>r.ok).catch(()=>false);
+    if (!ok) break;
+    _lbImgs.push(url);
+    lbRender(); // aggiorna count e dots man mano che arrivano
+  }
 }
 
 // Apre il lightbox a partire da un array di filename (usato dagli order card)
 function apriLightboxFromUrls(fileNames, nome) {
-  _lbImgs = fileNames.map(f => 'https://dnicollectibles.com/img_catalog/' + f);
+  _lbImgs = fileNames.map(f => f.startsWith('http') ? f : 'https://dnicollectibles.com/img_catalog/' + f);
   if (!_lbImgs.length) return;
   _lbIdx  = 0;
   _lbName = nome || '';
