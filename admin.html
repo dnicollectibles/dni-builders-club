@@ -527,7 +527,7 @@ tbody td strong{color:var(--text);font-weight:500}
         <div>&#x1F4C1; img_catalog/</div>
         <div style="padding-left:14px">&#x1F4C1; {sku_minuscolo}/</div>
         <div style="padding-left:28px">&#x1F5BC; {SKU_MAIUSCOLO}_01.jpg</div>
-        <div style="margin-top:8px;color:var(--text-mid)">Es: SNAA-TRISTAN &#8594; img_catalog/snaa_tristan/SNAA_TRISTAN_01.jpg</div>
+        <div style="margin-top:8px;color:var(--text-mid)">Es: SNAA-TRISTAN &#8594; img_catalog/SNAA-TRISTAN/SNAA_TRISTAN_01.jpg</div>
         <div style="margin-top:8px;color:var(--warn)">Carica le immagini via FTP, poi usa Sincronizza.</div>
       </div>
     </div>
@@ -1696,7 +1696,7 @@ async function avviaUpload() {
   progList.innerHTML = '';
 
   // Le immagini vengono caricate via FTP su Aruba — qui mostriamo solo i nomi attesi
-  const skuFolder = sku.toLowerCase().replace(/-/g,'_');
+  const skuFolder = sku;  // cartella Aruba: mantieni formato originale, es. SNAA-TRISTAN
   const skuFile   = sku.toUpperCase().replace(/-/g,'_');
   _uploadFiles.forEach((file, i) => {
     const num  = String(i + 1).padStart(2,'0');
@@ -1729,7 +1729,7 @@ async function caricaGalleria() {
   const grid = document.getElementById('imgGrid');
   if (!sku) { grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;font-family:var(--f-mono);font-size:10px;color:var(--text-dim);padding:24px">Seleziona un prodotto</div>'; return; }
   grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;font-family:var(--f-mono);font-size:10px;color:var(--text-dim);padding:24px">Ricerca immagini su Aruba...</div>';
-  const skuFolder = sku.toLowerCase().replace(/-/g,'_');
+  const skuFolder = sku;  // cartella Aruba: mantieni formato originale, es. SNAA-TRISTAN
   const skuFile   = sku.toUpperCase().replace(/-/g,'_');
   const base = 'https://dnicollectibles.com/img_catalog/';
   const urls = [];
@@ -1753,7 +1753,7 @@ async function caricaGalleria() {
 }
 
 function eliminaImgAruba(sku, num) {
-  const skuFolder = sku.toLowerCase().replace(/-/g,'_');
+  const skuFolder = sku;  // cartella Aruba: mantieni formato originale, es. SNAA-TRISTAN
   const skuFile   = sku.toUpperCase().replace(/-/g,'_');
   const nome = `${skuFile}_${String(num).padStart(2,'0')}.jpg`;
   toast(`Elimina manualmente via FTP: img_catalog/${skuFolder}/${nome}`, 'warn');
@@ -1885,7 +1885,7 @@ async function mAvviaUpload() {
   progList.innerHTML = '';
 
   const sku       = p.vendor_sku || p.id;
-  const skuFolder = sku.toLowerCase().replace(/-/g,'_');
+  const skuFolder = sku;  // cartella Aruba: mantieni formato originale, es. SNAA-TRISTAN
   const skuFile   = sku.toUpperCase().replace(/-/g,'_');
   const nomiFile  = [];
 

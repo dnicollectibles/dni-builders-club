@@ -2871,7 +2871,7 @@ async function apriLightbox(prodId) {
   document.body.style.overflow = 'hidden';
   // Discovery lazy: verifica _02, _03... finché 404
   const base = 'https://dnicollectibles.com/img_catalog/';
-  const folder = prod.skuFolder || prod.vendor_sku.toLowerCase().replace(/-/g,'_');
+  const folder = prod.skuFolder || prod.vendor_sku;  // cartella Aruba = vendor_sku originale
   const file   = prod.skuFile   || prod.vendor_sku.toUpperCase().replace(/-/g,'_');
   for (let n = 2; n <= 30; n++) {
     const pad = String(n).padStart(2,'0');
